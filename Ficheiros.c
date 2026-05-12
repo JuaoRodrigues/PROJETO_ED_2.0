@@ -41,14 +41,14 @@ void lerClientes(const char *ficheiro, HashTable *ht) {
 
     char linha[256];
     while (fgets(linha, sizeof(linha), f)) {
-        if (strlen(linha) <= 1) continue;
-        linha[strcspn(linha, "\n")] = '\0';
+        if (strlen(linha) <= 1) continue; //salta linhas vazias
+        linha[strcspn(linha, "\n")] = '\0'; //troca \n por \0
 
-        char *tab = strchr(linha, '\t');
+        char *tab = strchr(linha, '\t'); 
         if (!tab) continue;
-        *tab = '\0';
+        *tab = '\0'; //esta parte do codigo pega o endereço dos tabs e depois troca tabs por \0 (fim da string)
 
-        int id = atoi(linha);
+        int id = atoi(linha); // transforma string num inteiro
         char *nome = tab + 1;
 
         Cliente *c = malloc(sizeof(Cliente));
@@ -62,7 +62,7 @@ void lerClientes(const char *ficheiro, HashTable *ht) {
         c->produto_oferecido  = 0;
         c->proximo            = NULL;
 
-        int bucket = id % HASH_SIZE;
+        int bucket = id % HASH_SIZE; 
         NodoHash *nodo = malloc(sizeof(NodoHash));
         if (!nodo) { free(c); continue; }
         nodo->id_cliente    = id;
