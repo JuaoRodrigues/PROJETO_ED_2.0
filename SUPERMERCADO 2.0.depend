@@ -1,0 +1,47 @@
+# depslib dependency file v1.0
+1778606341 source:c:\users\aarco\desktop\supermercado 2.0\ficheiros.c
+	"Ficheiros.h"
+
+1778606341 c:\users\aarco\desktop\supermercado 2.0\ficheiros.h
+	"supermercado.h"
+
+1778606341 c:\users\aarco\desktop\supermercado 2.0\supermercado.h
+	<limits.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+
+1778596410 source:c:\users\aarco\desktop\supermercado 2.0\supermercado.c
+	"supermercado.h"
+
+1778606658 source:c:\users\aarco\desktop\supermercado 2.0\main.c
+	"supermercado.h"
+	"Ficheiros.h"
+	"menus.h"
+	"tempo.h"
+	"simulacao.h"
+	<locale.h>
+	<stdio.h>
+	<stdlib.h>
+
+1778604014 c:\users\aarco\desktop\supermercado 2.0\menus.h
+	"supermercado.h"
+
+1778606341 source:c:\users\aarco\desktop\supermercado 2.0\menus.c
+	"menus.h"
+
+1778606780 source:c:\users\aarco\desktop\supermercado 2.0\tempo.c
+	"tempo.h"
+	"simulacao.h"
+
+1778606876 c:\users\aarco\desktop\supermercado 2.0\tempo.h
+	"supermercado.h"
+
+1778606780 c:\users\aarco\desktop\supermercado 2.0\simulacao.h
+	"supermercado.h"
+	"tempo.h"
+
+1778606341 source:c:\users\aarco\desktop\supermercado 2.0\simulacao.c
+	"simulacao.h"
+
