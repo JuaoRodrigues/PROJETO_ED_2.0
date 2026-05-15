@@ -13,7 +13,6 @@ int main()
     srand(time(NULL));  // tempo a 0
     setlocale(LC_ALL, "portuguese");
 
-    int total = 0;
     Supermercado super = {0};
 
     lerConfiguracao("Configuracao.txt", &super.config);
