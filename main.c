@@ -18,7 +18,14 @@ int main()
 
     lerConfiguracao("Configuracao.txt", &super.config);
     lerClientes("clientes.txt", &super.clientes);
-    super.produtos = lerProdutos("produtos.txt", &total, 10);
+    super.produtos = lerProdutos("produtos.txt", &super.total_produtos, super.config.tempo_atendimento_produto);
+
+
+
+
+printf("Total produtos carregados: %d\n", super.total_produtos);
+
+    //menu_principal(&super);
 
     /* ---------- FUNCIONA
     printf("=== Configuracao carregada ===\n");
@@ -58,7 +65,7 @@ int main()
     free(super.produtos);
     */
 
-    //menu_principal(&super);
+
 
 
     super.st = configurarTempo(&super.config);

@@ -16,6 +16,8 @@
 #define MIN_TEMPO_LOJA      10   /* minutos simulados */
 #define MAX_TEMPO_LOJA      60   /* minutos simulados */
 
+#define MAX_PRODUTOS_CARRINHO 10
+
 
 /* ------------------------------ CONFIGURAÇÃO ------------------------------*/
 typedef struct {
@@ -121,7 +123,6 @@ typedef struct {
     NodoLoja            *inicio;
     int                 total_na_loja;
 } ListaLoja;
-
 
 /* ------------------------------ SUPERMERCADO ------------------------------*/
 typedef struct {

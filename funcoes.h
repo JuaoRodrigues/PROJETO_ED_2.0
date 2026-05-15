@@ -7,7 +7,7 @@
 void inserirLoja (ListaLoja *L, EntradaCliente entradaCliente);
 void removerLoja (ListaLoja *L, int tick_atual);
 
-
+void preencherCarrinho (Cliente *C, Supermercado *sm);
 
 
 

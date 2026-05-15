@@ -108,11 +108,23 @@ void correrSimulacao(Supermercado *sm) {
         // verifica entradas neste tick
         for (int i = 0; i < total_entradas; i++) {
             if (entradas[i].tick_entrada == sm->st.tick_atual && entradas[i].cliente != NULL) {
+                preencherCarrinho(entradas[i].cliente, sm);
                 inserirLoja(&sm->clientes_na_loja, entradas[i]);
-                printf("[%02d:%02d] Cliente %06d (%s) entrou na loja.\n",
+                printf("[%02d:%02d] Cliente %06d (%s) entrou na loja com %d produtos.\n",
                        hora, minuto,
                        entradas[i].cliente->id,
-                       entradas[i].cliente->nome);
+                       entradas[i].cliente->nome,
+                       entradas[i].cliente->n_produtos);
+
+                // ESCREVER OS PRODUTOS DE CADA PESSOA
+                Produto *prod = entradas[i].cliente->carrinho;
+                while(prod)
+                {
+                    printf("%s\n", prod->nome);
+                    prod = prod->proximo;
+                }
+                printf("\n");
+
             }
 
             if (entradas[i].tick_saida == sm->st.tick_atual && entradas[i].cliente != NULL) {
@@ -122,7 +134,6 @@ void correrSimulacao(Supermercado *sm) {
                        entradas[i].cliente->id,
                        entradas[i].cliente->nome);
             }
-
         }
 
         sm->st.tick_atual++;
