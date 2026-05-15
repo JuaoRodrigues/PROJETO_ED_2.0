@@ -1,7 +1,7 @@
 #include "supermercado.h"
 
 
-//printf(ola);
+//printf(adeus);
 
 
 
