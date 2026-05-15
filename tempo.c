@@ -1,5 +1,4 @@
 #include "tempo.h"
-#include "simulacao.h"
 
 
 // CONFIGURAR TEMPO DE SIMULACAO
@@ -16,7 +15,8 @@ SimulacaoTempo configurarTempo(Configuracao *config) {
 
     /* pede ao utilizador a duração real em minutos */
     int duracao_minutos;
-    printf("Quanto tempo (em minutos) deve demorar a simulacao de 1 dia?");
+    printf("Quanto tempo (em minutos) deve demorar a simulacao de 1 dia?\n");
+    printf("Minutos: ");
     scanf("%d", &duracao_minutos);
     LIMPAR_BUFFER();
 
@@ -43,22 +43,20 @@ void tickParaHora(SimulacaoTempo *st, int *hora, int *minuto) {
 
 // ESCOLHER UM CLIENTE ALEATORIAMENTE NO HASHTABLE PARA ENTRAR NA LOJA
 Cliente *clienteAleatorio(HashTable *ht) {
-    /* tenta ate 100 vezes encontrar um bucket nao vazio */
-    for (int tentativa = 0; tentativa < 100; tentativa++) {
         int bucket = rand() % HASH_SIZE;
+
         if (ht->buckets[bucket] != NULL) {
             /* percorre a lista do bucket e escolhe um nodo aleatorio */
             int count = 0;
             NodoHash *nodo = ht->buckets[bucket];
-            while (nodo) { count++; nodo = nodo->proximo; }
+            while (nodo) { count++; nodo = nodo->proximo; }     // faz a contagem de elementos do bucket
 
-            int escolha = rand() % count;
+            int escolha = rand() % count;   // escolhe um aleatorio do total do bucket
             nodo = ht->buckets[bucket];
             for (int i = 0; i < escolha; i++) nodo = nodo->proximo;
 
             return nodo->cliente;
         }
-    }
     return NULL;
 }
 
@@ -77,7 +75,7 @@ EntradaCliente *prepararEntradas(HashTable *ht, SimulacaoTempo *st, int *total_e
         int tempo_loja = (rand() % (MAX_TEMPO_LOJA - MIN_TEMPO_LOJA + 1)) + MIN_TEMPO_LOJA;
         entradas[i].tick_saida   = entradas[i].tick_entrada + tempo_loja;
 
-        /* garante que nao sai depois do fecho */
+        // garante que nao sai depois do fecho
         if (entradas[i].tick_saida > st->ticks_totais)
             entradas[i].tick_saida = st->ticks_totais;
     }
@@ -87,38 +85,49 @@ EntradaCliente *prepararEntradas(HashTable *ht, SimulacaoTempo *st, int *total_e
 }
 
 
-
-
 // ----------------------------------------------------------------------------------------------------
 
 // LOOP PRINCIPAL
-void correrSimulacao(SimulacaoTempo *st, HashTable *ht) {
+
+void correrSimulacao(Supermercado *sm) {
     int total_entradas = 0;
-    EntradaCliente *entradas = prepararEntradas(ht, st, &total_entradas);
+    EntradaCliente *entradas = prepararEntradas(&sm->clientes, &sm->st, &total_entradas);
 
     printf("Clientes previstos para hoje: %d\n\n", total_entradas);
 
+    /*
     struct timespec ts;
-    ts.tv_sec  = (time_t)st->segundos_por_tick;
-    ts.tv_nsec = (long)((st->segundos_por_tick - ts.tv_sec) * 1e9);
+    ts.tv_sec  = (time_t)sm->st.segundos_por_tick;
+    ts.tv_nsec = (long)((sm->st.segundos_por_tick - ts.tv_sec) * 1e9);
+    */
 
-    while (st->tick_atual < st->ticks_totais) {
+    while (sm->st.tick_atual < sm->st.ticks_totais) {
         int hora, minuto;
-        tickParaHora(st, &hora, &minuto);
+        tickParaHora(&sm->st, &hora, &minuto);
 
-        /* verifica entradas neste tick */
+        // verifica entradas neste tick
         for (int i = 0; i < total_entradas; i++) {
-            if (entradas[i].tick_entrada == st->tick_atual && entradas[i].cliente != NULL) {
-                printf("[%02d:%02d] Cliente %d (%s) entrou na loja. Sai no tick %d\n",
+            if (entradas[i].tick_entrada == sm->st.tick_atual && entradas[i].cliente != NULL) {
+                inserirLoja(&sm->clientes_na_loja, entradas[i]);
+                printf("[%02d:%02d] Cliente %06d (%s) entrou na loja.\n",
                        hora, minuto,
                        entradas[i].cliente->id,
-                       entradas[i].cliente->nome,
-                       entradas[i].tick_saida);
+                       entradas[i].cliente->nome);
             }
+
+            if (entradas[i].tick_saida == sm->st.tick_atual && entradas[i].cliente != NULL) {
+                removerLoja(&sm->clientes_na_loja, sm->st.tick_atual);
+                printf("[%02d:%02d] Cliente %06d (%s) saiu da loja.\n",
+                       hora, minuto,
+                       entradas[i].cliente->id,
+                       entradas[i].cliente->nome);
+            }
+
         }
 
-        st->tick_atual++;
-        nanosleep(&ts, NULL);
+        sm->st.tick_atual++;
+
+        Sleep((DWORD)(sm->st.segundos_por_tick * 1000));
     }
 
     printf("\nLoja fechada. Simulacao terminada.\n");
@@ -127,7 +136,6 @@ void correrSimulacao(SimulacaoTempo *st, HashTable *ht) {
 
 
 // ----------------------------------------------------------------------------------------------------------------
-
 
 
 

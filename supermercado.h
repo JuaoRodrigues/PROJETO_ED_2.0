@@ -2,24 +2,19 @@
 #define SUPERMERCADO_H_INCLUDED
 
 
-
-
 /* ------------------------------ CONSTANTES ------------------------------*/
-#define MAX_NOME     100
-#define MAX_CAIXAS   20
-#define SIM_SPEED    600
-#define HASH_SIZE 10007 // Gonçalo (procurar entender o pq de ser um numero primo)
+#define MAX_NOME            100
+#define MAX_CAIXAS          20
+#define SIM_SPEED           600
+
+#define HASH_SIZE           100
 
 // PARA A SIMULACAO
-#define MIN_CLIENTES_DIA  10
-#define MAX_CLIENTES_DIA  50
+#define MIN_CLIENTES_DIA    10
+#define MAX_CLIENTES_DIA    50
 
-#define MIN_TEMPO_LOJA    10   /* minutos simulados */
-#define MAX_TEMPO_LOJA    60   /* minutos simulados */
-
-
-
-
+#define MIN_TEMPO_LOJA      10   /* minutos simulados */
+#define MAX_TEMPO_LOJA      60   /* minutos simulados */
 
 
 /* ------------------------------ CONFIGURAÇÃO ------------------------------*/
@@ -54,6 +49,8 @@ typedef struct Cliente {
     double         sim_time_entrada;   /* sim_time quando entrou na fila */
     int            produto_oferecido;  /* 1 se já recebeu oferta neste atendimento */
     struct Cliente *proximo;           /* próximo cliente na fila */
+    int      tick_entrada;
+    int      tick_saida;
 } Cliente;
 
 
@@ -86,9 +83,9 @@ typedef struct {
 /* ------------------------------ HASTABLE ------------------------------*/
 typedef struct NodoHash {
     int             id_cliente;
-    Cliente        *cliente;       /* ponteiro para o cliente */
-    int             indice_caixa;  /* -1 se não está em nenhuma caixa */
-    struct NodoHash *proximo;      /* encadeamento para colisões */
+    Cliente         *cliente;       /* ponteiro para o cliente */
+    int             indice_caixa;   /* -1 se não está em nenhuma caixa */
+    struct NodoHash *proximo;       /* encadeamento para colisões */
 } NodoHash;
 
 typedef struct {
@@ -97,21 +94,47 @@ typedef struct {
 } HashTable;
 
 
+/* ------------------------------ usado em tempo.c ------------------------------*/
+// CLIENTES NA LOJA
+typedef struct {
+    Cliente *cliente;
+    int      tick_entrada;
+    int      tick_saida;
+} EntradaCliente;
+
+typedef struct {
+    int   hora_abertura;        /* da config, ex: 8  */
+    int   hora_fecho;           /* da config, ex: 22 */
+    int   ticks_totais;         /* total de ticks da simulação */
+    int   tick_atual;           /* tick em que estamos agora */
+    double segundos_por_tick;   /* tempo real de cada tick */
+} SimulacaoTempo;
+
+
+/* ------------------------------ CLIENTES NA LOJA ------------------------------*/
+typedef struct NodoLoja{
+    EntradaCliente      entrada;
+    struct NodoLoja     *proximo;
+} NodoLoja;
+
+typedef struct {
+    NodoLoja            *inicio;
+    int                 total_na_loja;
+} ListaLoja;
+
+
 /* ------------------------------ SUPERMERCADO ------------------------------*/
 typedef struct {
-    Caixa        caixas[MAX_CAIXAS];
-    Configuracao config;
-    HashTable    clientes;
-    double       sim_time_atual;
-    int          produtos_oferecidos_total;
-    float        valor_oferecido_total;
+    Caixa           caixas[MAX_CAIXAS];
+    Configuracao    config;
+    HashTable       clientes;
+    ListaLoja       clientes_na_loja;
+    Produto         *produtos;
+    int             total_produtos;
+    SimulacaoTempo  st;
+    int             produtos_oferecidos_total;
+    float           valor_oferecido_total;
 } Supermercado;
-
-
-
-
-
-
 
 
 
@@ -126,6 +149,7 @@ typedef struct {
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <windows.h>
 
 #define LIMPAR_BUFFER() do { int c; while ((c = getchar()) != '\n' && c != EOF); } while(0)
 

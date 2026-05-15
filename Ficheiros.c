@@ -5,17 +5,12 @@
 
 int lerConfiguracao(const char *ficheiro, Configuracao *config)
 {
-    FILE *f = fopen(ficheiro, "r"); //Abre o ficheiro no modo de leitura, se não conseguir abrir por não existe ou qq coisa assim dá erro e retorna 0
+    FILE *f = fopen(ficheiro, "r");
     if (!f) {
         printf("Erro: nao foi possivel abrir %s\n", ficheiro);
         return 0;
     }
 
-/*
-Explicação doq acontece abaixo:
-Ele associava a variavel chave à string lida no ficheiro. Se a chave for igual às strigs no ficheiro (ns se me soube explicar), ele lê o que tá
-na frente dessa string e guarda na struct config. faz isto até ler tudo o que há para ler.
-*/
     char chave[50];
     while (fscanf(f, "%s", chave) == 1) {
         if      (strcmp(chave, "MAX_ESPERA")                == 0) fscanf(f, "%d", &config->max_espera);
@@ -33,22 +28,22 @@ na frente dessa string e guarda na struct config. faz isto até ler tudo o que h
 
 
 void lerClientes(const char *ficheiro, HashTable *ht) {
-    FILE *f = fopen(ficheiro, "r"); 
+    FILE *f = fopen(ficheiro, "r");
     if (!f) {
         printf("Erro: nao foi possivel abrir %s\n", ficheiro);
-        return; 
+        return;
     }
 
     char linha[256];
     while (fgets(linha, sizeof(linha), f)) {
-        if (strlen(linha) <= 1) continue; //salta linhas vazias
-        linha[strcspn(linha, "\n")] = '\0'; //troca \n por \0
+        if (strlen(linha) <= 1) continue;
+        linha[strcspn(linha, "\n")] = '\0';
 
-        char *tab = strchr(linha, '\t'); 
+        char *tab = strchr(linha, '\t');
         if (!tab) continue;
-        *tab = '\0'; //esta parte do codigo pega o endereço dos tabs e depois troca tabs por \0 (fim da string)
+        *tab = '\0';
 
-        int id = atoi(linha); // transforma string num inteiro
+        int id = atoi(linha);
         char *nome = tab + 1;
 
         Cliente *c = malloc(sizeof(Cliente));
@@ -62,7 +57,7 @@ void lerClientes(const char *ficheiro, HashTable *ht) {
         c->produto_oferecido  = 0;
         c->proximo            = NULL;
 
-        int bucket = id % HASH_SIZE; 
+        int bucket = id % HASH_SIZE;
         NodoHash *nodo = malloc(sizeof(NodoHash));
         if (!nodo) { free(c); continue; }
         nodo->id_cliente    = id;
@@ -84,20 +79,15 @@ Produto *lerProdutos(const char *ficheiro, int *total, int tempo_max) {
     if (!f) {
         printf("Erro: nao foi possivel abrir %s\n", ficheiro);
         *total = 0;
-        return NULL; 
+        return NULL;
     }
 
-    int count = 0; //inicializa a variavel count a zero
+    int count = 0;
     char linha[512];
     while (fgets(linha, sizeof(linha), f)) {
-        if (strlen(linha) > 1) count++; //isto serve para ver o mumero de linhas no ficheiro (se uma linha tem tamanho superior a um desse ser considerada e aumenta a contagem. no fim teremos o numero de linhas total
+        if (strlen(linha) > 1) count++;
     }
 
-/*
-Nesta, o malloc serve para guardar espaço na memória. primeiro nós descobrimmos quantos produtos há, agr vamos guardar
-o n de produtos * o espaço que eles ocupam na variavel *produtos (depois podemos usa-la como um array(produtos[i])). Se não houver produtos aql 
-vai dar NULL e sabemos que o total dá zero.
-*/
     Produto *produtos = malloc(count * sizeof(Produto));
     if (!produtos) {
         fclose(f);
@@ -105,17 +95,12 @@ vai dar NULL e sabemos que o total dá zero.
         return NULL;
     }
 
-    rewind(f); //volta ao inicio do ficheiro
+    rewind(f);
     int i = 0;
     while (i < count && fgets(linha, sizeof(linha), f)) {
-        if (strlen(linha) <= 1) continue; //medida de segurança, se uma linha está em branco ela avança para a proxima iteração e ignora essa linha
-        linha[strcspn(linha, "\n")] = '\0'; //outra medida de segurança. O fgets lê o \n, entao usamos o strcspn para encontrar o /n e substituir por \0 (fim de string)
+        if (strlen(linha) <= 1) continue;
+        linha[strcspn(linha, "\n")] = '\0';
 
-        /*
-O strtok corta a linha. Imaginem nós temos tipo 1\tpao\t0.10 . O strtok da primeira vez vai retornar 1, da segunda pao, e da terceira 0.10
-Como ele tem memoria so colocamos na primeira vez, que depois o NULL faz aql continuar de onde parou)
-
-        */
         char *token = strtok(linha, "\t");
         if (!token) continue;
         produtos[i].id = atoi(token);
@@ -127,7 +112,7 @@ Como ele tem memoria so colocamos na primeira vez, que depois o NULL faz aql con
 
         token = strtok(NULL, "\t");
         if (!token) continue;
-        produtos[i].preco = atof(token); //o atof converte a string num float
+        produtos[i].preco = atof(token);
 
         produtos[i].tempo_passagem = (rand() % (tempo_max - 2 + 1)) + 2;
         produtos[i].proximo = NULL;
@@ -150,7 +135,7 @@ void lerDados(const char *ficheiro, Supermercado *sm) {
 
     char linha[512];
 
-    /* Ignorar linhas de comentário e ler número de caixas */
+    /* Ignorar linhas de coment�rio e ler n�mero de caixas */
     int n_caixas = 0;
     while (fgets(linha, sizeof(linha), f)) {
         if (linha[0] == '/' || strlen(linha) <= 1) continue;
@@ -188,7 +173,7 @@ void lerDados(const char *ficheiro, Supermercado *sm) {
         sscanf(linha, "OPERADOR : %s", operador_nome);
         strncpy(sm->caixas[i].operador_nome, operador_nome, MAX_NOME - 1);
 
-        /* Ler número de clientes */
+        /* Ler n�mero de clientes */
         while (fgets(linha, sizeof(linha), f)) {
             if (linha[0] != '/' && strlen(linha) > 1) break;
         }
