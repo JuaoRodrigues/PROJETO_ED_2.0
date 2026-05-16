@@ -19,10 +19,14 @@ int main()
     lerClientes("clientes.txt", &super.clientes);
     super.produtos = lerProdutos("produtos.txt", &super.total_produtos, super.config.tempo_atendimento_produto);
 
+    // gestao de caixas
+    for (int i = 0; i < super.config.n_caixas; i++)
+    {
+        super.caixas[i].id    = i;
+        super.caixas[i].ativa = 0;
+    }
+    super.caixas[0].ativa = 1;     // a caixa 1 começa ativa todos os dias
 
-
-
-printf("Total produtos carregados: %d\n", super.total_produtos);
 
     //menu_principal(&super);
 

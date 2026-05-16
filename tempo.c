@@ -129,12 +129,11 @@ void correrSimulacao(Supermercado *sm) {
 
             if (entradas[i].tick_saida == sm->st.tick_atual && entradas[i].cliente != NULL) {
                 removerLoja(&sm->clientes_na_loja, sm->st.tick_atual);
-                printf("[%02d:%02d] Cliente %06d (%s) saiu da loja.\n",
-                       hora, minuto,
-                       entradas[i].cliente->id,
-                       entradas[i].cliente->nome);
+                clienteEntrarCaixa(sm, entradas[i].cliente);
             }
         }
+
+        gerirCaixas(sm);
 
         sm->st.tick_atual++;
 
@@ -147,7 +146,6 @@ void correrSimulacao(Supermercado *sm) {
 
 
 // ----------------------------------------------------------------------------------------------------------------
-
 
 
 

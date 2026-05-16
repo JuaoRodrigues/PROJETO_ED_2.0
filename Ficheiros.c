@@ -53,7 +53,7 @@ void lerClientes(const char *ficheiro, HashTable *ht) {
         c->nome[MAX_NOME - 1] = '\0';
         c->n_produtos         = 0;
         c->carrinho           = NULL;
-        c->sim_time_entrada   = -1;
+        c->tick_entrada_fila   = -1;
         c->produto_oferecido  = 0;
         c->proximo            = NULL;
 
@@ -163,7 +163,7 @@ void lerDados(const char *ficheiro, Supermercado *sm) {
         sm->caixas[i].total_valor_vendido      = 0.0f;
         sm->caixas[i].produtos_oferecidos      = 0;
         sm->caixas[i].valor_oferecido          = 0.0f;
-        sm->caixas[i].sim_time_fim_atendimento = sm->config.hora_abertura * 3600;
+        sm->caixas[i].tick_fim_atendimento = sm->config.hora_abertura * 3600;
 
         /* Ler operador: "OPERADOR : NomeOperador" */
         while (fgets(linha, sizeof(linha), f)) {
@@ -191,7 +191,7 @@ void lerDados(const char *ficheiro, Supermercado *sm) {
             if (!c) continue;
             c->n_produtos        = 0;
             c->carrinho          = NULL;
-            c->sim_time_entrada = sm->config.hora_abertura * 3600;
+            c->tick_entrada_fila = sm->config.hora_abertura * 3600;
             c->produto_oferecido = 0;
             c->proximo           = NULL;
             c->id                = 0;

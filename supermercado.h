@@ -4,19 +4,18 @@
 
 /* ------------------------------ CONSTANTES ------------------------------*/
 #define MAX_NOME            100
-#define MAX_CAIXAS          20
 #define SIM_SPEED           600
-
+#define MAX_CAIXAS          20
 #define HASH_SIZE           100
 
 // PARA A SIMULACAO
 #define MIN_CLIENTES_DIA    10
-#define MAX_CLIENTES_DIA    50
+#define MAX_CLIENTES_DIA    11
 
 #define MIN_TEMPO_LOJA      10   /* minutos simulados */
 #define MAX_TEMPO_LOJA      60   /* minutos simulados */
 
-#define MAX_PRODUTOS_CARRINHO 10
+#define MAX_PRODUTOS_CARRINHO 3
 
 
 /* ------------------------------ CONFIGURAÇÃO ------------------------------*/
@@ -37,7 +36,7 @@ typedef struct Produto {
     int            id;
     char           nome[MAX_NOME];
     float          preco;
-    int            tempo_passagem;  /* gerado: rand() % (tempo_atend_prod - 2 + 1) + 2 */
+    int            tempo_passagem;  // gerado aleatoriamente entre x/2 e x | em segundos simulados
     struct Produto *proximo;
 } Produto;
 
@@ -47,12 +46,12 @@ typedef struct Cliente {
     int            id;
     char           nome[MAX_NOME];
     int            n_produtos;
-    Produto       *carrinho;           /* lista ligada de produtos */
-    double         sim_time_entrada;   /* sim_time quando entrou na fila */
+    Produto        *carrinho;           /* lista ligada de produtos */
+    int            tick_entrada_fila;   /* sim_time quando entrou na fila */
     int            produto_oferecido;  /* 1 se já recebeu oferta neste atendimento */
     struct Cliente *proximo;           /* próximo cliente na fila */
-    int      tick_entrada;
-    int      tick_saida;
+    int            tick_entrada;
+    int            tick_saida;
 } Cliente;
 
 
@@ -70,9 +69,9 @@ typedef struct {
     char   nome[MAX_NOME];
     char   operador_nome[MAX_NOME];
     int    operador_id;
-    int    ativa;
+    int    ativa;   // 0 = fechada, 1 = aberta, 2 = a fechar (atende o restante de clientes mas nao permite mais ninguem na fila), 3 = recentemente aberta (nao pode ser fechada nesse tick)
     Fila   fila;
-    double sim_time_fim_atendimento;
+    int    tick_fim_atendimento;
     int    total_clientes_atendidos;
     int    total_produtos_vendidos;
     float  total_valor_vendido;
