@@ -309,12 +309,12 @@ void processarAtendimento (Supermercado *sm)
         if(cai->seg_fim_atendimento == 0)
         {
             long tempo_total = 0;
-            Produto *p = cai->fila.frente->carrinho;
+            Produto *p1 = cai->fila.frente->carrinho;
 
-            while(p)
+            while(p1)
             {
-                tempo_total += p->tempo_passagem;
-                p = p->proximo
+                tempo_total += p1->tempo_passagem;
+                p1 = p1->proximo;
             }
         cai->seg_fim_atendimento = seg_atual + tempo_total;
         }
@@ -327,13 +327,20 @@ void processarAtendimento (Supermercado *sm)
             cai->total_clientes_atendidos ++;
             cai->total_produtos_vendidos += atendido->n_produtos;
 
+            // 3 PARTE
+            // soma o valor dos produtos
+            Produto *p2 = atendido->carrinho;
+            while(p2)
+            {
+                cai->total_valor_vendido += p2->preco;
+                p2 = p2->proximo;
+            }
+            //printf("Cliente %06d (%s) foi atendido na caixa %d.\n",               <----------
+            //       atendido->id, atendido->nome, cai->id);
+
+            cai->seg_fim_atendimento = 0;   // reset para o proximo cliente
         }
-
-
     }
-
-
-
 }
 
 
