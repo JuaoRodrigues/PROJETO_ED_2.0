@@ -117,13 +117,14 @@ void correrSimulacao(Supermercado *sm) {
                        entradas[i].cliente->n_produtos);
 
                 // ESCREVER OS PRODUTOS DE CADA PESSOA
+                /*
                 Produto *prod = entradas[i].cliente->carrinho;
                 while(prod)
                 {
                     printf("%s\n", prod->nome);
                     prod = prod->proximo;
                 }
-                printf("\n");
+                printf("\n");*/
 
             }
 

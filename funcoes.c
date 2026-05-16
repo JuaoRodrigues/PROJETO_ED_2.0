@@ -274,6 +274,12 @@ Cliente *sairFila(Caixa *cai)
 // ------------------------- CLIENTE ENTRA NA FILA CAIXA -------------------------
 void clienteEntrarCaixa(Supermercado *sm, Cliente *cli)
 {
+    if (cli->n_produtos == 0) {
+        printf("Cliente %06d (%s) saiu da loja sem produtos.\n", cli->id, cli->nome);
+        return;
+    }
+
+
     Caixa *cai = escolherCaixa(sm);
 
     if(cai == NULL)     return;
@@ -284,6 +290,58 @@ void clienteEntrarCaixa(Supermercado *sm, Cliente *cli)
     printf("Cliente %06d (%s) entrou na fila da caixa %d. Fila: %d clientes.\n",
            cli->id, cli->nome, cai->id, cai->fila.tamanho);
 }
+
+
+// ------------------------- ATENDER CLIENTE NA CAIXA -------------------------
+void processarAtendimento (Supermercado *sm)
+{
+    long seg_atual = (long)sm->st.tick_atual * 60;
+
+    for(int i = 0; i< sm->config.n_caixas; i++)
+    {
+        Caixa *cai = &sm->caixas[i];
+
+        if(cai->ativa == 0)     continue;
+        if(cai->fila.frente == NULL)    continue;
+
+        // 1 PARTE
+        //calcula o tempo de atendimento do cliente atual
+        if(cai->seg_fim_atendimento == 0)
+        {
+            long tempo_total = 0;
+            Produto *p = cai->fila.frente->carrinho;
+
+            while(p)
+            {
+                tempo_total += p->tempo_passagem;
+                p = p->proximo
+            }
+        cai->seg_fim_atendimento = seg_atual + tempo_total;
+        }
+
+        // 2 PARTE
+        // verifica se o atendimento acabou
+        if(seg_atual >= cai->seg_fim_atendimento)
+        {
+            Cliente *atendido = sairFila(cai);
+            cai->total_clientes_atendidos ++;
+            cai->total_produtos_vendidos += atendido->n_produtos;
+
+        }
+
+
+    }
+
+
+
+}
+
+
+
+
+
+
+
 
 
 

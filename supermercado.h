@@ -9,8 +9,8 @@
 #define HASH_SIZE           100
 
 // PARA A SIMULACAO
-#define MIN_CLIENTES_DIA    10
-#define MAX_CLIENTES_DIA    11
+#define MIN_CLIENTES_DIA    20
+#define MAX_CLIENTES_DIA    21
 
 #define MIN_TEMPO_LOJA      10   /* minutos simulados */
 #define MAX_TEMPO_LOJA      60   /* minutos simulados */
@@ -71,6 +71,7 @@ typedef struct {
     int    operador_id;
     int    ativa;   // 0 = fechada, 1 = aberta, 2 = a fechar (atende o restante de clientes mas nao permite mais ninguem na fila), 3 = recentemente aberta (nao pode ser fechada nesse tick)
     Fila   fila;
+    long   seg_fim_atendimento;     // segundos simulados em que o cliente termina a compra
     int    tick_fim_atendimento;
     int    total_clientes_atendidos;
     int    total_produtos_vendidos;
@@ -104,11 +105,12 @@ typedef struct {
 } EntradaCliente;
 
 typedef struct {
-    int   hora_abertura;        /* da config, ex: 8  */
-    int   hora_fecho;           /* da config, ex: 22 */
-    int   ticks_totais;         /* total de ticks da simulação */
-    int   tick_atual;           /* tick em que estamos agora */
-    double segundos_por_tick;   /* tempo real de cada tick */
+    int     hora_abertura;        // da config, ex: 8
+    int     hora_fecho;           // da config, ex: 22
+    int     ticks_totais;         // total de ticks da simulação
+    int     tick_atual;           // tick em que estamos agora
+    double  segundos_por_tick;    // tempo real de cada tick
+    long    seg_simulados;         // tick atual * 60
 } SimulacaoTempo;
 
 
