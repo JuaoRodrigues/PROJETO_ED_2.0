@@ -1,4 +1,23 @@
 #include "funcoes.h"
+#include "Ficheiros.h"
+
+
+// ------------------------- INICIALIZAR CAIXAS POR DIA -------------------------
+void inicializarLoja (Supermercado *sm)
+{
+    lerConfiguracao("Configuracao.txt", &sm->config);
+    lerClientes("clientes.txt", &sm->clientes);
+    sm->produtos = lerProdutos("produtos.txt", &sm->total_produtos, sm->config.tempo_atendimento_produto);
+
+    // gestao de caixas
+    for (int i = 0; i < sm->config.n_caixas; i++)
+    {
+        sm->caixas[i].id    = i + 1;
+        sm->caixas[i].ativa = 0;
+    }
+    sm->caixas[0].ativa = 1;     // a caixa 1 começa ativa todos os dias
+}
+
 
 // ------------------------- INSERIR CLIENTE NA LOJA -------------------------
 void inserirLoja (ListaLoja *L, EntradaCliente entradaCliente)

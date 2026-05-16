@@ -2,6 +2,7 @@
 #include "Ficheiros.h"
 #include "menus.h"
 #include "tempo.h"
+#include "funcoes.h"
 
 
 #include <locale.h>
@@ -14,18 +15,12 @@ int main()
     setlocale(LC_ALL, "portuguese");
 
     Supermercado super = {0};
+    inicializarLoja(&super);
 
-    lerConfiguracao("Configuracao.txt", &super.config);
-    lerClientes("clientes.txt", &super.clientes);
-    super.produtos = lerProdutos("produtos.txt", &super.total_produtos, super.config.tempo_atendimento_produto);
 
-    // gestao de caixas
-    for (int i = 0; i < super.config.n_caixas; i++)
-    {
-        super.caixas[i].id    = i;
-        super.caixas[i].ativa = 0;
-    }
-    super.caixas[0].ativa = 1;     // a caixa 1 começa ativa todos os dias
+
+
+
 
 
     //menu_principal(&super);

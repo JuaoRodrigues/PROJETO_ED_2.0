@@ -4,6 +4,9 @@
 #include "supermercado.h"
 
 
+
+void inicializarLoja (Supermercado *sm);
+
 void inserirLoja (ListaLoja *L, EntradaCliente entradaCliente);
 void removerLoja (ListaLoja *L, int tick_atual);
 

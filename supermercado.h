@@ -135,6 +135,7 @@ typedef struct {
     int             total_produtos;
     SimulacaoTempo  st;
     int             produtos_oferecidos_total;
+    float           valor_total_ganho;
     float           valor_oferecido_total;
 } Supermercado;
 
