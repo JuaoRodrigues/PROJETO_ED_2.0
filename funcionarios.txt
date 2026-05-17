@@ -1,14 +1,14 @@
-1670	Ana Francisca Lemos Martins
-4322	Joana Manies Ferreira Bastos
-2856	Ana Beatriz Campos Pereira
-3044	Patricia Cabral Henriques Bras
-9164	Carolina Rita Cruz Almeida
-3562	Catarina Nicole Silva Silva
-7046	Carolina Gomes Moutinho
-9140	Ines Fernandes Guilherme Silva
-8839	Roberto Maria Silva Pina
-6477	Pedro Ferreira Alves Silva
-5919	Fabiana Costa Silva Coelho
+1670	Joao Rodrigues
+4322	Gonçalo Bernardino
+2856	Isabela Xavier
+3044	Kauan Santos
+9164	Sara Lopes
+3562	Rita Pinto
+7046	Alexandre Rodrigues
+9140	Pietro Queiroz
+8839	Afonso Almeida
+6477	Luis Rodrigues
+5919	Duarte Pereira
 7353	Ines Emanuel Munhoz 
 6129	Maria Soraia Bullitta Portela
 3100	Joao Maria Marques 
