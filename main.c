@@ -17,12 +17,6 @@ int main()
     Supermercado super = {0};
     inicializarLoja(&super);
 
-
-
-
-
-
-
     //menu_principal(&super);
 
     /* ---------- FUNCIONA

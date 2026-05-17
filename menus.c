@@ -1,16 +1,14 @@
 #include "menus.h"
 
 
-
-
-
 // FUNCOES COMPLEMENTARES AOS MENUS
 void limpar_ecra ()
 {
-    for(int i = 0; i < 30; i++)
-    {
-        printf("\n");
-    }
+    #ifdef _WIN32
+        system("cls"); // Comando para Windows
+    #else
+        system("clear"); // Comando para Linux e macOS
+    #endif
 }
 
 void pausar()
