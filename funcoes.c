@@ -61,6 +61,16 @@ void removerLoja (ListaLoja *L, int tick_atual)
 
 void preencherCarrinho (Cliente *Cli, Supermercado *sm)
 {
+    //limpar carrinho anterior se existir
+    Produto *p = Cli->carrinho;
+    while(p)
+    {
+        Produto *tmp = p->proximo;
+        free(p);
+        p = tmp;
+    }
+
+
     int n = rand() % (MAX_PRODUTOS_CARRINHO + 1);   // escolha da quantidade de produtos [0, max_produtos]
     Cli->n_produtos = 0;
     Cli->carrinho = NULL;
@@ -87,6 +97,55 @@ void preencherCarrinho (Cliente *Cli, Supermercado *sm)
 
 // ------------------------- ESCOLHER CAIXA -------------------------
 // baseado na quantidade de produtos em cada caixa
+Caixa *escolherCaixa(Supermercado *sm)
+{
+    Caixa *melhor = NULL;
+    int menos_produtos = -1;
+
+    for(int i = 0; i < sm->config.n_caixas; i++)
+    {
+        if (sm->caixas[i].ativa != 1 && sm->caixas[i].ativa != 3) continue;
+        if (sm->caixas[i].fila.tamanho >= sm->config.max_fila) continue;
+
+        int total_produtos = 0;
+        Cliente *Cli = sm->caixas[i].fila.frente;
+        while(Cli){
+            total_produtos += Cli->n_produtos;
+            Cli = Cli->proximo;
+        }
+
+        if(melhor == NULL || total_produtos < menos_produtos){
+            menos_produtos = total_produtos;
+            melhor = &sm->caixas[i];
+        }
+    }
+
+    // se todas as caixas estao cheias, escolhe a com menos produtos ignorando o limite
+    if (melhor == NULL)
+    {
+        for(int i = 0; i < sm->config.n_caixas; i++)
+        {
+            if (sm->caixas[i].ativa != 1 && sm->caixas[i].ativa != 3) continue;
+
+            int total_produtos = 0;
+            Cliente *Cli = sm->caixas[i].fila.frente;
+            while(Cli){
+                total_produtos += Cli->n_produtos;
+                Cli = Cli->proximo;
+            }
+
+            if(melhor == NULL || total_produtos < menos_produtos){
+                menos_produtos = total_produtos;
+                melhor = &sm->caixas[i];
+            }
+        }
+    }
+
+    return melhor;
+}
+
+
+/*
 Caixa *escolherCaixa (Supermercado *sm)
 {
     Caixa *melhor = NULL;
@@ -113,9 +172,47 @@ Caixa *escolherCaixa (Supermercado *sm)
     }
     return melhor;
 }
-
+*/
 // ------------------------- MOVER METADE DA FILA -------------------------
 
+void moverMetadeFila(Caixa *antiga, Caixa *nova)
+{
+    if (antiga->fila.tamanho == 0) return;
+    int mover = antiga->fila.tamanho / 2;
+    if(mover == 0)  mover = 1;
+
+    // encontrar o ultimo NODO que fica na fila
+    int manter = antiga->fila.tamanho - mover;
+    if (manter == 0) {
+        nova->fila.frente    = antiga->fila.frente;
+        nova->fila.fim       = antiga->fila.fim;
+        nova->fila.tamanho   = mover;
+        antiga->fila.frente  = NULL;
+        antiga->fila.fim     = NULL;
+        antiga->fila.tamanho = 0;
+        return;
+    }
+
+
+    Cliente *cli = antiga->fila.frente;
+    for(int i = 0; i < manter - 1; i++)
+    {
+        cli = cli->proximo;
+    }
+
+    // cli é agora o ultimo cliente da fila antiga
+    // passa pessoas para a outra fila
+    nova->fila.frente = cli->proximo;
+    nova->fila.fim = antiga->fila.fim;
+    nova->fila.tamanho = mover;
+
+    // corta a fila antiga
+    cli->proximo = NULL;
+    antiga->fila.fim = cli;
+    antiga->fila.tamanho = manter;
+}
+
+/*      ANTIGO
 void moverMetadeFila(Caixa *antiga, Caixa *nova)
 {
     int mover = antiga->fila.tamanho / 2;
@@ -142,8 +239,11 @@ void moverMetadeFila(Caixa *antiga, Caixa *nova)
 
 
 
+*/
+
+
 // ------------------------- GERIR CAIXA -------------------------
-void gerirCaixas(Supermercado *sm)
+void gerirCaixas(Supermercado *sm, int loja_fechada)
 {
     // converte todas as caixas recentemente abertas para abertas normais
     // ativa = 3 -> ativa = 1
@@ -170,10 +270,10 @@ void gerirCaixas(Supermercado *sm)
                 if(sm->caixas[j].ativa == 2){
                     sm->caixas[j].ativa = 1;
                     moverMetadeFila(&sm->caixas[i], &sm->caixas[j]);
-                    printf("Caixa %d reativada. %d clientes transferidos da caixa %d\n",
+                    /*printf("Caixa %d reativada. %d clientes transferidos da caixa %d\n",
                         sm->caixas[j].id,
                         sm->caixas[j].fila.tamanho,
-                        sm->caixas[i].id);
+                        sm->caixas[i].id);*/
                     reativou = 1;
                     break;
                 }
@@ -187,10 +287,10 @@ void gerirCaixas(Supermercado *sm)
                     {
                         sm->caixas[j].ativa = 1;
                         moverMetadeFila(&sm->caixas[i], &sm->caixas[j]);
-                        printf("Caixa %d aberta. %d clientes transferidos da caixa %d\n",
+                        /*printf("Caixa %d aberta. %d clientes transferidos da caixa %d\n",
                                 sm->caixas[j].id,
                                 sm->caixas[j].fila.tamanho,
-                                sm->caixas[i].id);
+                                sm->caixas[i].id);*/
                         break;
                     }
                 }
@@ -233,7 +333,7 @@ void gerirCaixas(Supermercado *sm)
                 if (sm->caixas[i].fila.tamanho < sm->config.min_fila)
                     {
                     sm->caixas[i].ativa = 2;
-                    printf("Caixa %d a fechar (poucos clientes)\n", sm->caixas[i].id);
+                    //printf("Caixa %d a fechar (poucos clientes)\n", sm->caixas[i].id);
                     ativas--;
                 if (ativas == 1) break;
                 }
@@ -249,8 +349,28 @@ void gerirCaixas(Supermercado *sm)
         if (sm->caixas[i].ativa == 2 && sm->caixas[i].fila.tamanho == 0)
         {
             sm->caixas[i].ativa = 0;
-            printf("Caixa %d fechada.\n", sm->caixas[i].id);
+            //printf("Caixa %d fechada.\n", sm->caixas[i].id);
         }
+    }
+
+    //          5 PARTE
+    // caso a loja esteja fechada ja nao precisa de manter 1 caixa aberta
+    // fecha todas
+    if(loja_fechada)
+    {
+        int total_fila = 0;
+        for(int i = 0; i < sm->config.n_caixas; i++)
+        {
+            total_fila += sm->caixas[i].fila.tamanho;
+        }
+        if(total_fila == 0)
+        {
+            for(int i = 0; i < sm->config.n_caixas; i++)
+            {
+                sm->caixas[i].ativa = 0;
+            }
+        }
+
     }
 }
 
@@ -294,7 +414,7 @@ Cliente *sairFila(Caixa *cai)
 void clienteEntrarCaixa(Supermercado *sm, Cliente *cli)
 {
     if (cli->n_produtos == 0) {
-        printf("Cliente %06d (%s) saiu da loja sem produtos.\n", cli->id, cli->nome);
+        //printf("Cliente %06d (%s) saiu da loja sem produtos.\n", cli->id, cli->nome);
         return;
     }
 
@@ -306,8 +426,8 @@ void clienteEntrarCaixa(Supermercado *sm, Cliente *cli)
     cli->tick_entrada_fila = sm->st.tick_atual;
     entrarFila(cai, cli);
 
-    printf("Cliente %06d (%s) entrou na fila da caixa %d. Fila: %d clientes.\n",
-           cli->id, cli->nome, cai->id, cai->fila.tamanho);
+    /*printf("Cliente %06d (%s) entrou na fila da caixa %d. Fila: %d clientes.\n",
+           cli->id, cli->nome, cai->id, cai->fila.tamanho);*/
 }
 
 
@@ -320,7 +440,7 @@ void processarAtendimento (Supermercado *sm)
     {
         Caixa *cai = &sm->caixas[i];
 
-        if(cai->ativa == 0)     continue;
+        if(cai->ativa == 0)             continue;
         if(cai->fila.frente == NULL)    continue;
 
         // 1 PARTE
@@ -328,6 +448,7 @@ void processarAtendimento (Supermercado *sm)
         if(cai->seg_fim_atendimento == 0)
         {
             long tempo_total = 0;
+
             Produto *p1 = cai->fila.frente->carrinho;
 
             while(p1)
@@ -343,6 +464,8 @@ void processarAtendimento (Supermercado *sm)
         if(seg_atual >= cai->seg_fim_atendimento)
         {
             Cliente *atendido = sairFila(cai);
+            if(!atendido)   continue;
+            atendido->proximo = NULL;
             cai->total_clientes_atendidos ++;
             cai->total_produtos_vendidos += atendido->n_produtos;
 
@@ -362,7 +485,13 @@ void processarAtendimento (Supermercado *sm)
     }
 }
 
-
+int filasTotais(Supermercado *sm)
+{
+    int total = 0;
+    for (int i = 0; i < sm->config.n_caixas; i++)
+        total += sm->caixas[i].fila.tamanho;
+    return total;
+}
 
 
 

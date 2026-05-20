@@ -1,5 +1,12 @@
 #include "menus.h"
 
+#ifdef _WIN32
+    #include <windows.h>
+#endif
+
+
+
+
 
 // FUNCOES COMPLEMENTARES AOS MENUS
 void limpar_ecra ()
@@ -17,6 +24,53 @@ void pausar()
     while (getchar() != '\n');
 }
 
+// relativo à simulacao da forma que esta
+// mover o cursor para o inicio e escrever por cima
+void ativarANSI() {
+#ifdef _WIN32
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    DWORD dwMode = 0;
+    GetConsoleMode(hOut, &dwMode);
+    SetConsoleMode(hOut, dwMode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+#endif
+}
+
+
+void simular (Supermercado *sm, int hora, int minuto, int previstos)
+{
+    printf("\033[H");       //move o cursor para o inicio sem limpar
+    printf("  |------------------------------------------------------\n");
+    printf("  |                     SIMULAÇÃO\n");
+    printf("  |------------------------------------------------------\n");
+    if(hora<24) printf("  | Horas: [%02d:%02d]\n  |\n", hora, minuto);
+    else{
+        hora -= 24;
+        printf("  | Horas: [%02d:%02d]\n  |\n", hora, minuto);
+    }
+
+    int total_filas = 0;
+    for(int i = 0; i < sm->config.n_caixas; i++)
+    {
+        Caixa *cai = &sm->caixas[i];
+        total_filas += cai->fila.tamanho;
+
+        if(cai->ativa != 0)
+        {
+            printf("  \033[2K| Caixa %d : ", cai->id);
+            for(int j = 0; j < cai->fila.tamanho; j++){printf("#");}
+
+            int espacos = 40 - cai->fila.tamanho;
+            for (int j = 0; j < espacos; j++) printf(" ");
+            printf("%d\n", cai->fila.tamanho);
+
+        }else printf("  | Caixa %d : Fora de Serviço!                        0\n", cai->id);
+    }
+    printf("  |------------------------------------------------------\n");
+    printf("  | Clientes na Loja : %02d\n", sm->clientes_na_loja.total_na_loja);
+    printf("  | Clientes na Fila : %02d\n", total_filas);
+    printf("  | Clientes Previstos : %02d\n", previstos);
+    printf("  |------------------------------------------------------\n");
+}
 
 
 // MENUS
@@ -161,7 +215,31 @@ void menu_estatisticas(Supermercado *sm)
     }while (op != 0);
 }
 
+void pausarSimulacao(Supermercado *sm) {
+    int op;
+    int valido = 0;
+    do {
+        printf("  |------------------------------------------|\n");
+        printf("  |            SIMULACAO PAUSADA             |\n");
+        printf("  |------------------------------------------|\n");
+        printf("  | 1. Gerir Caixas                          |\n");
+        printf("  | 2. Ver estatisticas do momento           |\n");
+        printf("  | 3. Retomar simulacao                     |\n");
+        printf("  | 0. Cancelar simulacao                    |\n");
+        printf("  |------------------------------------------|\n");
+        printf("  | Opcao: ");
+        scanf("%d", &op);
+        LIMPAR_BUFFER();
 
+        switch (op) {
+            case 1: limpar_ecra(); valido = 1; menu_estatisticas(sm); break;
+            case 2: printf("DESENVOLVER\n"); valido = 1; break;
+            case 3: valido = 1; return;
+            case 0: valido = 1; exit(0);
+            default: printf("Opcao invalida.\n"); pausar();
+        }
+    } while (valido == 0);
+}
 
 
 

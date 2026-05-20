@@ -11,6 +11,9 @@
 
 int main()
 {
+    ativarANSI();
+    limpar_ecra();
+
     srand(time(NULL));  // tempo a 0
     setlocale(LC_ALL, "portuguese");
 

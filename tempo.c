@@ -1,4 +1,7 @@
 #include "tempo.h"
+#include "menus.h"
+
+
 
 
 // CONFIGURAR TEMPO DE SIMULACAO
@@ -23,6 +26,7 @@ SimulacaoTempo configurarTempo(Configuracao *config) {
     /* converte para segundos e divide pelos ticks */
     double duracao_segundos = duracao_minutos * 60.0;
     st.segundos_por_tick = duracao_segundos / st.ticks_totais;
+
 
     printf("\nSimulacao configurada:\n");
     printf("  Loja aberta: %dh - %dh\n", st.hora_abertura, st.hora_fecho);
@@ -68,19 +72,35 @@ EntradaCliente *prepararEntradas(HashTable *ht, SimulacaoTempo *st, int *total_e
     EntradaCliente *entradas = malloc(n * sizeof(EntradaCliente));
     if (!entradas) { *total_entradas = 0; return NULL; }
 
-    for (int i = 0; i < n; i++) {
-        entradas[i].cliente      = clienteAleatorio(ht);
-        entradas[i].tick_entrada = rand() % st->ticks_totais;
+    int count = 0;
+    int tentativas = 0;
+
+    while (count < n && tentativas < n * 10) {
+        tentativas++;
+        Cliente *c = clienteAleatorio(ht);
+        if (!c) continue;
+
+        // verifica se este cliente já foi escolhido
+        int repetido = 0;
+        for (int j = 0; j < count; j++) {
+            if (entradas[j].cliente == c) { repetido = 1; break; }
+        }
+        if (repetido) continue;
+
+        int tick_max_entrada = st->ticks_totais - MAX_TEMPO_LOJA;
+        entradas[count].cliente      = c;
+        entradas[count].tick_entrada = rand() % tick_max_entrada;
 
         int tempo_loja = (rand() % (MAX_TEMPO_LOJA - MIN_TEMPO_LOJA + 1)) + MIN_TEMPO_LOJA;
-        entradas[i].tick_saida   = entradas[i].tick_entrada + tempo_loja;
+        entradas[count].tick_saida   = entradas[count].tick_entrada + tempo_loja;
 
-        // garante que nao sai depois do fecho
-        if (entradas[i].tick_saida > st->ticks_totais)
-            entradas[i].tick_saida = st->ticks_totais;
+        if (entradas[count].tick_saida > st->ticks_totais)
+            entradas[count].tick_saida = st->ticks_totais;
+
+        count++;
     }
 
-    *total_entradas = n;
+    *total_entradas = count;
     return entradas;
 }
 
@@ -88,34 +108,33 @@ EntradaCliente *prepararEntradas(HashTable *ht, SimulacaoTempo *st, int *total_e
 // ----------------------------------------------------------------------------------------------------
 
 // LOOP PRINCIPAL
-
 void correrSimulacao(Supermercado *sm) {
     int total_entradas = 0;
     EntradaCliente *entradas = prepararEntradas(&sm->clientes, &sm->st, &total_entradas);
-
-    printf("Clientes previstos para hoje: %d\n\n", total_entradas);
-
-    /*
-    struct timespec ts;
-    ts.tv_sec  = (time_t)sm->st.segundos_por_tick;
-    ts.tv_nsec = (long)((sm->st.segundos_por_tick - ts.tv_sec) * 1e9);
-    */
-
-    while (sm->st.tick_atual < sm->st.ticks_totais) {
+    //printf("Clientes previstos para hoje: %d\n\n", total_entradas);
+    limpar_ecra();
+    printf("\033[?25l");
+    // so para quando:
+    // 1) passar da hora de fecho
+    // 2) não haver clientes na loja
+    // 3) não haver clientes na fila
+    while (sm->st.tick_atual <= sm->st.ticks_totais || sm->clientes_na_loja.total_na_loja > 0 || filasTotais(sm) > 0)
+    {
         int hora, minuto;
         tickParaHora(&sm->st, &hora, &minuto);
 
-        // verifica entradas neste tick
         for (int i = 0; i < total_entradas; i++) {
-            if (entradas[i].tick_entrada == sm->st.tick_atual && entradas[i].cliente != NULL) {
+            // so entra na loja se ainda nao passou a hora de fecho  // <-- controlo de entradas
+            if (entradas[i].tick_entrada == sm->st.tick_atual && entradas[i].cliente != NULL && sm->st.tick_atual <= sm->st.ticks_totais) {
                 preencherCarrinho(entradas[i].cliente, sm);
                 inserirLoja(&sm->clientes_na_loja, entradas[i]);
-                /*printf("[%02d:%02d] Cliente %06d (%s) entrou na loja com %d produtos.\n",
-                       hora, minuto,
-                       entradas[i].cliente->id,
-                       entradas[i].cliente->nome,
-                       entradas[i].cliente->n_produtos);*/
-
+                /*
+                printf("[%02d:%02d] Cliente %06d (%s) entrou na loja com %d produtos.\n",
+                   hora, minuto,
+                   entradas[i].cliente->id,
+                   entradas[i].cliente->nome,
+                   entradas[i].cliente->n_produtos);
+                */
                 // ESCREVER OS PRODUTOS DE CADA PESSOA
                 /*
                 Produto *prod = entradas[i].cliente->carrinho;
@@ -124,32 +143,41 @@ void correrSimulacao(Supermercado *sm) {
                     printf("%s\n", prod->nome);
                     prod = prod->proximo;
                 }
-                printf("\n");*/
-
+                printf("\n");
+                */
             }
-
+            // saida da loja acontece sempre, independentemente da hora  // <-- sem restricao de hora
             if (entradas[i].tick_saida == sm->st.tick_atual && entradas[i].cliente != NULL) {
                 removerLoja(&sm->clientes_na_loja, sm->st.tick_atual);
                 clienteEntrarCaixa(sm, entradas[i].cliente);
+                entradas[i].cliente = NULL;  // <-- marca como processado
             }
         }
 
+
+
         processarAtendimento(sm);
-        gerirCaixas(sm);
-
+        gerirCaixas(sm, sm->st.tick_atual >= sm->st.ticks_totais && sm->clientes_na_loja.total_na_loja == 0);
+        // verifica se o utilizador pretende pausar a simulacao
+        if (_kbhit()) {
+            int tecla = _getch();
+            if (tecla == 'p' || tecla == 'P') {
+                printf("\033[?25h");        //mostra o cursor
+                printf("\n");
+                pausarSimulacao(sm);        //esconde o cursor
+                while (_kbhit()) _getch();
+                printf("\033[?25l");
+                limpar_ecra();
+            }
+        }
+        simular(sm, hora, minuto, total_entradas);
         sm->st.tick_atual++;
-
         Sleep((DWORD)(sm->st.segundos_por_tick * 1000));
     }
-
+    printf("\033[?25h");                // mostra o cursor novamente
     printf("\nLoja fechada. Simulacao terminada.\n");
     free(entradas);
 }
-
-
-// ----------------------------------------------------------------------------------------------------------------
-
-
 
 
 
