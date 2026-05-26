@@ -20,7 +20,7 @@
 
 /* ------------------------------ CONFIGURAÇÃO ------------------------------*/
 typedef struct {
-    int   max_espera;
+    int   max_espera;      // em ticks simulados
     int   n_caixas;
     int   tempo_atendimento_produto;
     float max_preco;
@@ -63,6 +63,20 @@ typedef struct {
 } Fila;
 
 
+/* ------------------------------ LISTA PROD OFERECIDOS ------------------------------*/
+typedef struct no_prod_oferecido
+{
+    Produto                     prod;
+    struct no_prod_oferecido    *proximo;
+}NODO_prod_oferecido;
+
+typedef struct
+{
+    NODO_prod_oferecido         *inicio;
+    int                         total;
+}Lista_ofertas;
+
+
 /* ------------------------------ CAIXA ------------------------------*/
 typedef struct {
     int    id;
@@ -78,6 +92,7 @@ typedef struct {
     float  total_valor_vendido;
     int    produtos_oferecidos;
     float  valor_oferecido;
+    Lista_ofertas oferta;
 } Caixa;
 
 
@@ -143,16 +158,16 @@ typedef struct {
 
 
 
-
-
-
+#ifdef _WIN32
+    #include <windows.h>
+#endif
 
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <windows.h>
+
 
 #define LIMPAR_BUFFER() do { int c; while ((c = getchar()) != '\n' && c != EOF); } while(0)
 

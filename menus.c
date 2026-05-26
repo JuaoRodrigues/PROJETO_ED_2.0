@@ -217,7 +217,6 @@ void menu_estatisticas(Supermercado *sm)
 
 void pausarSimulacao(Supermercado *sm) {
     int op;
-    int valido = 0;
     do {
         printf("  |------------------------------------------|\n");
         printf("  |            SIMULACAO PAUSADA             |\n");
@@ -232,13 +231,13 @@ void pausarSimulacao(Supermercado *sm) {
         LIMPAR_BUFFER();
 
         switch (op) {
-            case 1: limpar_ecra(); valido = 1; menu_estatisticas(sm); break;
-            case 2: printf("DESENVOLVER\n"); valido = 1; break;
-            case 3: valido = 1; return;
-            case 0: valido = 1; exit(0);
+            case 1: limpar_ecra(); menu_estatisticas(sm); break;
+            case 2: printf("DESENVOLVER\n"); break;
+            case 3: return;
+            case 0: exit(0);
             default: printf("Opcao invalida.\n"); pausar();
         }
-    } while (valido == 0);
+    } while (1);
 }
 
 

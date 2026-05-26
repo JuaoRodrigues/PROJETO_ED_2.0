@@ -19,6 +19,7 @@ void entrarFila(Caixa *cai, Cliente *cli);
 Cliente *sairFila(Caixa *cai);
 void clienteEntrarCaixa(Supermercado *sm, Cliente *cliente);
 void processarAtendimento (Supermercado *sm);
+void oferecerProduto(Supermercado *sm);
 
 int filasTotais(Supermercado *sm);
 

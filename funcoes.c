@@ -14,6 +14,7 @@ void inicializarLoja (Supermercado *sm)
     {
         sm->caixas[i].id    = i + 1;
         sm->caixas[i].ativa = 0;
+        sm->caixas[i].seg_fim_atendimento = -1;
     }
     sm->caixas[0].ativa = 1;     // a caixa 1 começa ativa todos os dias
 }
@@ -445,7 +446,7 @@ void processarAtendimento (Supermercado *sm)
 
         // 1 PARTE
         //calcula o tempo de atendimento do cliente atual
-        if(cai->seg_fim_atendimento == 0)
+        if(cai->seg_fim_atendimento == -1)
         {
             long tempo_total = 0;
 
@@ -480,10 +481,73 @@ void processarAtendimento (Supermercado *sm)
             //printf("Cliente %06d (%s) foi atendido na caixa %d.\n",               <----------
             //       atendido->id, atendido->nome, cai->id);
 
-            cai->seg_fim_atendimento = 0;   // reset para o proximo cliente
+            cai->seg_fim_atendimento = -1;   // reset para o proximo cliente
         }
     }
 }
+
+
+void oferecerProduto(Supermercado *sm)
+{
+    for(int i = 0; i < sm->config.n_caixas; i++)
+    {
+        Caixa *cai = &sm->caixas[i];
+        if(cai->ativa == 0)  continue;
+
+        // comecamos a ver no 2 elemento da fila pq o 1 ja está a ser atendido
+        // e nao faz sentido oferecer-lhe nada
+
+        Cliente *cli = cai->fila.frente;
+        if(cli) cli = cli->proximo;
+
+        while(cli)
+        {
+            // verifica se o cliente espera ha mais de max_espera ticks
+            int espera = sm->st.tick_atual - cli->tick_entrada_fila;
+            if(espera >= sm->config.max_espera && cli->produto_oferecido == 0 && cli->carrinho != NULL)
+            {
+                // conta os produtos do carrinho
+                int total = 0;
+                Produto *p = cli->carrinho;
+                while(p)
+                {
+                    total ++;
+                    p = p->proximo;
+                }
+
+                // escolhe um produto aleatorio e reinicia p
+                int escolha = rand() % total;
+                p = cli->carrinho;
+                for(int i = 0; i < escolha; i++)
+                {
+                    p = p->proximo;
+                }
+
+                cli->produto_oferecido = 1;
+
+                // adiciona o produto à lista de produtos oferecidos
+                NODO_prod_oferecido *novo = malloc(sizeof(NODO_prod_oferecido));
+                if(!novo) {cli = cli->proximo; continue;}
+                novo->prod              = *p;    //copia o produto
+                novo->prod.proximo      = NULL;
+                novo->proximo           = cai->oferta.inicio;
+                cai->oferta.inicio      = novo;
+                cai->oferta.total++;
+
+printf("\nPRODUTO OFERECIDO A: [%s] - %s : %.2f", cli->nome, p->nome, p->preco);
+
+                // atualiza estatísticas da caixa e do supermercado
+                cai->produtos_oferecidos++;
+                cai->valor_oferecido += p->preco;
+                sm->produtos_oferecidos_total++;
+                sm->valor_oferecido_total += p->preco;
+            }
+            cli = cli->proximo;
+        }
+    }
+}
+
+
 
 int filasTotais(Supermercado *sm)
 {
