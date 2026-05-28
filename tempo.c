@@ -112,7 +112,7 @@ void correrSimulacao(Supermercado *sm) {
     int total_entradas = 0;
     EntradaCliente *entradas = prepararEntradas(&sm->clientes, &sm->st, &total_entradas);
     //printf("Clientes previstos para hoje: %d\n\n", total_entradas);
-    //limpar_ecra();
+    limpar_ecra();
     printf("\033[?25l");
     // so para quando:
     // 1) passar da hora de fecho
@@ -171,7 +171,7 @@ void correrSimulacao(Supermercado *sm) {
                 limpar_ecra();
             }
         }
-        //simular(sm, hora, minuto, total_entradas);
+        simular(sm, hora, minuto, total_entradas);
         sm->st.tick_atual++;
         Sleep((DWORD)(sm->st.segundos_por_tick * 1000));
     }

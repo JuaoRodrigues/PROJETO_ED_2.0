@@ -66,9 +66,10 @@ void simular (Supermercado *sm, int hora, int minuto, int previstos)
         }else printf("  | Caixa %d : Fora de Serviço!                        0\n", cai->id);
     }
     printf("  |------------------------------------------------------\n");
-    printf("  | Clientes na Loja : %02d\n", sm->clientes_na_loja.total_na_loja);
-    printf("  | Clientes na Fila : %02d\n", total_filas);
-    printf("  | Clientes Previstos : %02d\n", previstos);
+    printf("  | Clientes na Loja    : %02d\n", sm->clientes_na_loja.total_na_loja);
+    printf("  | Clientes na Fila    : %02d\n", total_filas);
+    printf("  | Clientes Previstos  : %02d\n", previstos);
+    printf("  | Produtos oferecidos : %02d\n", sm->produtos_oferecidos_total);
     printf("  |------------------------------------------------------\n");
 }
 

@@ -534,7 +534,7 @@ void oferecerProduto(Supermercado *sm)
                 cai->oferta.inicio      = novo;
                 cai->oferta.total++;
 
-printf("\nPRODUTO OFERECIDO A: [%s] - %s : %.2f", cli->nome, p->nome, p->preco);
+//printf("\nPRODUTO OFERECIDO A: [%s] - %s : %.2f", cli->nome, p->nome, p->preco);
 
                 // atualiza estatísticas da caixa e do supermercado
                 cai->produtos_oferecidos++;
