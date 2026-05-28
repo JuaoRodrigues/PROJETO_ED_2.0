@@ -69,7 +69,9 @@ int main()
 
     //imprimir_historico(&super);
     taxa_oferta(&super);
+    printf("\n\n");
     estatisticas_gerais(&super);
+
 
 
 

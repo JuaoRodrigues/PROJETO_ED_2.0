@@ -4,13 +4,12 @@
 
 /* ------------------------------ CONSTANTES ------------------------------*/
 #define MAX_NOME            100
-#define SIM_SPEED           600
-#define MAX_CAIXAS          20
+#define MAX_CAIXAS          20          // ACHO QUE NAO É USADO
 #define HASH_SIZE           100
 
 // PARA A SIMULACAO
-#define MIN_CLIENTES_DIA    20
-#define MAX_CLIENTES_DIA    21
+#define MIN_CLIENTES_DIA    1000
+#define MAX_CLIENTES_DIA    1001
 
 #define MIN_TEMPO_LOJA      10   /* minutos simulados */
 #define MAX_TEMPO_LOJA      60   /* minutos simulados */
@@ -22,7 +21,7 @@
 typedef struct {
     int   max_espera;      // em ticks simulados
     int   n_caixas;
-    int   tempo_atendimento_produto;
+    int   tempo_atendimento_produto;    // em segundos simulados
     float max_preco;
     int   max_fila;
     int   min_fila;
@@ -181,6 +180,12 @@ typedef struct {
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+
+// ----------------- CORES -----------------
+#define VERMELHO    "\033[31m"
+#define VERDE       "\033[32m"
+#define AMARELO     "\033[33m"
+#define RESET       "\033[0m"
 
 
 #define LIMPAR_BUFFER() do { int c; while ((c = getchar()) != '\n' && c != EOF); } while(0)

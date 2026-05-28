@@ -159,6 +159,14 @@ void correrSimulacao(Supermercado *sm) {
         processarAtendimento(sm);
         oferecerProduto(sm);
         gerirCaixas(sm, sm->st.tick_atual >= sm->st.ticks_totais && sm->clientes_na_loja.total_na_loja == 0);
+
+        // calcula o tempo de cada caixa aberta
+        for (int i = 0; i < sm->config.n_caixas; i++)
+        {
+            if (sm->caixas[i].ativa != 0)
+                sm->caixas[i].ticks_aberta ++;
+        }
+
         // verifica se o utilizador pretende pausar a simulacao
         if (_kbhit()) {
             int tecla = _getch();
@@ -177,13 +185,6 @@ void correrSimulacao(Supermercado *sm) {
     }
     printf("\033[?25h");                // mostra o cursor novamente
     printf("\nLoja fechada. Simulacao terminada.\n");
-
-    // calcula o tempo de cada caixa aberta
-    for (int i = 0; i < sm->config.n_caixas; i++)
-    {
-        if (sm->caixas[i].ativa != 0)
-            sm->caixas[i].ticks_aberta += sm->st.tick_atual - sm->caixas[i].tick_abertura;
-    }
 
     free(entradas);
 }

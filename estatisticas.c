@@ -1,5 +1,9 @@
 #include "estatisticas.h"
 
+
+
+
+
 void registar_cliente_atendido (Caixa *cai, Cliente *cli)
 {
     NodoClienteAtendido *novo = malloc(sizeof(NodoClienteAtendido));
@@ -61,9 +65,14 @@ void taxa_oferta (Supermercado *sm)
             a = t;
         }
         int maxDiv = a;
+        float percentagem = (float)oferecidos / total * 100.0;
 
-        if (maxDiv == 0 || oferecidos == 0)     printf("  Caixa %d | nenhum produto oferecido\n", cai->id);
-        else printf("  Caixa %d | %d em cada %d clientes recebeu uma oferta\n", cai->id, oferecidos / maxDiv, total / maxDiv);
+        if (maxDiv == 0 || oferecidos == 0)             printf("  Caixa %d | nenhum produto oferecido                       " VERDE "0.0%%" RESET "\n", cai->id);
+        else {
+            if(percentagem >= 75)                       printf("  Caixa %d | %3d em cada %3d clientes recebeu uma oferta    " VERMELHO "%.1f%%" RESET "\n", cai->id, oferecidos / maxDiv, total / maxDiv, percentagem);
+            if(percentagem < 80 && percentagem >= 25)   printf("  Caixa %d | %3d em cada %3d clientes recebeu uma oferta    " AMARELO "%.1f%%" RESET "\n", cai->id, oferecidos / maxDiv, total / maxDiv, percentagem);
+            if(percentagem < 25)                        printf("  Caixa %d | %3d em cada %3d clientes recebeu uma oferta    " VERDE "%.1f%%" RESET "\n", cai->id, oferecidos / maxDiv, total / maxDiv, percentagem);
+        }
     }
 }
 
@@ -76,10 +85,12 @@ void estatisticas_gerais (Supermercado *sm)
     // P -> produtos vendidos
     // R -> rendimento (total vendas em euros)
     // T -> tempo aberta
+    // O -> oferecidos
     Caixa *maisA = NULL, *menosA = NULL;
     Caixa *maisP = NULL, *menosP = NULL;
     Caixa *maisR = NULL, *menosR = NULL;
     Caixa *maisT = NULL, *menosT = NULL;
+    Caixa *maisO = NULL, *menosO = NULL;
 
     for(int i = 0; i < sm->config.n_caixas; i++)
     {
@@ -97,32 +108,39 @@ void estatisticas_gerais (Supermercado *sm)
 
         if(!maisT  || cai->ticks_aberta > maisT->ticks_aberta)                              maisT  = cai;
         if(!menosT || cai->ticks_aberta < menosT->ticks_aberta)                             menosT = cai;
+
+        if(!maisO  || cai->produtos_oferecidos > maisO->produtos_oferecidos)                maisO  = cai;
+        if(!menosO || cai->produtos_oferecidos < maisO->produtos_oferecidos)                menosO = cai;
     }
 
-    printf("=== Clientes Atendidos ===\n");
-    if (maisA)  printf("  Mais:  Caixa %d | %d clientes\n", maisA->id, maisA->total_clientes_atendidos);   // <---
-    if (menosA) printf("  Menos: Caixa %d | %d clientes\n", menosA->id, menosA->total_clientes_atendidos); // <---
+    printf("===| Clientes Atendidos \n");
+    if (maisA)  printf(VERDE " + " RESET "|  Mais:  Caixa %02d | %7d clientes\n", maisA->id, maisA->total_clientes_atendidos);
+    if (menosA) printf(VERMELHO " - " RESET "|  Menos: Caixa %02d | %7d clientes\n", menosA->id, menosA->total_clientes_atendidos);
 
-    printf("\n=== Produtos Vendidos ===\n");
-    if (maisP)  printf("  Mais:  Caixa %d | %d produtos\n", maisP->id, maisP->total_produtos_vendidos);
-    if (menosP) printf("  Menos: Caixa %d | %d produtos\n", menosP->id, menosP->total_produtos_vendidos);
+    printf("\n===| Produtos Vendidos \n");
+    if (maisP)  printf(VERDE " + " RESET "|  Mais:  Caixa %02d | %7d produtos\n", maisP->id, maisP->total_produtos_vendidos);
+    if (menosP) printf(VERMELHO " - " RESET "|  Menos: Caixa %02d | %7d produtos\n", menosP->id, menosP->total_produtos_vendidos);
 
-    printf("\n===  Rendimento  ===\n");
-    if(maisR)   printf("  Mais:  Caixa %d | %.2f euros\n", maisR->id, maisR->total_valor_vendido);
-    if(menosR)  printf("  Menos: Caixa %d | %.2f euros\n", menosR->id, menosR->total_valor_vendido);
+    printf("\n===| Produtos Oferecidos \n");
+    if (maisP)  printf(VERDE " + " RESET "|  Mais:  Caixa %02d | %7d produtos oferecidos\n", maisO->id, maisO->total_produtos_vendidos);
+    if (menosP) printf(VERMELHO " - " RESET "|  Menos: Caixa %02d | %7d produtos oferecidos\n", menosO->id, menosO->total_produtos_vendidos);
 
-    printf("\n=== Tempo Aberta ===\n");
+    printf("\n===|  Rendimento  \n");
+    if(maisR)   printf(VERDE " + " RESET "|  Mais:  Caixa %02d | %9.2f euros\n", maisR->id, maisR->total_valor_vendido);
+    if(menosR)  printf(VERMELHO " - " RESET "|  Menos: Caixa %02d | %9.2f euros\n", menosR->id, menosR->total_valor_vendido);
+
+    printf("\n===| Tempo Aberta \n");
     if(maisT)
     {
         int horas = (maisT->ticks_aberta) / 60;
         int mins  = (maisT->ticks_aberta) % 60;
-        printf("  Mais:  Caixa %d | %02dh%02d\n", maisT->id, horas, mins);
+        printf(VERDE " + " RESET"|  Mais:  Caixa %02d | %02dh%02d\n", maisT->id, horas, mins);
     }
     if(menosT)
     {
         int horas = (menosT->ticks_aberta) / 60;
         int mins  = (menosT->ticks_aberta) %60;
-        printf("  Menos: Caixa %d | %02dh%02d\n", menosT->id, horas, mins);
+        printf(VERMELHO " - " RESET "|  Menos: Caixa %02d | %02dh%02d\n", menosT->id, horas, mins);
     }
 }
 

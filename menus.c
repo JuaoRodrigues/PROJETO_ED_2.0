@@ -1,4 +1,5 @@
 #include "menus.h"
+#include "estatisticas.h"
 
 #ifdef _WIN32
     #include <windows.h>
