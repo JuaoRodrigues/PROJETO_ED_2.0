@@ -9,8 +9,8 @@
 #define HASH_SIZE           100
 
 // PARA A SIMULACAO
-#define MIN_CLIENTES_DIA    1000
-#define MAX_CLIENTES_DIA    1001
+#define MIN_CLIENTES_DIA    20
+#define MAX_CLIENTES_DIA    21
 
 #define MIN_TEMPO_LOJA      10   /* minutos simulados */
 #define MAX_TEMPO_LOJA      60   /* minutos simulados */
@@ -77,6 +77,17 @@ typedef struct
 }Lista_ofertas;
 
 
+/* ------------------------------ LISTA CLIENTES ATENDIDOS POR CAIXA ------------------------------*/
+typedef struct NodoClienteAtendido {
+    Cliente                     atendido;
+    struct NodoClienteAtendido  *proximo;
+} NodoClienteAtendido;
+
+typedef struct {
+    NodoClienteAtendido         *inicio;
+    int                         total;
+} ListaClientesAtendidos;
+
 /* ------------------------------ CAIXA ------------------------------*/
 typedef struct {
     int    id;
@@ -93,6 +104,9 @@ typedef struct {
     int    produtos_oferecidos;
     float  valor_oferecido;
     Lista_ofertas oferta;
+    ListaClientesAtendidos historico;
+    int ticks_aberta;       // total de ticks aberta
+    int tick_abertura;      // ultimo tick em que abriu
 } Caixa;
 
 

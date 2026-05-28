@@ -1,5 +1,6 @@
 #include "funcoes.h"
 #include "Ficheiros.h"
+#include "estatisticas.h"
 
 
 // ------------------------- INICIALIZAR CAIXAS POR DIA -------------------------
@@ -15,6 +16,7 @@ void inicializarLoja (Supermercado *sm)
         sm->caixas[i].id    = i + 1;
         sm->caixas[i].ativa = 0;
         sm->caixas[i].seg_fim_atendimento = -1;
+        sm->caixas[0].tick_abertura = 0;
     }
     sm->caixas[0].ativa = 1;     // a caixa 1 começa ativa todos os dias
 }
@@ -269,7 +271,9 @@ void gerirCaixas(Supermercado *sm, int loja_fechada)
             for(int j = 0; j < sm->config.n_caixas; j++)
             {
                 if(sm->caixas[j].ativa == 2){
+                    // reativa caixa que estava a fechar
                     sm->caixas[j].ativa = 1;
+                    sm->caixas[j].tick_abertura = sm->st.tick_atual;
                     moverMetadeFila(&sm->caixas[i], &sm->caixas[j]);
                     /*printf("Caixa %d reativada. %d clientes transferidos da caixa %d\n",
                         sm->caixas[j].id,
@@ -287,6 +291,7 @@ void gerirCaixas(Supermercado *sm, int loja_fechada)
                     if(sm->caixas[j].ativa == 0)
                     {
                         sm->caixas[j].ativa = 1;
+                        sm->caixas[j].tick_abertura = sm->st.tick_atual;
                         moverMetadeFila(&sm->caixas[i], &sm->caixas[j]);
                         /*printf("Caixa %d aberta. %d clientes transferidos da caixa %d\n",
                                 sm->caixas[j].id,
@@ -349,6 +354,7 @@ void gerirCaixas(Supermercado *sm, int loja_fechada)
     {
         if (sm->caixas[i].ativa == 2 && sm->caixas[i].fila.tamanho == 0)
         {
+            sm->caixas[i].ticks_aberta += sm->st.tick_atual - sm->caixas[i].tick_abertura;  // acumula o tempo aberta da caixa
             sm->caixas[i].ativa = 0;
             //printf("Caixa %d fechada.\n", sm->caixas[i].id);
         }
@@ -466,6 +472,7 @@ void processarAtendimento (Supermercado *sm)
         {
             Cliente *atendido = sairFila(cai);
             if(!atendido)   continue;
+
             atendido->proximo = NULL;
             cai->total_clientes_atendidos ++;
             cai->total_produtos_vendidos += atendido->n_produtos;
@@ -478,8 +485,10 @@ void processarAtendimento (Supermercado *sm)
                 cai->total_valor_vendido += p2->preco;
                 p2 = p2->proximo;
             }
-            //printf("Cliente %06d (%s) foi atendido na caixa %d.\n",               <----------
+            //printf("Cliente %06d (%s) foi atendido na caixa %d.\n",
             //       atendido->id, atendido->nome, cai->id);
+
+            registar_cliente_atendido(cai, atendido);
 
             cai->seg_fim_atendimento = -1;   // reset para o proximo cliente
         }
@@ -548,7 +557,6 @@ void oferecerProduto(Supermercado *sm)
 }
 
 
-
 int filasTotais(Supermercado *sm)
 {
     int total = 0;
@@ -556,13 +564,3 @@ int filasTotais(Supermercado *sm)
         total += sm->caixas[i].fila.tamanho;
     return total;
 }
-
-
-
-
-
-
-
-
-
-

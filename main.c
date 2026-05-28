@@ -3,6 +3,7 @@
 #include "menus.h"
 #include "tempo.h"
 #include "funcoes.h"
+#include "estatisticas.h"
 
 
 #include <locale.h>
@@ -66,7 +67,9 @@ int main()
     super.st = configurarTempo(&super.config);
     correrSimulacao(&super);
 
-
+    //imprimir_historico(&super);
+    taxa_oferta(&super);
+    estatisticas_gerais(&super);
 
 
 

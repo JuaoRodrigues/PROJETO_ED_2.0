@@ -171,12 +171,20 @@ void correrSimulacao(Supermercado *sm) {
                 limpar_ecra();
             }
         }
-        simular(sm, hora, minuto, total_entradas);
+        //simular(sm, hora, minuto, total_entradas);
         sm->st.tick_atual++;
         Sleep((DWORD)(sm->st.segundos_por_tick * 1000));
     }
     printf("\033[?25h");                // mostra o cursor novamente
     printf("\nLoja fechada. Simulacao terminada.\n");
+
+    // calcula o tempo de cada caixa aberta
+    for (int i = 0; i < sm->config.n_caixas; i++)
+    {
+        if (sm->caixas[i].ativa != 0)
+            sm->caixas[i].ticks_aberta += sm->st.tick_atual - sm->caixas[i].tick_abertura;
+    }
+
     free(entradas);
 }
 
