@@ -16,9 +16,9 @@ void inicializarLoja (Supermercado *sm)
         sm->caixas[i].id    = i + 1;
         sm->caixas[i].ativa = 0;
         sm->caixas[i].seg_fim_atendimento = -1;
-        sm->caixas[0].tick_abertura = 0;
     }
     sm->caixas[0].ativa = 1;     // a caixa 1 começa ativa todos os dias
+    sm->caixas[0].tick_abertura = 0;
 }
 
 
