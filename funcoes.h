@@ -20,6 +20,8 @@ Cliente *sairFila(Caixa *cai);
 void clienteEntrarCaixa(Supermercado *sm, Cliente *cliente);
 void processarAtendimento (Supermercado *sm);
 void oferecerProduto(Supermercado *sm);
+void abrirCaixaDefinitiva(Supermercado *sm, int id_caixa);
+void fecharCaixaDefinitiva(Supermercado *sm, int id_caixa);
 
 int filasTotais(Supermercado *sm);
 

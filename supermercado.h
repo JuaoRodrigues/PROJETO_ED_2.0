@@ -93,7 +93,11 @@ typedef struct {
     char   nome[MAX_NOME];
     char   operador_nome[MAX_NOME];
     int    operador_id;
-    int    ativa;   // 0 = fechada, 1 = aberta, 2 = a fechar (atende o restante de clientes mas nao permite mais ninguem na fila), 3 = recentemente aberta (nao pode ser fechada nesse tick)
+    // 0 = fechada, 1 = aberta, 2 = a fechar (atende o restante de clientes mas nao permite mais ninguem na fila)
+    // 3 = recentemente aberta (nao pode ser fechada nesse tick)
+    // 4 = fechada definitivamente (todos os clientes incluindo o da frente sao redistribuidos)
+    // 5 = aberta definitivamente (nunca fecha ate ordem contrária)
+    int    ativa;
     Fila   fila;
     long   seg_fim_atendimento;     // segundos simulados em que o cliente termina a compra
     int    tick_fim_atendimento;

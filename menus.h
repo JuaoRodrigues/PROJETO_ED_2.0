@@ -2,6 +2,8 @@
 #define MENUS_H_INCLUDED
 
 #include "supermercado.h"
+#include "estatisticas.h"
+#include "funcoes.h"
 
  void limpar_ecra();
  void pausar();

@@ -1,5 +1,5 @@
 #include "menus.h"
-#include "estatisticas.h"
+
 
 #ifdef _WIN32
     #include <windows.h>
@@ -123,9 +123,9 @@ void menu_caixas(Supermercado *sm)
     printf("  |             GESTÃO DE CAIXAS             |\n");
     printf("  |------------------------------------------|\n");
     printf("  | 1. Listar todas as caixas                |\n");
-    printf("  | 2. Abrir caixa                           |\n");
-    printf("  | 3. Fechar caixa                          |\n");
-    printf("  | 4. Fechar caixa (redistribuir clientes)  |\n");
+    printf("  | 2. Abrir caixa definitivamente           |\n");
+    printf("  | 3. Fechar caixa definitivamente          |\n");
+    printf("  | 4. Voltar a gestão automárica            |\n");
     printf("  | 5. Verificar abertura/fecho automatico   |\n");
     printf("  | 0. Voltar                                |\n");
     printf("  |------------------------------------------|\n");
@@ -136,7 +136,24 @@ void menu_caixas(Supermercado *sm)
     switch(op)
     {
     case 1: printf("DESENVOLVER\n");    break;
-    case 2: printf("DESENVOLVER\n");    break;
+    case 2:
+        int n;
+        limpar_ecra();
+        do{
+            printf("\n\n  Número da caixa que pretende abrir: ");
+            scanf("%d", &n);
+            LIMPAR_BUFFER();
+            if(n <= 0 || n > sm->config.n_caixas)
+            {
+                printf("  Número de caixa inválido! Tente novamente com um valor entre 1 e %d", sm->config.n_caixas);
+                continue;
+            }
+            abrirCaixaDefinitiva(sm, n);
+            pausar();
+        }while (n <= 0 || n > sm->config.n_caixas);
+        limpar_ecra();
+        break;
+
     case 3: printf("DESENVOLVER\n");    break;
     case 4: printf("DESENVOLVER\n");    break;
     case 5: printf("DESENVOLVER\n");    break;
@@ -259,7 +276,7 @@ void pausarSimulacao(Supermercado *sm) {
         LIMPAR_BUFFER();
 
         switch (op) {
-            case 1: limpar_ecra(); menu_estatisticas(sm); break;
+            case 1: limpar_ecra(); menu_caixas(sm); pausar(); limpar_ecra(); break;
             case 2: printf("DESENVOLVER\n"); break;
             case 3: return;
             case 0: exit(0);

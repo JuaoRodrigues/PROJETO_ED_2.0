@@ -67,7 +67,7 @@ int main()
     super.st = configurarTempo(&super.config);
     correrSimulacao(&super);
 
-    menu_estatisticas(&super);
+    //menu_estatisticas(&super);
 
 
 

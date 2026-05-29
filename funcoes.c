@@ -264,7 +264,7 @@ void gerirCaixas(Supermercado *sm, int loja_fechada)
     // verifica se existe alguma caixa a fechar -> esta permanece aberta
     for(int i = 0; i < sm->config.n_caixas; i++)
     {
-        if (sm->caixas[i].ativa != 1) continue;
+        if (sm->caixas[i].ativa != 1 && sm->caixas[i].ativa != 5) continue;
 
         if(sm->caixas[i].fila.tamanho >= sm->config.max_fila)
         {
@@ -313,7 +313,7 @@ void gerirCaixas(Supermercado *sm, int loja_fechada)
     int ativas = 0;
     for(int i = 0; i < sm->config.n_caixas; i++)
     {
-        if(sm->caixas[i].ativa == 1)    ativas ++;
+        if(sm->caixas[i].ativa == 1 || sm->caixas[i].ativa == 5)    ativas ++;
     }
 
 
@@ -325,7 +325,7 @@ void gerirCaixas(Supermercado *sm, int loja_fechada)
         int caixa_cheia = 0;
         for(int i = 0; i < sm->config.n_caixas; i++)
         {
-            if((sm->caixas[i].ativa == 1) && sm->caixas[i].fila.tamanho >= sm->config.max_fila)
+            if((sm->caixas[i].ativa == 1 || sm->caixas[i].ativa == 5) && sm->caixas[i].fila.tamanho >= sm->config.max_fila)
             {
                 caixa_cheia = 1;
                 break;
@@ -576,4 +576,87 @@ int filasTotais(Supermercado *sm)
     for (int i = 0; i < sm->config.n_caixas; i++)
         total += sm->caixas[i].fila.tamanho;
     return total;
+}
+
+
+// -------------------------- REVER NAO FUNCIONA
+
+void abrirCaixaDefinitiva(Supermercado *sm, int id_caixa)
+{
+    // procurar a caixa pelo ID
+    for(int i = 0; i < sm->config.n_caixas; i++)
+    {
+        if(sm->caixas[i].id != id_caixa)    continue;
+
+        if(sm->caixas[i].ativa == 5)
+        {
+            printf("\n  A caixa %d já estava aberta definitivamente!", id_caixa);
+            return;
+        }
+
+        if(sm->caixas[i].ativa != 0 || sm->caixas[i].ativa != 4)
+        {
+            printf("\n  A caixa %d já estava aberta", id_caixa);
+            printf("\n  Agora está aberta definitivamente!");
+            printf("\n  Caso futuramente pretenda fechar esta caixa tem que o fazer manualmente");
+            return;
+        }
+
+        sm->caixas[i].ativa = 5;
+        sm->caixas[i].tick_abertura = sm->st.tick_atual;
+        printf("\n  Caixa %d aberta definitivamente", id_caixa);
+        printf("\n  Caso futuramente pretenda fechar esta caixa tem que o fazer manualmente");
+        return;
+    }
+}
+
+
+void fecharCaixaDefinitiva(Supermercado *sm, int id_caixa)
+{
+    // procurar a caixa pelo ID
+    for(int i = 0; i < sm->config.n_caixas; i++)
+    {
+        if (sm->caixas[i].id != id_caixa)   continue;
+
+        if(sm->caixas[i].ativa == 4)
+        {
+            printf("\n  A caixa %d já estava fechada definitivamente!", id_caixa);
+            return;
+        }
+
+        if(sm->caixas[i].ativa == 0)
+        {
+            printf("\n  A caixa %d já estava fechada", id_caixa);
+            printf("\n  Agora está fechada definitivamente!");
+            printf("\n  Caso futuramente pretenda abrir esta caixa tem que o fazer manualmente");
+            return;
+        }
+
+        sm->caixas[i].ticks_aberta += sm->st.tick_atual - sm->caixas[i].tick_abertura;
+        sm->caixas[i].ativa = 4; // fecha primeiro para escolherCaixa a ignorar
+
+        while(sm->caixas[i].fila.tamanho > 0)
+        {
+            Cliente *cli = sairFila(&sm->caixas[i]);
+            if(!cli)    break;
+
+            Caixa *destino = escolherCaixa(sm);
+
+            if(destino) entrarFila(destino, cli);
+            else {
+                printf("\n  Não é possivel fechar a caixa %d: nenhuma caixa disponivel.\n", id_caixa);
+                printf("\n  Pois esta é a única caixa ativa e tem que haver sempre pelo menos uma caixa aberta!");
+                entrarFila(&sm->caixas[i], cli);
+                sm->caixas[i].ativa = 1; // reverte o fecho
+                return;
+            }
+        }
+
+        sm->caixas[i].seg_fim_atendimento = -1;
+        printf("\n  Caixa %d fechada definitivamente", id_caixa);
+        printf("\n  Caso futuramente pretenda abrir esta caixa tem que o fazer manualmente");
+        return;
+    }
+
+
 }
