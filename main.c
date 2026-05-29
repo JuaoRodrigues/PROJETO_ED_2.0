@@ -67,11 +67,7 @@ int main()
     super.st = configurarTempo(&super.config);
     correrSimulacao(&super);
 
-    //imprimir_historico(&super);
-    taxa_oferta(&super);
-    printf("\n\n");
-    estatisticas_gerais(&super);
-
+    menu_estatisticas(&super);
 
 
 

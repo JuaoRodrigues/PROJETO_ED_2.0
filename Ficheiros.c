@@ -126,6 +126,8 @@ Produto *lerProdutos(const char *ficheiro, int *total, int tempo_max) {
 }
 
 
+
+
 void lerDados(const char *ficheiro, Supermercado *sm) {
     FILE *f = fopen(ficheiro, "r");
     if (!f) {
@@ -242,4 +244,67 @@ void lerDados(const char *ficheiro, Supermercado *sm) {
     }
 
     fclose(f);
+}
+
+
+void atribuirFuncionarios(const char *ficheiro, Supermercado *sm)
+{
+    FILE *f = fopen(ficheiro, "r");
+    if (!f) {
+        printf("Erro: nao foi possivel abrir %s\n", ficheiro);
+        return;
+    }
+
+    // contar quantos funcionarios existem
+    int total = 0;
+    char linha[256];
+    while (fgets(linha, sizeof(linha), f))
+        if (strlen(linha) > 1) total++;
+
+    if (total == 0) { fclose(f); return; }
+
+    // guardar todos os funcionarios em arrays temporarios
+    int *ids          = malloc(total * sizeof(int));
+    char (*nomes)[MAX_NOME] = malloc(total * sizeof(*nomes));
+    if (!ids || !nomes) { fclose(f); free(ids); free(nomes); return; }
+
+    rewind(f);
+    int i = 0;
+    while (i < total && fgets(linha, sizeof(linha), f))
+    {
+        if (strlen(linha) <= 1) continue;
+        linha[strcspn(linha, "\n")] = '\0';
+
+        char *espaco = strchr(linha, ' ');
+        if (!espaco) continue;
+        *espaco = '\0';
+
+        ids[i] = atoi(linha);
+        strncpy(nomes[i], espaco + 1, MAX_NOME - 1);
+        nomes[i][MAX_NOME - 1] = '\0';
+        i++;
+    }
+    fclose(f);
+
+    // atribuir um funcionario aleatorio a cada caixa
+    // sem repeticoes se houver funcionarios suficientes
+    int *usados = calloc(i, sizeof(int));
+    if (!usados) { free(ids); free(nomes); return; }
+
+    for (int c = 0; c < sm->config.n_caixas; c++)
+    {
+        int escolha, tentativas = 0;
+        do {
+            escolha = rand() % i;
+            tentativas++;
+        } while (usados[escolha] && tentativas < i);
+
+        usados[escolha] = 1;
+        sm->caixas[c].operador_id = ids[escolha];
+        strncpy(sm->caixas[c].operador_nome, nomes[escolha], MAX_NOME - 1);
+    }
+
+    free(ids);
+    free(nomes);
+    free(usados);
 }

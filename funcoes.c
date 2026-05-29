@@ -8,6 +8,7 @@ void inicializarLoja (Supermercado *sm)
 {
     lerConfiguracao("Configuracao.txt", &sm->config);
     lerClientes("clientes.txt", &sm->clientes);
+    atribuirFuncionarios("funcionarios.txt", sm);
     sm->produtos = lerProdutos("produtos.txt", &sm->total_produtos, sm->config.tempo_atendimento_produto);
 
     // gestao de caixas
@@ -19,6 +20,7 @@ void inicializarLoja (Supermercado *sm)
     }
     sm->caixas[0].ativa = 1;     // a caixa 1 começa ativa todos os dias
     sm->caixas[0].tick_abertura = 0;
+    sm->clientesDia = 0;
 }
 
 
@@ -422,6 +424,7 @@ void clienteEntrarCaixa(Supermercado *sm, Cliente *cli)
 {
     if (cli->n_produtos == 0) {
         //printf("Cliente %06d (%s) saiu da loja sem produtos.\n", cli->id, cli->nome);
+        sm->est_clientes.total_sem_produtos++;
         return;
     }
 
@@ -489,6 +492,16 @@ void processarAtendimento (Supermercado *sm)
             //       atendido->id, atendido->nome, cai->id);
 
             registar_cliente_atendido(cai, atendido);
+
+            // atualiza as estatisticas dos clientes
+            sm->est_clientes.total_atendidos++;
+            sm->est_clientes.total_produtos   += atendido->n_produtos;
+            sm->est_clientes.total_com_oferta += atendido->produto_oferecido;
+            sm->est_clientes.total_espera     += sm->st.tick_atual - atendido->tick_entrada_fila;
+            sm->est_clientes.total_tempo_loja += sm->st.tick_atual - atendido->tick_entrada;
+            Produto *p3 = atendido->carrinho;
+            while (p3) { sm->est_clientes.total_gasto += p3->preco; p3 = p3->proximo; }
+
 
             cai->seg_fim_atendimento = -1;   // reset para o proximo cliente
         }

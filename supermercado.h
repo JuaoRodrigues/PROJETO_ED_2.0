@@ -153,6 +153,17 @@ typedef struct {
     int                 total_na_loja;
 } ListaLoja;
 
+/* ------------------------------ ESTATISTICAS CLIENTES ------------------------------*/
+typedef struct {
+    int    total_atendidos;
+    int    total_sem_produtos;
+    int    total_com_oferta;
+    int    total_produtos;
+    float  total_gasto;
+    long   total_espera;       // soma dos ticks de espera na fila
+    long   total_tempo_loja;   // soma dos ticks na loja
+} EstatisticasClientes;
+
 /* ------------------------------ SUPERMERCADO ------------------------------*/
 typedef struct {
     Caixa           caixas[MAX_CAIXAS];
@@ -165,6 +176,8 @@ typedef struct {
     int             produtos_oferecidos_total;
     float           valor_total_ganho;
     float           valor_oferecido_total;
+    int             clientesDia;
+    EstatisticasClientes est_clientes;
 } Supermercado;
 
 

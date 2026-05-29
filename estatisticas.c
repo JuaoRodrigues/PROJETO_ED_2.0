@@ -24,20 +24,16 @@ void registar_cliente_atendido (Caixa *cai, Cliente *cli)
     cai->historico.total ++;
 }
 
-
-void imprimir_historico (Supermercado *sm)
+void imprimir_historico (Caixa *cai)
 {
-    for(int i = 0; i < sm->config.n_caixas; i++)
+    printf("\n=== Caixa %d | Total atendidos: %d\n", cai->id, cai->historico.total);
+
+    if(cai->historico.total != 0)
     {
-        Caixa *cai = &sm->caixas[i];
-        if(cai->historico.total == 0)  continue;
-
-        printf("\n=== Caixa %d | Total atendidos: %d ===\n", cai->id, cai->historico.total);
-
         NodoClienteAtendido *n = cai->historico.inicio;
         while(n)
         {
-            printf("  Cliente %06d (%s) | Produtos: %d\n", n->atendido.id, n->atendido.nome, n->atendido.n_produtos);
+            printf("  Cliente %06d (%s) | Quantidade de produtos: %d\n", n->atendido.id, n->atendido.nome, n->atendido.n_produtos);
             n = n->proximo;
         }
     }
@@ -67,13 +63,30 @@ void taxa_oferta (Supermercado *sm)
         int maxDiv = a;
         float percentagem = (float)oferecidos / total * 100.0;
 
-        if (maxDiv == 0 || oferecidos == 0)             printf("  Caixa %d | nenhum produto oferecido                       " VERDE "0.0%%" RESET "\n", cai->id);
+        if (maxDiv == 0 || oferecidos == 0)             printf("  Caixa %d | Nenhum produto oferecido                                " VERDE "0,0%%" RESET "\n", cai->id);
         else {
-            if(percentagem >= 75)                       printf("  Caixa %d | %3d em cada %3d clientes recebeu uma oferta    " VERMELHO "%.1f%%" RESET "\n", cai->id, oferecidos / maxDiv, total / maxDiv, percentagem);
-            if(percentagem < 80 && percentagem >= 25)   printf("  Caixa %d | %3d em cada %3d clientes recebeu uma oferta    " AMARELO "%.1f%%" RESET "\n", cai->id, oferecidos / maxDiv, total / maxDiv, percentagem);
-            if(percentagem < 25)                        printf("  Caixa %d | %3d em cada %3d clientes recebeu uma oferta    " VERDE "%.1f%%" RESET "\n", cai->id, oferecidos / maxDiv, total / maxDiv, percentagem);
+            if(percentagem >= 50)                       printf("  Caixa %d | %3d em cada %3d clientes recebeu uma oferta             " VERMELHO "%.1f%%" RESET "\n", cai->id, oferecidos / maxDiv, total / maxDiv, percentagem);
+            if(percentagem < 50 && percentagem >= 25)   printf("  Caixa %d | %3d em cada %3d clientes recebeu uma oferta             " AMARELO "%.1f%%" RESET "\n", cai->id, oferecidos / maxDiv, total / maxDiv, percentagem);
+            if(percentagem < 25)                        printf("  Caixa %d | %3d em cada %3d clientes recebeu uma oferta             " VERDE "%.1f%%" RESET "\n", cai->id, oferecidos / maxDiv, total / maxDiv, percentagem);
         }
     }
+    // L -> loja
+    int oferecidosL = sm->produtos_oferecidos_total;
+    int totalL = sm->clientesDia;
+
+    int b = totalL, a = oferecidosL;
+    while(b)
+    {
+        int t = b;
+        b = a % b;
+        a = t;
+    }
+    int maxDivL = a;
+    float percentagemL = (float)oferecidosL / totalL * 100.0;
+    if (maxDivL == 0 || oferecidosL == 0)               printf("\n  No Supermercado | Nenhum produto oferecido                       " VERDE "0,0%%" RESET "\n");
+    if(percentagemL >= 50)                              printf("\n  No Supermercado | %3d em cada %3d clientes recebeu uma oferta    " VERMELHO "%.1f%%" RESET "\n", oferecidosL / maxDivL, totalL / maxDivL, percentagemL);
+    if(percentagemL < 50 && percentagemL >= 25)         printf("\n  No Supermercado | %3d em cada %3d clientes recebeu uma oferta    " AMARELO "%.1f%%" RESET "\n", oferecidosL / maxDivL, totalL / maxDivL, percentagemL);
+    if(percentagemL < 25)                               printf("\n  No Supermercado | %3d em cada %3d clientes recebeu uma oferta    " VERDE "%.1f%%" RESET "\n", oferecidosL / maxDivL, totalL / maxDivL, percentagemL);
 }
 
 
@@ -112,6 +125,22 @@ void estatisticas_gerais (Supermercado *sm)
         if(!maisO  || cai->produtos_oferecidos > maisO->produtos_oferecidos)                maisO  = cai;
         if(!menosO || cai->produtos_oferecidos < maisO->produtos_oferecidos)                menosO = cai;
     }
+    // A -> abertura
+    // F -> fecho
+    // E -> esperado
+
+    int horaA = sm->config.hora_abertura,  minA = 0;
+    int horaE = sm->config.hora_fecho,     minE = 0;
+    int horaF = sm->st.tick_atual / 60 + sm->config.hora_abertura, minF = sm->st.tick_atual % 60 + sm->config.hora_abertura;
+
+
+    printf("===  Estatísticas Gerais \n\n");
+
+    printf("===| Horas");
+    printf("   | Hora abertura : %02dh%02d\n", horaA, minA);
+    printf("   | Hora fecho : %02dh%02d\n", horaF, minF);
+    printf("   | Hora fecho (esperado): %02dh%02d\n\n", horaE, minE);
+
 
     printf("===| Clientes Atendidos \n");
     if (maisA)  printf(VERDE " + " RESET "|  Mais:  Caixa %02d | %7d clientes\n", maisA->id, maisA->total_clientes_atendidos);
@@ -144,3 +173,29 @@ void estatisticas_gerais (Supermercado *sm)
     }
 }
 
+
+
+void estatisticas_clientes(Supermercado *sm)
+{
+    EstatisticasClientes *e = &sm->est_clientes;
+    int total_entraram = sm->clientes.total_clientes;
+
+    printf("\n=== Estatísticas de Clientes\n\n");
+
+    if (e->total_atendidos > 0)
+    {
+        printf("  | Media de produtos por cliente  : %.1f\n", (float)e->total_produtos / e->total_atendidos);
+        printf("  | Media de espera na fila        : %ldm\n", e->total_espera / e->total_atendidos);
+        printf("  | Media de tempo na loja         : %ldm\n", e->total_tempo_loja / e->total_atendidos);
+        printf("  | Media de dinheiro gasto        : %.2f euros\n", e->total_gasto / e->total_atendidos);
+    }
+
+    printf("  | Clientes sem produtos          : %d [%.1f%%]\n",
+        e->total_sem_produtos,
+        total_entraram > 0 ? (float)e->total_sem_produtos / total_entraram * 100.0f : 0.0f);
+
+    printf("  | Clientes com oferta            : %d [%.1f%%]\n",
+        e->total_com_oferta,
+        e->total_atendidos > 0 ? (float)e->total_com_oferta / e->total_atendidos * 100.0f : 0.0f);
+    printf("  |\n  | Total clientes                 : %d\n", sm->est_clientes.total_atendidos);
+}

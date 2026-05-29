@@ -191,11 +191,11 @@ void menu_estatisticas(Supermercado *sm)
     printf("  |------------------------------------------|\n");
     printf("  |                 ESTATISTICAS             |\n");
     printf("  |------------------------------------------|\n");
-    printf("  | 1. Caixa com mais atendimentos           |\n");
-    printf("  | 2. Caixa com mais produtos vendidos      |\n");
+    printf("  | 1. Estatísticas gerais                   |\n");
+    printf("  | 2. Taxa de oferta de produtos            |\n");
     printf("  | 3. Listar clientes de uma caixa          |\n");
-    printf("  | 4. Operador com menos atendimentos       |\n");
-    printf("  | 5. Produtos oferecidos e custo           |\n");
+    printf("  | 4. Listar funcionários                   |\n");
+    printf("  | 5. Estatísticas dos clientes             |\n");
     printf("  | 0. Voltar                                |\n");
     printf("  |------------------------------------------|\n");
     printf("  | Opção: ");
@@ -204,17 +204,43 @@ void menu_estatisticas(Supermercado *sm)
 
     switch(op)
     {
-    case 1: printf("DESENVOLVER\n");    break;
-    case 2: printf("DESENVOLVER\n");    break;
-    case 3: printf("DESENVOLVER\n");    break;
-    case 4: printf("DESENVOLVER\n");    break;
-    case 5: printf("DESENVOLVER\n");    break;
+    case 1: limpar_ecra(); estatisticas_gerais(sm); pausar(); limpar_ecra(); break;
+    case 2: limpar_ecra(); taxa_oferta(sm); pausar(); limpar_ecra(); break;
+    case 3:
+        limpar_ecra();
+        int n;
+        do
+        {
+            printf("\nIndique a caixa: ");
+            scanf("%d", &n);
+            LIMPAR_BUFFER();
+            if(n <= 0 || n > sm->config.n_caixas)    {printf("\n  Número de caixa inválido! Tente um valor entre 1 e %d\n", sm->config.n_caixas); continue;}
+            Caixa *caix = &sm->caixas[n - 1];
+            imprimir_historico(caix);
+            pausar();
+        }while (n <= 0 || n > sm->config.n_caixas);
+        limpar_ecra();
+        break;
+    case 4:
+        limpar_ecra();
+        printf("\n=== Todos os funcionários do Supermercado\n");
+        for(int i = 0; i < sm->config.n_caixas; i++) { printf("CAIXA %d : %d - %s\n", i+1, sm->caixas[i].operador_id, sm->caixas[i].operador_nome); }
+        pausar();
+        limpar_ecra();
+        break;
+    case 5:
+        limpar_ecra();
+        estatisticas_clientes(sm);
+        pausar();
+        limpar_ecra();
+        break;
     case 0: break;
         default:  printf("  Opcao inválida.\n"); pausar();
     }
-    limpar_ecra();
+    //limpar_ecra();
 
     }while (op != 0);
+    limpar_ecra();
 }
 
 void pausarSimulacao(Supermercado *sm) {

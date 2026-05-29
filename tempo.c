@@ -111,6 +111,7 @@ EntradaCliente *prepararEntradas(HashTable *ht, SimulacaoTempo *st, int *total_e
 void correrSimulacao(Supermercado *sm) {
     int total_entradas = 0;
     EntradaCliente *entradas = prepararEntradas(&sm->clientes, &sm->st, &total_entradas);
+    sm->clientesDia = total_entradas;
     //printf("Clientes previstos para hoje: %d\n\n", total_entradas);
     limpar_ecra();
     printf("\033[?25l");
@@ -126,6 +127,7 @@ void correrSimulacao(Supermercado *sm) {
         for (int i = 0; i < total_entradas; i++) {
             // so entra na loja se ainda nao passou a hora de fecho  // <-- controlo de entradas
             if (entradas[i].tick_entrada == sm->st.tick_atual && entradas[i].cliente != NULL && sm->st.tick_atual <= sm->st.ticks_totais) {
+                entradas[i].cliente->tick_entrada = entradas[i].tick_entrada;
                 preencherCarrinho(entradas[i].cliente, sm);
                 inserirLoja(&sm->clientes_na_loja, entradas[i]);
                 /*
@@ -148,6 +150,7 @@ void correrSimulacao(Supermercado *sm) {
             }
             // saida da loja acontece sempre, independentemente da hora  // <-- sem restricao de hora
             if (entradas[i].tick_saida == sm->st.tick_atual && entradas[i].cliente != NULL) {
+                entradas[i].cliente->tick_saida = entradas[i].tick_saida;
                 removerLoja(&sm->clientes_na_loja, sm->st.tick_atual);
                 clienteEntrarCaixa(sm, entradas[i].cliente);
                 entradas[i].cliente = NULL;  // <-- marca como processado
@@ -185,7 +188,7 @@ void correrSimulacao(Supermercado *sm) {
     }
     printf("\033[?25h");                // mostra o cursor novamente
     printf("\nLoja fechada. Simulacao terminada.\n");
-
+    pausar();
     free(entradas);
 }
 
