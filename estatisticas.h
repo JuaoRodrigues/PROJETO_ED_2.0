@@ -5,6 +5,7 @@
 
 void registar_cliente_atendido (Caixa *cai, Cliente *cli);
 void imprimir_historico (Caixa *cai);
+void imprimirFila (Supermercado *sm, int id_caixa);         // FUNCIONA
 
 void taxa_oferta (Supermercado *sm);
 void estatisticas_gerais (Supermercado *sm);

@@ -18,10 +18,12 @@ void gerirCaixas(Supermercado *sm, int loja_fechada);
 void entrarFila(Caixa *cai, Cliente *cli);
 Cliente *sairFila(Caixa *cai);
 void clienteEntrarCaixa(Supermercado *sm, Cliente *cliente);
-void processarAtendimento (Supermercado *sm);
-void oferecerProduto(Supermercado *sm);
-void abrirCaixaDefinitiva(Supermercado *sm, int id_caixa);
-void fecharCaixaDefinitiva(Supermercado *sm, int id_caixa);
+void processarAtendimento (Supermercado *sm);                   //funciona
+void oferecerProduto(Supermercado *sm);                         //funciona
+
+void abrirCaixaDefinitiva(Supermercado *sm, int id_caixa);      // funciona
+void fecharCaixaDefinitiva(Supermercado *sm, int id_caixa);     // CRASHA O PROGRAMA
+void caixasAutomaticas (Supermercado *sm, int op);              // funciona
 
 int filasTotais(Supermercado *sm);
 

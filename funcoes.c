@@ -109,7 +109,7 @@ Caixa *escolherCaixa(Supermercado *sm)
 
     for(int i = 0; i < sm->config.n_caixas; i++)
     {
-        if (sm->caixas[i].ativa != 1 && sm->caixas[i].ativa != 3) continue;
+        if (sm->caixas[i].ativa != 1 && sm->caixas[i].ativa != 3 && sm->caixas[i].ativa != 5) continue;
         if (sm->caixas[i].fila.tamanho >= sm->config.max_fila) continue;
 
         int total_produtos = 0;
@@ -581,82 +581,67 @@ int filasTotais(Supermercado *sm)
 
 // -------------------------- REVER NAO FUNCIONA
 
+// NECESSARIO VALIDACAO ANTES SOBRE O ID DA CAIXA
 void abrirCaixaDefinitiva(Supermercado *sm, int id_caixa)
 {
-    // procurar a caixa pelo ID
-    for(int i = 0; i < sm->config.n_caixas; i++)
+    Caixa *cai = &sm->caixas[id_caixa - 1];
+
+    if(cai->ativa == 5)
     {
-        if(sm->caixas[i].id != id_caixa)    continue;
-
-        if(sm->caixas[i].ativa == 5)
-        {
-            printf("\n  A caixa %d já estava aberta definitivamente!", id_caixa);
-            return;
-        }
-
-        if(sm->caixas[i].ativa != 0 || sm->caixas[i].ativa != 4)
-        {
-            printf("\n  A caixa %d já estava aberta", id_caixa);
-            printf("\n  Agora está aberta definitivamente!");
-            printf("\n  Caso futuramente pretenda fechar esta caixa tem que o fazer manualmente");
-            return;
-        }
-
-        sm->caixas[i].ativa = 5;
-        sm->caixas[i].tick_abertura = sm->st.tick_atual;
-        printf("\n  Caixa %d aberta definitivamente", id_caixa);
-        printf("\n  Caso futuramente pretenda fechar esta caixa tem que o fazer manualmente");
+        printf("\n  A caixa %d já estava aberta definitivamente!");
         return;
     }
+
+    cai->ativa = 5;
+    cai->seg_fim_atendimento = -1;
+    printf("\n  Caixa %d aberta definitivamente!", id_caixa);
+    printf("\n  Caso futuramente pretenda fechar esta caixa tem que o fazer manualmente");
 }
 
 
 void fecharCaixaDefinitiva(Supermercado *sm, int id_caixa)
 {
-    // procurar a caixa pelo ID
-    for(int i = 0; i < sm->config.n_caixas; i++)
+    Caixa *cai = &sm->caixas[id_caixa - 1];
+
+    if(cai->ativa == 4)
     {
-        if (sm->caixas[i].id != id_caixa)   continue;
-
-        if(sm->caixas[i].ativa == 4)
-        {
-            printf("\n  A caixa %d já estava fechada definitivamente!", id_caixa);
-            return;
-        }
-
-        if(sm->caixas[i].ativa == 0)
-        {
-            printf("\n  A caixa %d já estava fechada", id_caixa);
-            printf("\n  Agora está fechada definitivamente!");
-            printf("\n  Caso futuramente pretenda abrir esta caixa tem que o fazer manualmente");
-            return;
-        }
-
-        sm->caixas[i].ticks_aberta += sm->st.tick_atual - sm->caixas[i].tick_abertura;
-        sm->caixas[i].ativa = 4; // fecha primeiro para escolherCaixa a ignorar
-
-        while(sm->caixas[i].fila.tamanho > 0)
-        {
-            Cliente *cli = sairFila(&sm->caixas[i]);
-            if(!cli)    break;
-
-            Caixa *destino = escolherCaixa(sm);
-
-            if(destino) entrarFila(destino, cli);
-            else {
-                printf("\n  Não é possivel fechar a caixa %d: nenhuma caixa disponivel.\n", id_caixa);
-                printf("\n  Pois esta é a única caixa ativa e tem que haver sempre pelo menos uma caixa aberta!");
-                entrarFila(&sm->caixas[i], cli);
-                sm->caixas[i].ativa = 1; // reverte o fecho
-                return;
-            }
-        }
-
-        sm->caixas[i].seg_fim_atendimento = -1;
-        printf("\n  Caixa %d fechada definitivamente", id_caixa);
-        printf("\n  Caso futuramente pretenda abrir esta caixa tem que o fazer manualmente");
+        printf("\n  A caixa %d já estava fechada definitivamente!");
         return;
     }
 
+    // move os clientes um a um, cada um escolhe a melhor caixa disponivel
+    while (cai->fila.tamanho > 0)
+    {
+        Caixa *destino = escolherCaixa(sm);
+        if(destino == NULL)
+        {
+            printf("\n  Aviso: nao ha caixas abertas para receber a fila.\n");
+            break;
+        }
+        Cliente *cli = sairFila(cai);
+        entrarFila(destino, cli);
+    }
+    cai->ativa = 4;
+    cai->seg_fim_atendimento = -1;
+    printf(" Caixa %d fechada definitivamente.\n", id_caixa);
+    printf("\n  Caso futuramente pretenda fechar esta caixa tem que o fazer manualmente");
+}
 
+
+void caixasAutomaticas (Supermercado *sm, int op)
+{
+    if (op == 0)
+    {
+        // mete todas as caixas em automatico
+        for(int i = 0; i < sm->config.n_caixas; i++)
+        {
+            if (sm->caixas[i].ativa == 5) sm->caixas[i].ativa = 1;
+            if (sm->caixas[i].ativa == 4) sm->caixas[i].ativa = 0;
+        }
+        printf("\n  Gestao automatica reativada para todas as caixas.\n");
+    }else{
+        if (sm->caixas[op - 1].ativa == 5) sm->caixas[op - 1].ativa = 1;
+        if (sm->caixas[op - 1].ativa == 4) sm->caixas[op - 1].ativa = 0;
+        printf("\n  Gestao automatica reativada para a caixa %d.\n", op);
+    }
 }

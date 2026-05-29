@@ -40,6 +40,29 @@ void imprimir_historico (Caixa *cai)
 }
 
 
+void imprimirFila (Supermercado *sm, int id_caixa)
+{
+    Caixa *cai = &sm->caixas[id_caixa - 1];
+    printf("\n=== Caixa %d | Total fila: %d\n", cai->id, cai->fila.tamanho);
+
+    if(cai->fila.tamanho == 0)
+    {
+        printf("  A fila da caixa está vazia!\n", id_caixa);
+        return;
+    }
+
+    Cliente *cli = cai->fila.frente;
+    for(int i = 0; i < cai->fila.tamanho; i++)
+    {
+        printf("  %d - [%d produtos]%s\n", i+1, cli->n_produtos, cli->nome);
+        cli = cli->proximo;
+    }
+}
+
+
+
+
+
 void taxa_oferta (Supermercado *sm)
 {
     printf("===| Taxa de produtos oferecidos\n");
