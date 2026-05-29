@@ -182,7 +182,7 @@ void correrSimulacao(Supermercado *sm) {
                 limpar_ecra();
             }
         }
-        //simular(sm, hora, minuto, total_entradas);
+        simular(sm, hora, minuto, total_entradas);
         sm->st.tick_atual++;
         Sleep((DWORD)(sm->st.segundos_por_tick * 1000));
     }

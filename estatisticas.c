@@ -42,6 +42,7 @@ void imprimir_historico (Caixa *cai)
 
 void taxa_oferta (Supermercado *sm)
 {
+    printf("===| Taxa de produtos oferecidos\n");
     for(int i = 0; i < sm->config.n_caixas; i++)
     {
         Caixa *cai = &sm->caixas[i];
@@ -63,11 +64,11 @@ void taxa_oferta (Supermercado *sm)
         int maxDiv = a;
         float percentagem = (float)oferecidos / total * 100.0;
 
-        if (maxDiv == 0 || oferecidos == 0)             printf("  Caixa %d | Nenhum produto oferecido                                " VERDE "0,0%%" RESET "\n", cai->id);
+        if (maxDiv == 0 || oferecidos == 0)             printf("   | Caixa %d | Nenhum produto oferecido                                " VERDE "0,0%%" RESET "\n", cai->id);
         else {
-            if(percentagem >= 50)                       printf("  Caixa %d | %3d em cada %3d clientes recebeu uma oferta             " VERMELHO "%.1f%%" RESET "\n", cai->id, oferecidos / maxDiv, total / maxDiv, percentagem);
-            if(percentagem < 50 && percentagem >= 25)   printf("  Caixa %d | %3d em cada %3d clientes recebeu uma oferta             " AMARELO "%.1f%%" RESET "\n", cai->id, oferecidos / maxDiv, total / maxDiv, percentagem);
-            if(percentagem < 25)                        printf("  Caixa %d | %3d em cada %3d clientes recebeu uma oferta             " VERDE "%.1f%%" RESET "\n", cai->id, oferecidos / maxDiv, total / maxDiv, percentagem);
+            if(percentagem >= 50)                       printf("   | Caixa %d | %3d em cada %3d clientes recebeu uma oferta             " VERMELHO "%.1f%%" RESET "\n", cai->id, oferecidos / maxDiv, total / maxDiv, percentagem);
+            if(percentagem < 50 && percentagem >= 25)   printf("   | Caixa %d | %3d em cada %3d clientes recebeu uma oferta             " AMARELO "%.1f%%" RESET "\n", cai->id, oferecidos / maxDiv, total / maxDiv, percentagem);
+            if(percentagem < 25)                        printf("   | Caixa %d | %3d em cada %3d clientes recebeu uma oferta             " VERDE "%.1f%%" RESET "\n", cai->id, oferecidos / maxDiv, total / maxDiv, percentagem);
         }
     }
     // L -> loja
@@ -83,10 +84,11 @@ void taxa_oferta (Supermercado *sm)
     }
     int maxDivL = a;
     float percentagemL = (float)oferecidosL / totalL * 100.0;
-    if (maxDivL == 0 || oferecidosL == 0)               printf("\n  No Supermercado | Nenhum produto oferecido                       " VERDE "0,0%%" RESET "\n");
-    if(percentagemL >= 50)                              printf("\n  No Supermercado | %3d em cada %3d clientes recebeu uma oferta    " VERMELHO "%.1f%%" RESET "\n", oferecidosL / maxDivL, totalL / maxDivL, percentagemL);
-    if(percentagemL < 50 && percentagemL >= 25)         printf("\n  No Supermercado | %3d em cada %3d clientes recebeu uma oferta    " AMARELO "%.1f%%" RESET "\n", oferecidosL / maxDivL, totalL / maxDivL, percentagemL);
-    if(percentagemL < 25)                               printf("\n  No Supermercado | %3d em cada %3d clientes recebeu uma oferta    " VERDE "%.1f%%" RESET "\n", oferecidosL / maxDivL, totalL / maxDivL, percentagemL);
+    printf("   |");
+    if (maxDivL == 0 || oferecidosL == 0)               printf("\n   | No Supermercado | Nenhum produto oferecido                        " VERDE "0,0%%" RESET "\n");
+    if(percentagemL >= 50)                              printf("\n   | No Supermercado | %3d em cada %3d clientes recebeu uma oferta     " VERMELHO "%.1f%%" RESET "\n", oferecidosL / maxDivL, totalL / maxDivL, percentagemL);
+    if(percentagemL < 50 && percentagemL >= 25)         printf("\n   | No Supermercado | %3d em cada %3d clientes recebeu uma oferta     " AMARELO "%.1f%%" RESET "\n", oferecidosL / maxDivL, totalL / maxDivL, percentagemL);
+    if(percentagemL < 25)                               printf("\n   | No Supermercado | %3d em cada %3d clientes recebeu uma oferta     " VERDE "%.1f%%" RESET "\n", oferecidosL / maxDivL, totalL / maxDivL, percentagemL);
 }
 
 
@@ -136,7 +138,7 @@ void estatisticas_gerais (Supermercado *sm)
 
     printf("===  Estatísticas Gerais \n\n");
 
-    printf("===| Horas");
+    printf("===| Horas\n");
     printf("   | Hora abertura : %02dh%02d\n", horaA, minA);
     printf("   | Hora fecho : %02dh%02d\n", horaF, minF);
     printf("   | Hora fecho (esperado): %02dh%02d\n\n", horaE, minE);
