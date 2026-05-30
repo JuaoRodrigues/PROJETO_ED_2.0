@@ -275,7 +275,7 @@ void atribuirFuncionarios(const char *ficheiro, Supermercado *sm)
         if (strlen(linha) <= 1) continue;
         linha[strcspn(linha, "\n")] = '\0';
 
-        char *espaco = strchr(linha, ' ');
+        char *espaco = strchr(linha, '\t');
         if (!espaco) continue;
         *espaco = '\0';
 

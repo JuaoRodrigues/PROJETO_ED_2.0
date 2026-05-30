@@ -22,7 +22,7 @@ void processarAtendimento (Supermercado *sm);                   //funciona
 void oferecerProduto(Supermercado *sm);                         //funciona
 
 void abrirCaixaDefinitiva(Supermercado *sm, int id_caixa);      // funciona
-void fecharCaixaDefinitiva(Supermercado *sm, int id_caixa);     // CRASHA O PROGRAMA
+void fecharCaixaDefinitiva(Supermercado *sm, int id_caixa);     // funciona
 void caixasAutomaticas (Supermercado *sm, int op);              // funciona
 
 int filasTotais(Supermercado *sm);

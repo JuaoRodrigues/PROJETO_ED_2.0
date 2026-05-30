@@ -609,7 +609,16 @@ void fecharCaixaDefinitiva(Supermercado *sm, int id_caixa)
         return;
     }
 
+    cai->ativa = 4;
+    cai->seg_fim_atendimento = -1;
+
     // move os clientes um a um, cada um escolhe a melhor caixa disponivel
+    if(cai->fila.tamanho > 0)
+    {
+        printf("\n  Na seguinte tabela pode verificar a distribuição dos clientes da caixa %d", id_caixa);
+        printf("\n\n  | Caixa | Cliente\n");
+    }
+
     while (cai->fila.tamanho > 0)
     {
         Caixa *destino = escolherCaixa(sm);
@@ -620,10 +629,9 @@ void fecharCaixaDefinitiva(Supermercado *sm, int id_caixa)
         }
         Cliente *cli = sairFila(cai);
         entrarFila(destino, cli);
+        printf("  | %3d   | %s\n", destino->id, cli->nome);
     }
-    cai->ativa = 4;
-    cai->seg_fim_atendimento = -1;
-    printf(" Caixa %d fechada definitivamente.\n", id_caixa);
+    printf("\n  Caixa %d fechada definitivamente.\n", id_caixa);
     printf("\n  Caso futuramente pretenda fechar esta caixa tem que o fazer manualmente");
 }
 

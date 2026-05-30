@@ -82,6 +82,7 @@ void simular (Supermercado *sm, int hora, int minuto, int previstos)
 
 
 // MENUS
+¨/*
 void menu_principal(Supermercado *sm)
 {
     int op;
@@ -118,7 +119,7 @@ do{
 }while(op != 0);
 
 }
-
+*/
 
 void menu_caixas(Supermercado *sm)
 {
@@ -178,7 +179,7 @@ void menu_caixas(Supermercado *sm)
     case 3:
         limpar_ecra();
         do{
-            printf("\n\n  Número da caixa que pretende abrir: ");
+            printf("\n\n  Número da caixa que pretende fechar: ");
             scanf("%d", &n);
             LIMPAR_BUFFER();
             if(n <= 0 || n > sm->config.n_caixas)
@@ -293,7 +294,7 @@ void menu_estatisticas(Supermercado *sm)
         pausar();
         limpar_ecra();
         break;
-    case 0: break;
+    case 0: limpar_ecra(); return;
         default:  printf("  Opcao inválida.\n"); pausar();
     }
     //limpar_ecra();
@@ -319,16 +320,17 @@ void pausarSimulacao(Supermercado *sm) {
 
         switch (op) {
             case 1: limpar_ecra(); menu_caixas(sm); limpar_ecra(); break;
-            case 2: printf("DESENVOLVER\n"); break;
+            case 2:
+                limpar_ecra();
+                menu_estatisticas(sm);
+                break;
+
+
             case 3: return;
             case 0: exit(0);
             default: printf("Opcao invalida.\n"); pausar();
         }
     } while (1);
 }
-
-
-
-
 
 
