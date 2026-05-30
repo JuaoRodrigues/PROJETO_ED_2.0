@@ -54,7 +54,7 @@ void imprimirFila (Supermercado *sm, int id_caixa)
     Cliente *cli = cai->fila.frente;
     for(int i = 0; i < cai->fila.tamanho; i++)
     {
-        printf("  %d - [%d produtos]%s\n", i+1, cli->n_produtos, cli->nome);
+        printf("  %d - [%2d produtos] | %05d %s\n", i+1, cli->n_produtos, cli->id, cli->nome);
         cli = cli->proximo;
     }
 }

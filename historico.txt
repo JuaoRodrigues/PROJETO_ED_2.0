@@ -1,0 +1,92 @@
+DIA 1
+n_caixas|8
+produtos_oferecidos_total|18
+valor_total_ganho|40917,38
+valor_oferecido_total|98,51
+clientes_dia|1000
+est_total_atendidos|927
+est_total_sem_produtos|38
+est_total_com_oferta|18
+est_total_produtos|9686
+est_total_espera|10566
+est_total_tempo_loja|42642
+est_total_gasto|40917,38
+CAIXA|1|Ana Carolina Patricio |245|2580|11213,66|1|14,29|1085
+CAIXA|2|Mariana Sofia Braga |231|2294|9552,77|3|14,85|1008
+CAIXA|3|Beatriz Manuel dos Antos|202|2155|9008,03|3|23,77|1076
+CAIXA|4|Maria Garcia Osório Novo|160|1749|7401,76|10|44,42|872
+CAIXA|5|Mariana dos Santos Almeida|74|787|3205,51|1|1,18|436
+CAIXA|6|Vladimir Fonseca Martins Moura|12|108|465,48|0|0,00|68
+CAIXA|7|Mariana Ghilas Pereira Almeida|3|13|71,69|0|0,00|12
+CAIXA|8|Sergio Vidinha Canteiro Silva|0|0|0,00|0|0,00|0
+FIM_DIA
+
+DIA 2
+n_caixas|8
+produtos_oferecidos_total|3
+valor_total_ganho|40893,98
+valor_oferecido_total|4,01
+clientes_dia|1000
+est_total_atendidos|925
+est_total_sem_produtos|38
+est_total_com_oferta|4
+est_total_produtos|9684
+est_total_espera|10228
+est_total_tempo_loja|42333
+est_total_gasto|40893,98
+CAIXA|1|Maria da Silva Tavares|243|2532|10820,67|1|0,83|993
+CAIXA|2|Filipa Liliana Meira Soares|244|2480|10434,94|0|0,00|965
+CAIXA|3|Isabela Xavier|157|1743|7015,23|2|3,18|911
+CAIXA|4|Goncalo Margarido da Costa|184|1888|8311,28|0|0,00|862
+CAIXA|5|Sandra Maria Pereira |89|926|3848,85|0|0,00|503
+CAIXA|6|Afonso Almeida|8|115|464,50|0|0,00|60
+CAIXA|7|Mariana Maria Moreira Andrade|0|0|0,00|0|0,00|0
+CAIXA|8|Rodrigo Agnes Ferro Ferreira|0|0|0,00|0|0,00|0
+FIM_DIA
+
+DIA 3
+n_caixas|8
+produtos_oferecidos_total|7
+valor_total_ganho|39304,89
+valor_oferecido_total|35,77
+clientes_dia|1000
+est_total_atendidos|917
+est_total_sem_produtos|47
+est_total_com_oferta|7
+est_total_produtos|9542
+est_total_espera|10169
+est_total_tempo_loja|42630
+est_total_gasto|39304,89
+CAIXA|1|Filipa Liliana Meira Soares|229|2376|9599,86|0|0,00|1019
+CAIXA|2|Fabio Nabais Ferreira |228|2432|9953,21|3|15,18|995
+CAIXA|3|Rita Goncalves Lourenco|193|1985|8393,87|0|0,00|938
+CAIXA|4|Afonso Almeida|159|1653|6759,23|0|0,00|858
+CAIXA|5|Caroline Reis Silva Pinto|108|1096|4600,02|4|20,59|548
+CAIXA|6|Guilherme Jose Teixeira Tavares|0|0|0,00|0|0,00|0
+CAIXA|7|Goncalo Margarido da Costa|0|0|0,00|0|0,00|55
+CAIXA|8|Isabela Xavier|0|0|0,00|0|0,00|0
+FIM_DIA
+
+DIA 4
+n_caixas|8
+produtos_oferecidos_total|12
+valor_total_ganho|39797,08
+valor_oferecido_total|43,30
+clientes_dia|1001
+est_total_atendidos|920
+est_total_sem_produtos|47
+est_total_com_oferta|11
+est_total_produtos|9580
+est_total_espera|10334
+est_total_tempo_loja|43171
+est_total_gasto|39797,08
+CAIXA|1|Mariana Maria Pinharandas |224|2224|9079,85|0|0,00|1291
+CAIXA|2|Afonso Almeida|230|2433|10098,86|2|4,54|998
+CAIXA|3|Sónia Saraiva Nunes |218|2400|10129,68|9|37,57|1128
+CAIXA|4|Madalena Leal  Aguiar|156|1633|6892,86|1|1,19|874
+CAIXA|5|Joao Maria Marques |89|877|3532,99|0|0,00|423
+CAIXA|6|Sara de Abreu Conde|3|13|64,27|0|0,00|12
+CAIXA|7|Mariana Nogueira Silva Pinto|0|0|0,00|0|0,00|0
+CAIXA|8|Beatriz Manuel dos Antos|0|0|0,00|0|0,00|0
+FIM_DIA
+

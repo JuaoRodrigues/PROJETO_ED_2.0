@@ -90,7 +90,7 @@ typedef struct {
 /* ------------------------------ CAIXA ------------------------------*/
 typedef struct {
     int    id;
-    char   nome[MAX_NOME];
+    char   nome[MAX_NOME];          // acho que nao é usado
     char   operador_nome[MAX_NOME];
     int    operador_id;
     // 0 = fechada, 1 = aberta, 2 = a fechar (atende o restante de clientes mas nao permite mais ninguem na fila)
@@ -181,6 +181,7 @@ typedef struct {
     float           valor_total_ganho;
     float           valor_oferecido_total;
     int             clientesDia;
+    int             dia;
     EstatisticasClientes est_clientes;
 } Supermercado;
 

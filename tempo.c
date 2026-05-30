@@ -1,11 +1,12 @@
 #include "tempo.h"
 #include "menus.h"
+#include "Ficheiros.h"
 
 
 
 
 // CONFIGURAR TEMPO DE SIMULACAO
-SimulacaoTempo configurarTempo(Configuracao *config) {
+SimulacaoTempo configurarTempo(Configuracao *config, int temp) {
 
     SimulacaoTempo st;
     // VERIFICAR AS HORAS DE ABERTURA E DE FECHO DA LOJA
@@ -18,10 +19,18 @@ SimulacaoTempo configurarTempo(Configuracao *config) {
 
     /* pede ao utilizador a duração real em minutos */
     int duracao_minutos;
-    printf("Quanto tempo (em minutos) deve demorar a simulacao de 1 dia?\n");
-    printf("Minutos: ");
-    scanf("%d", &duracao_minutos);
-    LIMPAR_BUFFER();
+
+    if(temp != 1 && temp != 2)
+    {
+        printf("  |\n");
+        printf("  |Quanto tempo (em minutos) deve demorar a simulacao de 1 dia?\n");
+        printf("  |Minutos: ");
+        scanf("%d", &duracao_minutos);
+        LIMPAR_BUFFER();
+    }
+    if(temp == 1)   duracao_minutos = 1;
+    if(temp == 2)   duracao_minutos = 2;
+
 
     /* converte para segundos e divide pelos ticks */
     double duracao_segundos = duracao_minutos * 60.0;
@@ -187,8 +196,12 @@ void correrSimulacao(Supermercado *sm) {
         Sleep((DWORD)(sm->st.segundos_por_tick * 1000));
     }
     printf("\033[?25h");                // mostra o cursor novamente
-    printf("\nLoja fechada. Simulacao terminada.\n");
-    pausar();
+    guardarDia(sm);
+    printf("\n  Loja fechada. Simulacao terminada.");
+    printf("\n  Dia %d guardado em 'historico.txt'.\n\n", sm->dia);
+    //pausar();
+
+    menu_fim_simulacao(sm);
     free(entradas);
 }
 

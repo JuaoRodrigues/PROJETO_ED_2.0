@@ -308,3 +308,143 @@ void atribuirFuncionarios(const char *ficheiro, Supermercado *sm)
     free(nomes);
     free(usados);
 }
+
+
+
+int obterProximoDia()
+{
+    FILE *f = fopen("historico.txt", "r");
+    if (!f) return 1;
+
+    char linha[512];
+    int ultimo_dia = 0;
+
+    while (fgets(linha, sizeof(linha), f))
+    {
+        int dia;
+        if (sscanf(linha, "DIA %d", &dia) == 1)
+            ultimo_dia = dia;
+    }
+
+    fclose(f);
+    return (ultimo_dia == 0) ? 1 : ultimo_dia + 1;
+}
+
+
+// --------------------------------------------------------------------
+
+
+void guardarDia(Supermercado *sm)
+{
+    FILE *f = fopen("historico.txt", "a");
+    if (!f)
+    {
+        printf("Erro ao abrir historico.txt\n");
+        return;
+    }
+    fprintf(f, "DIA %d\n", sm->dia);
+    fprintf(f, "n_caixas|%d\n", sm->config.n_caixas);
+    fprintf(f, "produtos_oferecidos_total|%d\n", sm->produtos_oferecidos_total);
+    fprintf(f, "valor_total_ganho|%.2f\n", sm->valor_total_ganho);
+    fprintf(f, "valor_oferecido_total|%.2f\n", sm->valor_oferecido_total);
+    fprintf(f, "clientes_dia|%d\n", sm->clientesDia);
+    fprintf(f, "est_total_atendidos|%d\n", sm->est_clientes.total_atendidos);       // <-
+    fprintf(f, "est_total_sem_produtos|%d\n", sm->est_clientes.total_sem_produtos); // <-
+    fprintf(f, "est_total_com_oferta|%d\n", sm->est_clientes.total_com_oferta);     // <-
+    fprintf(f, "est_total_produtos|%d\n", sm->est_clientes.total_produtos);         // <-
+    fprintf(f, "est_total_espera|%ld\n", sm->est_clientes.total_espera);            // <-
+    fprintf(f, "est_total_tempo_loja|%ld\n", sm->est_clientes.total_tempo_loja);    // <-
+    fprintf(f, "est_total_gasto|%.2f\n", sm->est_clientes.total_gasto);             // <-
+    for (int i = 0; i < sm->config.n_caixas; i++)
+    {
+        Caixa *cai = &sm->caixas[i];
+        fprintf(f, "CAIXA|%d|%s|%d|%d|%.2f|%d|%.2f|%d\n",
+            cai->id,
+            cai->operador_nome,
+            cai->total_clientes_atendidos,
+            cai->total_produtos_vendidos,
+            cai->total_valor_vendido,
+            cai->produtos_oferecidos,
+            cai->valor_oferecido,
+            cai->ticks_aberta);
+    }
+    fprintf(f, "FIM_DIA\n\n");
+    fclose(f);
+}
+
+
+float atof_virgula(const char *str)
+{
+    char copia[64];
+    strncpy(copia, str, sizeof(copia) - 1);
+    copia[sizeof(copia) - 1] = '\0';
+    for (int i = 0; copia[i]; i++)
+        if (copia[i] == ',') copia[i] = '.';
+    return (float)atof(copia);
+}
+
+int carregarDia(int dia_pretendido, Supermercado *sm_temp)
+{
+    FILE *f = fopen("historico.txt", "r");
+    if (!f) return 0;
+    char linha[512];
+    int dia_atual  = -1;
+    int encontrado = 0;
+    int idx        = 0;
+    // limpa o sm_temp
+    memset(sm_temp, 0, sizeof(Supermercado));
+    while (fgets(linha, sizeof(linha), f))
+    {
+        linha[strcspn(linha, "\n")] = '\0';
+        if (sscanf(linha, "DIA %d", &dia_atual) == 1)
+        {
+            encontrado = (dia_atual == dia_pretendido);
+            if (encontrado) sm_temp->dia = dia_atual;
+            continue;
+        }
+        if (!encontrado) continue;
+        if (strcmp(linha, "FIM_DIA") == 0) break;
+        char copia[512];
+        strcpy(copia, linha);
+        char *tok = strtok(copia, "|");
+        if (strcmp(tok, "n_caixas") == 0)
+            sm_temp->config.n_caixas = atoi(strtok(NULL, "|"));
+        else if (strcmp(tok, "produtos_oferecidos_total") == 0)
+            sm_temp->produtos_oferecidos_total = atoi(strtok(NULL, "|"));
+        else if (strcmp(tok, "valor_total_ganho") == 0)
+            sm_temp->valor_total_ganho = atof_virgula(strtok(NULL, "|"));
+        else if (strcmp(tok, "valor_oferecido_total") == 0)
+            sm_temp->valor_oferecido_total = atof_virgula(strtok(NULL, "|"));
+        else if (strcmp(tok, "clientes_dia") == 0)
+            sm_temp->clientesDia = atoi(strtok(NULL, "|"));
+        else if (strcmp(tok, "est_total_atendidos") == 0)                                           // <-
+            sm_temp->est_clientes.total_atendidos = atoi(strtok(NULL, "|"));                        // <-
+        else if (strcmp(tok, "est_total_sem_produtos") == 0)                                        // <-
+            sm_temp->est_clientes.total_sem_produtos = atoi(strtok(NULL, "|"));                     // <-
+        else if (strcmp(tok, "est_total_com_oferta") == 0)                                          // <-
+            sm_temp->est_clientes.total_com_oferta = atoi(strtok(NULL, "|"));                       // <-
+        else if (strcmp(tok, "est_total_produtos") == 0)                                            // <-
+            sm_temp->est_clientes.total_produtos = atoi(strtok(NULL, "|"));                         // <-
+        else if (strcmp(tok, "est_total_espera") == 0)                                              // <-
+            sm_temp->est_clientes.total_espera = atol(strtok(NULL, "|"));                           // <-
+        else if (strcmp(tok, "est_total_tempo_loja") == 0)                                          // <-
+            sm_temp->est_clientes.total_tempo_loja = atol(strtok(NULL, "|"));                       // <-
+        else if (strcmp(tok, "est_total_gasto") == 0)                                               // <-
+            sm_temp->est_clientes.total_gasto = atof_virgula(strtok(NULL, "|"));                    // <-
+        else if (strcmp(tok, "CAIXA") == 0 && idx < MAX_CAIXAS)
+        {
+            Caixa *cai = &sm_temp->caixas[idx];
+            cai->id                       = atoi(strtok(NULL, "|"));
+            strncpy(cai->operador_nome,        strtok(NULL, "|"), MAX_NOME - 1);
+            cai->total_clientes_atendidos = atoi(strtok(NULL, "|"));
+            cai->total_produtos_vendidos  = atoi(strtok(NULL, "|"));
+            cai->total_valor_vendido      = atof_virgula(strtok(NULL, "|"));
+            cai->produtos_oferecidos      = atoi(strtok(NULL, "|"));
+            cai->valor_oferecido          = atof_virgula(strtok(NULL, "|"));
+            cai->ticks_aberta             = atoi(strtok(NULL, "|"));
+            idx++;
+        }
+    }
+    fclose(f);
+    return encontrado;
+}

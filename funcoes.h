@@ -6,6 +6,7 @@
 
 
 void inicializarLoja (Supermercado *sm);
+void iniciarDia(Supermercado *sm);
 
 void inserirLoja (ListaLoja *L, EntradaCliente entradaCliente);
 void removerLoja (ListaLoja *L, int tick_atual);
@@ -20,6 +21,9 @@ Cliente *sairFila(Caixa *cai);
 void clienteEntrarCaixa(Supermercado *sm, Cliente *cliente);
 void processarAtendimento (Supermercado *sm);                   //funciona
 void oferecerProduto(Supermercado *sm);                         //funciona
+Cliente *sairFilaPonteiro(Caixa *cai, Cliente *alvo);           //testar
+void moverClientePorId(Supermercado *sm, int origem);           //testar
+
 
 void abrirCaixaDefinitiva(Supermercado *sm, int id_caixa);      // funciona
 void fecharCaixaDefinitiva(Supermercado *sm, int id_caixa);     // funciona

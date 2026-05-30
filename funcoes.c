@@ -8,7 +8,6 @@ void inicializarLoja (Supermercado *sm)
 {
     lerConfiguracao("Configuracao.txt", &sm->config);
     lerClientes("clientes.txt", &sm->clientes);
-    atribuirFuncionarios("funcionarios.txt", sm);
     sm->produtos = lerProdutos("produtos.txt", &sm->total_produtos, sm->config.tempo_atendimento_produto);
 
     // gestao de caixas
@@ -18,9 +17,86 @@ void inicializarLoja (Supermercado *sm)
         sm->caixas[i].ativa = 0;
         sm->caixas[i].seg_fim_atendimento = -1;
     }
+    iniciarDia(sm);
+}
+
+void iniciarDia (Supermercado *sm)
+{
+    // os funcionarios trocam de caixa em cada dia
+    atribuirFuncionarios("funcionarios.txt", sm);
+
+    // limpa a lista de clientes na loja
+    NodoLoja *nodoLoja = sm->clientes_na_loja.inicio;
+    while (nodoLoja != NULL)
+    {
+        NodoLoja *temp = nodoLoja;
+        nodoLoja = nodoLoja->proximo;
+        free(temp);
+    }
+    sm->clientes_na_loja.inicio       = NULL;
+    sm->clientes_na_loja.total_na_loja = 0;
+
+    // reset das caixas
+    for (int i = 0; i < sm->config.n_caixas; i++)
+    {
+        Caixa *cai = &sm->caixas[i];
+
+        // esvazia a fila
+        while (cai->fila.tamanho > 0)
+            sairFila(cai);
+
+        // limpa lista de ofertas
+        NODO_prod_oferecido *nodoOferta = cai->oferta.inicio;
+        while (nodoOferta != NULL)
+        {
+            NODO_prod_oferecido *temp = nodoOferta;
+            nodoOferta = nodoOferta->proximo;
+            free(temp);
+        }
+        cai->oferta.inicio = NULL;
+        cai->oferta.total  = 0;
+
+        // limpa historico de clientes atendidos
+        NodoClienteAtendido *nodoHist = cai->historico.inicio;
+        while (nodoHist != NULL)
+        {
+            NodoClienteAtendido *temp = nodoHist;
+            nodoHist = nodoHist->proximo;
+            free(temp);
+        }
+        cai->historico.inicio = NULL;
+        cai->historico.total  = 0;
+
+        // reset dos contadores
+        cai->total_clientes_atendidos = 0;
+        cai->total_produtos_vendidos  = 0;
+        cai->total_valor_vendido      = 0.0;
+        cai->produtos_oferecidos      = 0;
+        cai->valor_oferecido          = 0.0;
+        cai->seg_fim_atendimento      = -1;
+        cai->tick_fim_atendimento     = 0;
+        cai->ticks_aberta             = 0;
+        cai->tick_abertura            = 0;
+
+        // fecha todas as caixas
+        if (cai->ativa != 0) cai->ativa = 0;
+    }
+
+    // reinicia os contadores gerais
+    sm->produtos_oferecidos_total = 0;
+    sm->valor_total_ganho         = 0.0f;
+    sm->valor_oferecido_total     = 0.0f;
+    sm->clientesDia               = 0;
+    sm->est_clientes              = (EstatisticasClientes){0};
+
+    // reinicia o tempo e atualiza o dia
+    sm->st.tick_atual    = 0;
+    sm->st.seg_simulados = 0;
+    sm->dia = obterProximoDia();
+
+    // abre a caixa 1 todos os dias
     sm->caixas[0].ativa = 1;     // a caixa 1 começa ativa todos os dias
     sm->caixas[0].tick_abertura = 0;
-    sm->clientesDia = 0;
 }
 
 
@@ -486,6 +562,7 @@ void processarAtendimento (Supermercado *sm)
             while(p2)
             {
                 cai->total_valor_vendido += p2->preco;
+                sm->valor_total_ganho    += p2->preco;
                 p2 = p2->proximo;
             }
             //printf("Cliente %06d (%s) foi atendido na caixa %d.\n",
@@ -605,7 +682,7 @@ void fecharCaixaDefinitiva(Supermercado *sm, int id_caixa)
 
     if(cai->ativa == 4)
     {
-        printf("\n  A caixa %d já estava fechada definitivamente!");
+        printf("\n  A caixa %d já estava fechada definitivamente!", id_caixa);
         return;
     }
 
@@ -651,5 +728,98 @@ void caixasAutomaticas (Supermercado *sm, int op)
         if (sm->caixas[op - 1].ativa == 5) sm->caixas[op - 1].ativa = 1;
         if (sm->caixas[op - 1].ativa == 4) sm->caixas[op - 1].ativa = 0;
         printf("\n  Gestao automatica reativada para a caixa %d.\n", op);
+    }
+}
+
+
+// encontra o cliente que vamos mover
+// aponta para ele
+Cliente *sairFilaPonteiro(Caixa *cai, Cliente *alvo)
+{
+    if (cai->fila.frente == NULL || alvo == NULL) return NULL;
+
+    // caso especial: remover o primeiro
+    if (cai->fila.frente == alvo) return sairFila(cai);
+
+    // percorre ate encontrar o anterior ao alvo
+    Cliente *anterior = cai->fila.frente;
+    while (anterior->proximo != alvo)
+    {
+        if (anterior->proximo == NULL) return NULL; // nao encontrou
+        anterior = anterior->proximo;
+    }
+
+    anterior->proximo = alvo->proximo;
+    if (alvo == cai->fila.fim) cai->fila.fim = anterior;
+
+    alvo->proximo = NULL;
+    cai->fila.tamanho--;
+    return alvo;
+}
+
+
+void moverClientePorId(Supermercado *sm, int origem)
+{
+    Caixa *cai_origem = &sm->caixas[origem - 1];
+    printf("\n  DEBUG: caixa %d | ativa=%d | tamanho=%d\n",
+           cai_origem->id, cai_origem->ativa, cai_origem->fila.tamanho);
+
+    if(cai_origem->fila.tamanho == 0)
+    {
+        printf("  A caixa %d não tem clientes na fila", origem);
+        return;
+    }
+
+    // listar fila
+    imprimirFila(sm, origem);
+
+    // escolher pelo ID do cleinte
+    int id_escolhido;
+    Cliente *cli = NULL;
+    do{
+        printf("\n  Indique o ID do cliente que pretende mover!");
+        printf("\n  ID: ");
+        scanf("%d", &id_escolhido);
+        LIMPAR_BUFFER();
+
+        cli = cai_origem->fila.frente;
+        while(cli)
+        {
+            if (cli->id == id_escolhido) break;
+            cli = cli->proximo;
+        }
+        if (!cli) printf("\n  ID nao encontrado na fila desta caixa!\n");
+    }while(!cli);
+
+    // escolher caixa de destino
+    int destino;
+    do{
+        printf("\n\n  Escolha o número da caixa de destino!");
+        printf("\n  Caixa de destino: ");
+        scanf("%d", &destino);
+        LIMPAR_BUFFER();
+        if (destino <= 0 || destino > sm->config.n_caixas)
+        {
+            printf("\n  Número de caixa inválido!\n  Tente um valor entre 1 e %d", sm->config.n_caixas, origem);
+            continue;
+        }
+        if(destino == origem)
+        {
+            printf("\n  A caixa de destino não pode ser igual à de origem!\n  Tente novamente");
+            continue;
+        }
+        if(sm->caixas[destino - 1].ativa == 0 || sm->caixas[destino - 1].ativa == 4)
+        {
+            printf("\n  A caixa %d está fechada!\n  Tente novamente");
+            destino = 0;
+        }
+    }while(destino <= 0 || destino > sm->config.n_caixas || destino == origem);
+
+    // mover usando o ponteiro ja encontrado
+    Cliente *movido = sairFilaPonteiro(cai_origem, cli);
+    if (movido != NULL)
+    {
+        entrarFila(&sm->caixas[destino - 1], movido);
+        printf("\n  Cliente %06d (%s) movido da caixa %d para a caixa %d.\n", movido->id, movido->nome, origem, destino);
     }
 }
