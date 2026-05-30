@@ -168,7 +168,20 @@ typedef struct {
     long   total_tempo_loja;   // soma dos ticks na loja
 } EstatisticasClientes;
 
-/* ------------------------------ SUPERMERCADO ------------------------------*/
+
+/* ---------------------- CLIENTES BANIDOS ---------------------- */
+typedef struct NodoBanido {
+    int                 id;
+    char                nome[MAX_NOME];
+    struct NodoBanido   *proximo;
+} NodoBanido;
+
+typedef struct {
+    NodoBanido  *inicio;
+    int         total;
+} ListaBanidos;
+
+/* ------------------------------ SUPERMERCADO ------------------------------ */
 typedef struct {
     Caixa           caixas[MAX_CAIXAS];
     Configuracao    config;
@@ -182,6 +195,7 @@ typedef struct {
     float           valor_oferecido_total;
     int             clientesDia;
     int             dia;
+    ListaBanidos    banidos;
     EstatisticasClientes est_clientes;
 } Supermercado;
 

@@ -137,7 +137,7 @@ void menu_caixas(Supermercado *sm)
     printf("  | 3. Fechar caixa definitivamente          |\n");
     printf("  | 4. Voltar a gestão automárica            |\n");
     printf("  | 5. Gestão automática de caixa específica |\n");
-    printf("  | 6. Mover cliente de caixa                |\n");
+    //printf("  | 6. Mover cliente de caixa                |\n");
     printf("  | 0. Voltar                                |\n");
     printf("  |------------------------------------------|\n");
     printf("  | Opção: ");
@@ -215,7 +215,54 @@ void menu_caixas(Supermercado *sm)
         pausar();
         limpar_ecra();
         break;
-    case 6:
+    case 0:
+        limpar_ecra(); break;
+    default: printf("  Opcao inválida.\n"); pausar();
+    }
+    limpar_ecra();
+
+    }while(op != 0);
+}
+
+
+void menu_clientes(Supermercado *sm)
+{
+    limpar_ecra();
+    int op;
+    int id;
+
+    do{
+    printf("  |------------------------------------------|\n");
+    printf("  |             GESTÃO DE CLIENTES           |\n");
+    printf("  |------------------------------------------|\n");
+    printf("  | 1. Pesquisar cliente                     |\n");
+    printf("  | 2. Mover cliente para outra caixa        |\n");
+    printf("  | 3. Banir Cliente                         |\n");
+    printf("  | 4. Desbanir Cliente                      |\n");
+    printf("  | 5. Listar Cliente Banidos                |\n");
+    printf("  | 0. Voltar                                |\n");
+    printf("  |------------------------------------------|\n");
+    printf("  | Opção: ");
+    scanf("%d", &op);
+    LIMPAR_BUFFER();
+
+    switch(op)
+    {
+    case 1:
+        limpar_ecra();
+        do
+        {
+            printf("\n  Indique o ID do cliente que pretende pesquisar");
+            printf("\n  ID: ");
+            scanf("%d", &id);
+            LIMPAR_BUFFER();
+            if(id <= 0 || id > 999999)   {printf("\n\n  ID inválido!\n  Tente um valor superior a 0 com, no máximo 6 algarismos!"); continue;}
+            pesquisarCliente(sm, id);
+        }while (id <= 0 || id > 999999);     // todos os IDS tem um maximo de 6 algarismos
+        pausar();
+        limpar_ecra();
+        break;
+    case 2:
         limpar_ecra();
         int origem;
         do{
@@ -233,39 +280,53 @@ void menu_caixas(Supermercado *sm)
         pausar();
         limpar_ecra();
         break;
-    case 0:
-        limpar_ecra(); break;
-    default: printf("  Opcao inválida.\n"); pausar();
-    }
-    limpar_ecra();
+    case 3:
+        limpar_ecra();
+        do
+        {
+            printf("\n  Indique o ID do cliente que pretende banir.");
+            printf("\n  ID: ");
+            scanf("%d", &id);
+            LIMPAR_BUFFER();
+            if(id<=0 || id > 999999)    {printf("\n\n  ID inválido!\n  Tente um valor superior a 0 com, no máximo 6 algarismos!"); continue;}
+            banirCliente(sm, id);
+        }while(id<=0 || id > 999999);       // todos os IDS tem um maximo de 6 algarismos
+        pausar();
+        limpar_ecra();
+        break;
 
-    }while(op != 0);
-}
+    case 4:
+        limpar_ecra();
+        int ban;
+        listarBanidos(sm);
+        if(sm->banidos.total != 0)
+        {
+            do
+            {
+                printf("\n\n  Pretende desbanir algum dos clientes banidos?");
+                printf("\n  1. Sim");
+                printf("\n  2. Não");
+                printf("\n  Resposta: ");
+                scanf("%d", &ban);
+                if(ban != 1 && ban != 2)    {printf("\n  Opção inválida!\n  Tente novamente"); continue;}
+            }while (ban != 1 && ban != 2);
 
-
-void menu_clientes(Supermercado *sm)
-{
-    limpar_ecra();
-    int op;
-
-    do{
-    printf("  |------------------------------------------|\n");
-    printf("  |             GESTÃO DE CLIENTES           |\n");
-    printf("  |------------------------------------------|\n");
-    printf("  | 1. Pesquisar cliente                     |\n");
-    printf("  | 2. Mover cliente para outra caixa        |\n");
-    printf("  | 3. Listar fila de uma caixa              |\n");
-    printf("  | 0. Voltar                                |\n");
-    printf("  |------------------------------------------|\n");
-    printf("  | Opção: ");
-    scanf("%d", &op);
-    LIMPAR_BUFFER();
-
-    switch(op)
-    {
-    case 1: printf("DESENVOLVER\n");    break;
-    case 2: printf("DESENVOLVER\n");    break;
-    case 3: printf("DESENVOLVER\n");    break;
+            if(ban == 1)
+            {
+               do
+               {
+                    printf("\n  Indique o ID do cliente que pretende desbanir.");
+                    printf("\n  ID: ");
+                    scanf("%d", &id);
+                    LIMPAR_BUFFER();
+                    if(id<=0 || id > 999999)    {printf("\n\n  ID inválido!\n  Tente um valor superior a 0 com, no máximo 6 algarismos!"); continue;}
+                    desbanirCliente(sm, id);
+               }while (id<=0 || id > 999999);       // todos os IDS tem um maximo de 6 algarismos
+            }
+        }
+        pausar();
+        limpar_ecra();
+        break;
     case 0: break;
         default: printf("  Opcao inválida.\n"); pausar();
     }
@@ -278,7 +339,6 @@ void menu_estatisticas_anteriores(Supermercado *sm)
 {
     limpar_ecra();
     int op;
-    int n;
     do{
     printf("  |------------------------------------------|\n");
     printf("  |                 ESTATISTICAS             |\n");
@@ -403,8 +463,9 @@ void pausarSimulacao(Supermercado *sm) {
         printf("  |            SIMULACAO PAUSADA             |\n");
         printf("  |------------------------------------------|\n");
         printf("  | 1. Gerir Caixas                          |\n");
-        printf("  | 2. Ver estatisticas do momento           |\n");
-        printf("  | 3. Retomar simulacao                     |\n");
+        printf("  | 2. Gerir Clientes                        |\n");
+        printf("  | 3. Ver estatisticas do momento           |\n");
+        printf("  | 4. Retomar simulacao                     |\n");
         printf("  | 0. Cancelar simulacao                    |\n");
         printf("  |------------------------------------------|\n");
         printf("  | Opcao: ");
@@ -417,13 +478,18 @@ void pausarSimulacao(Supermercado *sm) {
                 menu_caixas(sm);
                 limpar_ecra();
                 break;
+
             case 2:
+                limpar_ecra();
+                menu_clientes(sm);
+                break;
+
+            case 3:
                 limpar_ecra();
                 menu_estatisticas(sm);
                 break;
 
-
-            case 3: return;
+            case 4: return;
             case 0:
                 limpar_ecra();
                 iniciarDia(sm);
@@ -434,7 +500,7 @@ void pausarSimulacao(Supermercado *sm) {
 
             default: printf("Opcao invalida.\n"); pausar();
         }
-    } while (op < 0 || op > 3);
+    } while (op != 4 || op != 0);
 }
 
 
@@ -568,7 +634,7 @@ void menu_inicial (Supermercado *sm)
         */
         case 0:
             // guardar dados em ficheiro FALTA
-            // APAGAR COMPLETAMENTE TODAS AS ESTRUTURAS FALTA
+            libertarMemoria(sm);
             limpar_ecra();
             printf("\n  A terminar programa!");
             exit(0);

@@ -75,7 +75,7 @@ Cliente *clienteAleatorio(HashTable *ht) {
 
 
 // PREPARAR AS ENTRADAS
-EntradaCliente *prepararEntradas(HashTable *ht, SimulacaoTempo *st, int *total_entradas) {
+EntradaCliente *prepararEntradas(Supermercado *sm, HashTable *ht, SimulacaoTempo *st, int *total_entradas) {
     int n = (rand() % (MAX_CLIENTES_DIA - MIN_CLIENTES_DIA + 1)) + MIN_CLIENTES_DIA;
 
     EntradaCliente *entradas = malloc(n * sizeof(EntradaCliente));
@@ -95,6 +95,7 @@ EntradaCliente *prepararEntradas(HashTable *ht, SimulacaoTempo *st, int *total_e
             if (entradas[j].cliente == c) { repetido = 1; break; }
         }
         if (repetido) continue;
+        if (clienteBanido(sm, c->id)) continue;
 
         int tick_max_entrada = st->ticks_totais - MAX_TEMPO_LOJA;
         entradas[count].cliente      = c;
@@ -119,7 +120,7 @@ EntradaCliente *prepararEntradas(HashTable *ht, SimulacaoTempo *st, int *total_e
 // LOOP PRINCIPAL
 void correrSimulacao(Supermercado *sm) {
     int total_entradas = 0;
-    EntradaCliente *entradas = prepararEntradas(&sm->clientes, &sm->st, &total_entradas);
+    EntradaCliente *entradas = prepararEntradas(sm, &sm->clientes, &sm->st, &total_entradas);
     sm->clientesDia = total_entradas;
     //printf("Clientes previstos para hoje: %d\n\n", total_entradas);
     limpar_ecra();
@@ -185,9 +186,9 @@ void correrSimulacao(Supermercado *sm) {
             if (tecla == 'p' || tecla == 'P') {
                 printf("\033[?25h");        //mostra o cursor
                 printf("\n");
-                pausarSimulacao(sm);        //esconde o cursor
+                pausarSimulacao(sm);
                 while (_kbhit()) _getch();
-                printf("\033[?25l");
+                printf("\033[?25l");        //esconde o cursor
                 limpar_ecra();
             }
         }

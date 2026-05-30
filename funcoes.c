@@ -17,6 +17,7 @@ void inicializarLoja (Supermercado *sm)
         sm->caixas[i].ativa = 0;
         sm->caixas[i].seg_fim_atendimento = -1;
     }
+    carregarBanidos(sm);
     iniciarDia(sm);
 }
 
@@ -822,4 +823,293 @@ void moverClientePorId(Supermercado *sm, int origem)
         entrarFila(&sm->caixas[destino - 1], movido);
         printf("\n  Cliente %06d (%s) movido da caixa %d para a caixa %d.\n", movido->id, movido->nome, origem, destino);
     }
+}
+
+// verifica se o cliente pertence a clientes.txt
+// se sim devolve o cliente
+NodoHash *procurarCliente(HashTable *ht, int id)
+{
+    int bucket = id % HASH_SIZE;
+    NodoHash *nodo = ht->buckets[bucket];
+
+    while(nodo)
+    {
+        if(nodo->id_cliente == id)  return nodo;
+        nodo = nodo->proximo;
+    }
+    return NULL;
+}
+
+
+void pesquisarCliente(Supermercado *sm, int id)
+{
+    int naLoja = 0;
+    int naFila = 0;
+    // verifica se o cliente existe na hashtable
+    NodoHash *nodo = procurarCliente(&sm->clientes, id);
+    if(!nodo)   {printf("\n  Cliente %06d não existe no ficheiro 'clientes.txt'.\n", id); return;}
+
+    int tick = nodo->cliente->tick_entrada;
+    int hora = tick / 60;
+    int min = tick % 60;
+
+    printf("\n  Dados do cliente %06d", id);
+    printf("\n  Nome: %s", nodo->cliente->nome);
+
+    // verifica se está na loja
+    NodoLoja *nodoL = sm->clientes_na_loja.inicio;
+    while(nodoL)
+    {
+        if(nodoL->entrada.cliente->id == id)
+        {
+            printf("\n  Estado: dentro da loja (não está em nenhuma fila)");
+            naLoja = 1;
+            break;
+        }
+        nodoL = nodoL->proximo;
+    }
+
+    // verifica se está numa fila
+    for(int i = 0; i < sm->config.n_caixas; i++)
+    {
+        Cliente *cli = sm->caixas[i].fila.frente;
+        int posicao = 1;
+
+        while(cli)
+        {
+            if(cli->id == id)
+            {
+                printf("\n  Estado: na fila da caixa %d | posição %d de %d", i, posicao, sm->caixas[i].fila.tamanho);
+                naFila = 1;
+                break;
+            }
+            cli = cli->proximo;
+            posicao++;
+        }
+    }
+
+    if(naLoja == 0 || naFila == 0)
+    {
+        printf("\n  Estado: não está na loja nem em nenhuma fila\n");
+        return;
+    }
+
+
+    // imprime o resto dos dados
+    printf("  Entrada: %02dh%02d", hora, min);
+    printf("\n  Carrinho: %d produtos", nodo->cliente->n_produtos);
+    Produto *p = nodo->cliente->carrinho;
+    int contador = 1;
+    while(p)
+    {
+        printf("\n%5d. %3.2f | %s", contador, p->preco, p->nome);
+        contador++;
+    }
+}
+
+
+void banirCliente(Supermercado *sm, int id)
+{
+    NodoHash *nodo = procurarCliente(&sm->clientes, id);
+    if(!nodo) {printf("\n  Cliente %06d não existe no ficheiro 'clientes.txt'.\n", id); return;}
+
+    // verifica se ja esta banido
+    NodoBanido *b = sm->banidos.inicio;
+    while(b)
+    {
+        if(b->id == id)
+        {
+            printf("\n  O cliente %06d - %s já estava banido!", b->id, b->nome);
+            return;
+        }
+        b = b->proximo;
+    }
+
+    // adicionar à lista
+    NodoBanido *novo = malloc(sizeof(NodoBanido));
+    if (!novo) return;
+    novo->id = id;
+    strncpy(novo->nome, nodo->cliente->nome, MAX_NOME - 1);
+    novo->proximo       = sm->banidos.inicio;
+    sm->banidos.inicio  = novo;
+    sm->banidos.total++;
+
+    // guarda no ficheiro
+    FILE *f = fopen("banidos.txt", "a");
+    if(f)
+    {
+        fprintf(f, "%d\t%s\n", id, nodo->cliente->nome);
+        fclose(f);
+    }
+    printf("\n  O cliente %06d - %s foi banido com sucesso.\n", id, nodo->cliente->nome);
+}
+
+
+void desbanirCliente(Supermercado *sm, int id)
+{
+    NodoBanido *atual    = sm->banidos.inicio;
+    NodoBanido *anterior = NULL;
+
+    while(atual)
+    {
+        if(atual->id == id)
+        {
+            if (anterior)   anterior->proximo  = atual->proximo;
+            else            sm->banidos.inicio = atual->proximo;
+            sm->banidos.total--;
+            printf("\n  Cliente %06d - %s desbanido com sucesso.\n", id, atual->nome);
+            free(atual);
+
+            // reescreve o ficheiro sem este cliente
+            FILE *f = fopen("banidos.txt", "w");
+            if (f)
+            {
+                NodoBanido *b = sm->banidos.inicio;
+                while (b)
+                {
+                    fprintf(f, "%d\t%s\n", b->id, b->nome);
+                    b = b->proximo;
+                }
+                fclose(f);
+            }
+            return;
+        }
+        anterior = atual;
+        atual    = atual->proximo;
+    }
+    printf("\n  Cliente %06d não está na lista de banidos.\n", id);
+}
+
+
+// verifica se o cliente foi banido
+int clienteBanido(Supermercado *sm, int id)
+{
+    NodoBanido *b = sm->banidos.inicio;
+    while (b)
+    {
+        if (b->id == id) return 1;
+        b = b->proximo;
+    }
+    return 0;
+}
+
+void listarBanidos(Supermercado *sm)
+{
+    printf("\n=== Clientes Banidos | Total: %d\n\n", sm->banidos.total);
+
+    if (sm->banidos.total == 0)
+    {
+        printf("  Nenhum cliente banido.\n");
+        return;
+    }
+
+    NodoBanido *b = sm->banidos.inicio;
+    int i = 1;
+    while (b)
+    {
+        printf(" %3d. | %06d | %s\n", i, b->id, b->nome);
+        b = b->proximo;
+        i++;
+    }
+}
+
+// ------------------------------------------------------
+void libertarMemoria(Supermercado *sm)
+{
+    // 1 - HASHTABLE
+    for(int i = 0; i < HASH_SIZE; i++)
+    {
+        NodoHash *nodo = sm->clientes.buckets[i];
+        while(nodo)
+        {
+            NodoHash *temp = nodo;
+            nodo = nodo->proximo;
+
+            // liberta o carrinho do cliente
+            Produto *p = temp->cliente->carrinho;
+            while(p)
+            {
+                Produto *tmp = p->proximo;
+                free(p);
+                p = tmp;
+            }
+            free(temp->cliente);  // liberta o cliente
+            free(temp);           // liberta o nodo da hashtable
+        }
+        sm->clientes.buckets[i] = NULL;
+    }
+    sm->clientes.total_clientes = 0;
+
+
+    // 2 - ARRAY DE PRODUTOS
+    free(sm->produtos);
+    sm->produtos      = NULL;
+    sm->total_produtos = 0;
+
+
+    // 3 - LISTA DE CLIENTES NA LOJA
+    NodoLoja *nodoL = sm->clientes_na_loja.inicio;
+    while(nodoL)
+    {
+        NodoLoja *temp = nodoL;
+        nodoL = nodoL->proximo;
+        free(temp);
+    }
+    sm->clientes_na_loja.inicio        = NULL;
+    sm->clientes_na_loja.total_na_loja = 0;
+
+
+    // 4 - CAIXAS
+    for(int i = 0; i < sm->config.n_caixas; i++)
+    {
+        Caixa *cai = &sm->caixas[i];
+
+        // 4.1 - fila (os clientes pertencem à hashtable, nao se libertam aqui)
+        cai->fila.frente  = NULL;
+        cai->fila.fim     = NULL;
+        cai->fila.tamanho = 0;
+
+        // 4.2 - lista de ofertas
+        NODO_prod_oferecido *nodoOferta = cai->oferta.inicio;
+        while (nodoOferta)
+        {
+            NODO_prod_oferecido *temp = nodoOferta;
+            nodoOferta = nodoOferta->proximo;
+            free(temp);
+        }
+        cai->oferta.inicio = NULL;
+        cai->oferta.total  = 0;
+
+        // 4.3 - historico de clientes atendidos
+        NodoClienteAtendido *nodoHist = cai->historico.inicio;
+        while (nodoHist)
+        {
+            NodoClienteAtendido *temp = nodoHist;
+            nodoHist = nodoHist->proximo;
+
+            // 4.4 - liberta o carrinho da copia do cliente no historico
+            Produto *p = temp->atendido.carrinho;
+            while (p)
+            {
+                Produto *tmp = p->proximo;
+                free(p);
+                p = tmp;
+            }
+            free(temp);
+        }
+        cai->historico.inicio = NULL;
+        cai->historico.total  = 0;
+    }
+
+
+    // 5 - LISTA DE BANIDOS
+    NodoBanido *nodoBan = sm->banidos.inicio;
+    while (nodoBan)
+    {
+        NodoBanido *temp = nodoBan;
+        nodoBan = nodoBan->proximo;
+        free(temp);
+    }
+    sm->banidos.inicio = NULL;
+    sm->banidos.total  = 0;
 }

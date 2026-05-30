@@ -9,7 +9,7 @@
 SimulacaoTempo configurarTempo(Configuracao *config, int temp);
 void tickParaHora(SimulacaoTempo *st, int *hora, int *minuto);
 Cliente *clienteAleatorio(HashTable *ht);
-EntradaCliente *prepararEntradas(HashTable *ht, SimulacaoTempo *st, int *total_entradas);
+EntradaCliente *prepararEntradas(Supermercado *sm, HashTable *ht, SimulacaoTempo *st, int *total_entradas);
 
 void correrSimulacao(Supermercado *sm);
 

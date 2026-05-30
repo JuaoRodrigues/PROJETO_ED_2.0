@@ -13,6 +13,7 @@ void atribuirFuncionarios(const char *ficheiro, Supermercado *sm);
 
 void guardarDia(Supermercado *sm);
 int carregarDia(int dia_pretendido, Supermercado *sm_temp);
+void carregarBanidos(Supermercado *sm);                             //testar
 float atof_virgula(const char *str);
 int obterProximoDia();
 

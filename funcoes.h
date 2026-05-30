@@ -21,8 +21,16 @@ Cliente *sairFila(Caixa *cai);
 void clienteEntrarCaixa(Supermercado *sm, Cliente *cliente);
 void processarAtendimento (Supermercado *sm);                   //funciona
 void oferecerProduto(Supermercado *sm);                         //funciona
-Cliente *sairFilaPonteiro(Caixa *cai, Cliente *alvo);           //testar
-void moverClientePorId(Supermercado *sm, int origem);           //testar
+Cliente *sairFilaPonteiro(Caixa *cai, Cliente *alvo);           //funciona
+void moverClientePorId(Supermercado *sm, int origem);           //funciona
+NodoHash *procurarCliente(HashTable *ht, int id);               //funciona
+void pesquisarCliente(Supermercado *sm, int id);                //funciona
+void banirCliente(Supermercado *sm, int id);                    //funciona
+void desbanirCliente(Supermercado *sm, int id);                 //funciona
+int clienteBanido(Supermercado *sm, int id);                    //funciona
+void listarBanidos(Supermercado *sm);                           //funciona
+
+void libertarMemoria(Supermercado *sm);                         //funciona
 
 
 void abrirCaixaDefinitiva(Supermercado *sm, int id_caixa);      // funciona

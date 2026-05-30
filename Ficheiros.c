@@ -448,3 +448,31 @@ int carregarDia(int dia_pretendido, Supermercado *sm_temp)
     fclose(f);
     return encontrado;
 }
+
+
+void carregarBanidos(Supermercado *sm)
+{
+    FILE *f = fopen("banidos.txt", "r");
+    if (!f) return; // ficheiro nao existe ainda
+
+    char linha[256];
+    while (fgets(linha, sizeof(linha), f))
+    {
+        if (strlen(linha) <= 1) continue;
+        linha[strcspn(linha, "\n")] = '\0';
+
+        char *tab = strchr(linha, '\t');
+        if (!tab) continue;
+        *tab = '\0';
+
+        NodoBanido *novo = malloc(sizeof(NodoBanido));
+        if (!novo) continue;
+        novo->id = atoi(linha);
+        strncpy(novo->nome, tab + 1, MAX_NOME - 1);
+        novo->nome[MAX_NOME - 1] = '\0';
+        novo->proximo       = sm->banidos.inicio;
+        sm->banidos.inicio  = novo;
+        sm->banidos.total++;
+    }
+    fclose(f);
+}
