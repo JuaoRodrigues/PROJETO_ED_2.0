@@ -1,0 +1,11 @@
+2026-06-01 00:36:25 ; Dia 1 ; MENU INICIAL         ; Entrou
+2026-06-01 00:36:27 ; Dia 1 ; MENU INICIAL         ; Saiu - Iniciar simulacao
+2026-06-01 00:36:27 ; Dia 1 ; MENU CONFIGURAR TEMPO ; Entrou
+2026-06-01 00:36:28 ; Dia 1 ; CONFIGURAR TEMPO     ; 1 minuto real
+2026-06-01 00:36:28 ; Dia 1 ; MENU CONFIGURAR TEMPO ; Saiu
+2026-06-01 00:36:28 ; Dia 1 ; INICIAR SIMULACAO    ; Simulacao iniciada
+2026-06-01 00:36:44 ; Dia 1 ; MENU PAUSA           ; Entrou
+2026-06-01 00:36:46 ; Dia 1 ; MENU PAUSA           ; Saiu - Cancelou simulacao
+2026-06-01 00:36:46 ; Dia 1 ; MENU INICIAL         ; Entrou
+2026-06-01 00:36:48 ; Dia 1 ; MENU INICIAL         ; Saiu
+2026-06-01 00:36:48 ; Dia 1 ; TERMINAR PROGRAMA    ; Terminado pelo utilizador
