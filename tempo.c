@@ -129,6 +129,9 @@ void correrSimulacao(Supermercado *sm) {
     // 1) passar da hora de fecho
     // 2) não haver clientes na loja
     // 3) não haver clientes na fila
+
+    registarAcao(sm, "INICIAR SIMULACAO", "Simulacao iniciada");
+
     while (sm->st.tick_atual <= sm->st.ticks_totais || sm->clientes_na_loja.total_na_loja > 0 || filasTotais(sm) > 0)
     {
         int hora, minuto;
@@ -198,6 +201,7 @@ void correrSimulacao(Supermercado *sm) {
     }
     printf("\033[?25h");                // mostra o cursor novamente
     guardarDia(sm);
+    registarAcao(sm, "FIM SIMULACAO", "Simulacao terminada e dia guardado");
     printf("\n  Loja fechada. Simulacao terminada.");
     printf("\n  Dia %d guardado em 'historico.txt'.\n\n", sm->dia);
     //pausar();

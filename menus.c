@@ -126,6 +126,7 @@ do{
 
 void menu_caixas(Supermercado *sm)
 {
+    registarAcao(sm, "MENU CAIXAS", "Entrou");
     limpar_ecra();
     int op;
     do{
@@ -159,6 +160,7 @@ void menu_caixas(Supermercado *sm)
                 continue;
             }
             imprimirFila(sm, n);
+            char det[64]; sprintf(det, "Caixa %d", n); registarAcao(sm, "LISTAR FILA", det);
             pausar();
         }while (n <= 0 || n > sm->config.n_caixas);
         limpar_ecra();
@@ -222,11 +224,13 @@ void menu_caixas(Supermercado *sm)
     limpar_ecra();
 
     }while(op != 0);
+    registarAcao(sm, "MENU CAIXAS", "Saiu");
 }
 
 
 void menu_clientes(Supermercado *sm)
 {
+    registarAcao(sm, "MENU CLIENTES", "Entrou");
     limpar_ecra();
     int op;
     int id;
@@ -299,6 +303,7 @@ void menu_clientes(Supermercado *sm)
         limpar_ecra();
         int ban;
         listarBanidos(sm);
+        registarAcao(sm, "LISTAR BANIDOS", "Visualizado");
         if(sm->banidos.total != 0)
         {
             do
@@ -333,10 +338,12 @@ void menu_clientes(Supermercado *sm)
     limpar_ecra();
 
     }while(op != 0);
+    registarAcao(sm, "MENU CLIENTES", "Saiu");
 }
 
 void menu_estatisticas_anteriores(Supermercado *sm)
 {
+    registarAcao(sm, "MENU ESTAT. ANTERIORES", "Entrou");
     limpar_ecra();
     int op;
     do{
@@ -355,10 +362,11 @@ void menu_estatisticas_anteriores(Supermercado *sm)
 
     switch(op)
     {
-    case 1: limpar_ecra(); estatisticas_gerais(sm); pausar(); limpar_ecra(); break;
-    case 2: limpar_ecra(); taxa_oferta(sm); pausar(); limpar_ecra(); break;
+    case 1: limpar_ecra(); registarAcao(sm, "ESTATISTICAS GERAIS", "Visualizado"); estatisticas_gerais(sm); pausar(); limpar_ecra(); break;
+    case 2: limpar_ecra(); registarAcao(sm, "TAXA OFERTA", "Visualizado"); taxa_oferta(sm); pausar(); limpar_ecra(); break;
     case 3:
         limpar_ecra();
+        registarAcao(sm, "LISTAR FUNCIONARIOS", "Visualizado");
         printf("\n=== Todos os funcionários do Supermercado\n");
         for(int i = 0; i < sm->config.n_caixas; i++) { printf("CAIXA %d : %d - %s\n", i+1, sm->caixas[i].operador_id, sm->caixas[i].operador_nome); }
         pausar();
@@ -366,6 +374,7 @@ void menu_estatisticas_anteriores(Supermercado *sm)
         break;
     case 4:
         limpar_ecra();
+        registarAcao(sm, "ESTATISTICAS CLIENTES", "Visualizado");
         estatisticas_clientes(sm);
         pausar();
         limpar_ecra();
@@ -377,6 +386,7 @@ void menu_estatisticas_anteriores(Supermercado *sm)
 
     }while (op != 0);
     limpar_ecra();
+    registarAcao(sm, "MENU ESTAT. ANTERIORES", "Saiu");
 }
 
 
@@ -384,6 +394,7 @@ void menu_estatisticas_anteriores(Supermercado *sm)
 
 void menu_estatisticas(Supermercado *sm)
 {
+    registarAcao(sm, "MENU ESTATISTICAS", "Entrou");
     limpar_ecra();
     int op;
     int n;
@@ -405,8 +416,8 @@ void menu_estatisticas(Supermercado *sm)
 
     switch(op)
     {
-    case 1: limpar_ecra(); estatisticas_gerais(sm); pausar(); limpar_ecra(); break;
-    case 2: limpar_ecra(); taxa_oferta(sm); pausar(); limpar_ecra(); break;
+    case 1: limpar_ecra(); registarAcao(sm, "ESTATISTICAS GERAIS", "Visualizado"); estatisticas_gerais(sm); pausar(); limpar_ecra(); break;
+    case 2: limpar_ecra(); registarAcao(sm, "TAXA OFERTA", "Visualizado"); taxa_oferta(sm); pausar(); limpar_ecra(); break;
     case 3:
         limpar_ecra();
         do
@@ -417,6 +428,7 @@ void menu_estatisticas(Supermercado *sm)
             if(n <= 0 || n > sm->config.n_caixas)    {printf("\n  Número de caixa inválido! Tente um valor entre 1 e %d\n", sm->config.n_caixas); continue;}
             Caixa *caix = &sm->caixas[n - 1];
             imprimir_historico(caix);
+            char det[64]; sprintf(det, "Caixa %d", n); registarAcao(sm, "HISTORICO CAIXA", det);
             pausar();
         }while (n <= 0 || n > sm->config.n_caixas);
         limpar_ecra();
@@ -430,12 +442,14 @@ void menu_estatisticas(Supermercado *sm)
             LIMPAR_BUFFER();
             if(n <= 0 || n > sm->config.n_caixas)    {printf("\n  Número de caixa inválido! Tente um valor entre 1 e %d\n", sm->config.n_caixas); continue;}
             imprimirFila(sm, n);
+            char det[64]; sprintf(det, "Caixa %d", n); registarAcao(sm, "LISTAR FILA", det);
             pausar();
         }while (n <= 0 || n > sm->config.n_caixas);
         limpar_ecra();
         break;
     case 5:
         limpar_ecra();
+        registarAcao(sm, "LISTAR FUNCIONARIOS", "Visualizado");
         printf("\n=== Todos os funcionários do Supermercado\n");
         for(int i = 0; i < sm->config.n_caixas; i++) { printf("CAIXA %d : %d - %s\n", i+1, sm->caixas[i].operador_id, sm->caixas[i].operador_nome); }
         pausar();
@@ -443,6 +457,7 @@ void menu_estatisticas(Supermercado *sm)
         break;
     case 6:
         limpar_ecra();
+        registarAcao(sm, "ESTATISTICAS CLIENTES", "Visualizado");
         estatisticas_clientes(sm);
         pausar();
         limpar_ecra();
@@ -453,11 +468,13 @@ void menu_estatisticas(Supermercado *sm)
     //limpar_ecra();
 
     }while (op != 0);
+    registarAcao(sm, "MENU ESTATISTICAS", "Saiu");
     limpar_ecra();
 }
 
 void pausarSimulacao(Supermercado *sm) {
     int op;
+    registarAcao(sm, "MENU PAUSA", "Entrou");
     do {
         printf("  |------------------------------------------|\n");
         printf("  |            SIMULACAO PAUSADA             |\n");
@@ -489,8 +506,11 @@ void pausarSimulacao(Supermercado *sm) {
                 menu_estatisticas(sm);
                 break;
 
-            case 4: return;
+            case 4:
+                registarAcao(sm, "MENU PAUSA", "Saiu - Retomou simulacao");
+                return;
             case 0:
+                registarAcao(sm, "MENU PAUSA", "Saiu - Cancelou simulacao");
                 limpar_ecra();
                 iniciarDia(sm);
                 sm->dia--;
@@ -506,6 +526,7 @@ void pausarSimulacao(Supermercado *sm) {
 
 void menu_fim_simulacao (Supermercado *sm)
 {
+    registarAcao(sm, "MENU FIM SIMULACAO", "Entrou");
     int op;
     do
     {
@@ -527,18 +548,20 @@ void menu_fim_simulacao (Supermercado *sm)
             break;
         case 2:
             limpar_ecra();
+            registarAcao(sm, "MENU FIM SIMULACAO", "Saiu");
             menu_inicial(sm);
             break;
 
             default: printf("Opção inválida.\n"); pausar();
         }
-    }while (op != 1 || op!= 2);
+    }while (op != 1 && op!= 2);
 }
 
 
 
 void menu_configurar_tempo(Supermercado *sm)
 {
+    registarAcao(sm, "MENU CONFIGURAR TEMPO", "Entrou");
     int op;
     do{
         printf("  |------------------------------------------|\n");
@@ -556,21 +579,27 @@ void menu_configurar_tempo(Supermercado *sm)
         switch (op)
         {
         case 1:
+            registarAcao(sm, "CONFIGURAR TEMPO", "1 minuto real");
+            registarAcao(sm, "MENU CONFIGURAR TEMPO", "Saiu");
             sm->st = configurarTempo(&sm->config, 1);
             correrSimulacao(sm);
 
         case 2:
+            registarAcao(sm, "CONFIGURAR TEMPO", "2 minutos reais");
+            registarAcao(sm, "MENU CONFIGURAR TEMPO", "Saiu");
             sm->st = configurarTempo(&sm->config, 2);
             correrSimulacao(sm);
         case 3:
+            registarAcao(sm, "CONFIGURAR TEMPO", "Tempo personalizado");
+            registarAcao(sm, "MENU CONFIGURAR TEMPO", "Saiu");
             sm->st = configurarTempo(&sm->config, 0);
             correrSimulacao(sm);
         case 0:
             limpar_ecra();
+            registarAcao(sm, "MENU CONFIGURAR TEMPO", "Saiu - Cancelou");
             menu_inicial(sm);
             break;
         default: printf("Opção inválida.\n"); pausar();
-
         }
 
     }while(op != 0);
@@ -584,6 +613,7 @@ void menu_inicial (Supermercado *sm)
     int op;
     Supermercado sm_temp = {0};
     iniciarDia(sm);
+    registarAcao(sm, "MENU INICIAL", "Entrou");
     do
     {
         printf("  |------------------------------------------|\n");
@@ -592,6 +622,7 @@ void menu_inicial (Supermercado *sm)
         printf("  | 1. Simular dia %3d                       |\n", sm->dia);
         printf("  | 2. Ver estatísticas do dia anterior      |\n");
         printf("  | 3. Ver estatísticas dum dia especifico   |\n");
+        printf("  | 4. Reiniciar programa                    |\n");
         //printf("  | 4. Gerir caixas antes da simulação       |\n");
         //printf("  | 5. Gerir clientes antes da simulação     |\n");
         printf("  | 0. Terminar programa                     |\n");     // USAR exit(0)
@@ -604,12 +635,17 @@ void menu_inicial (Supermercado *sm)
         {
         case 1:
             limpar_ecra();
+            registarAcao(sm, "MENU INICIAL", "Saiu - Iniciar simulacao");
             menu_configurar_tempo(sm);
             break;
         case 2:
             int dia_anterior = sm->dia - 1;
+            char det[64]; sprintf(det, "Dia %d", dia_anterior); registarAcao(sm, "VER ESTAT. DIA ANTERIOR", det);
             if (dia_anterior < 1)
+            {
                 printf("\n  Nao existe dia anterior.\n");
+                pausar();
+            }
             else if (carregarDia(dia_anterior, &sm_temp))
                 menu_estatisticas_anteriores(&sm_temp);
             else {printf("\n  Dia %d nao encontrado no historico.\n", dia_anterior); pausar();}
@@ -617,23 +653,43 @@ void menu_inicial (Supermercado *sm)
             break;
         case 3:
             int dia_pretendido;
+            sprintf(det, "Dia %d", dia_pretendido); registarAcao(sm, "VER ESTAT. DIA ESPECIFICO", det);
             printf("\n  Qual o dia que pretende consultar? ");
             scanf("%d", &dia_pretendido);
             LIMPAR_BUFFER();
             limpar_ecra();
+            sprintf(det, "Dia %d", dia_pretendido);
             if (carregarDia(dia_pretendido, &sm_temp))
+            {
+                registarAcao(sm, "VER ESTAT. DIA ESPECIFICO", det);
                 menu_estatisticas_anteriores(&sm_temp);
+            }
             else{printf("\n  Dia %d não encontrado no histórico.\n", dia_pretendido); pausar();}
             limpar_ecra();
             break;
-        /*
         case 4:
-            printf("\nDESENVOLVER");
-        case 5:
-            printf("\nDESENVOLVER");
-        */
+            int confirm;
+                printf("\n\n  Tem a certeza que pretende reiniciar o programa?");
+                printf("\n  Isto apagará o histórico e a lista de banidos!");
+                printf("\n  Além de inicializar o programa denovo!");
+                printf("\n  1. Sim");
+                printf("\n  2. Não");
+            do
+            {
+                printf("\n  Resposta: ");
+                scanf("%d", &confirm);
+                LIMPAR_BUFFER();
+                if(confirm != 1 && confirm != 2)    {printf("\n  Resposta inválida!"); continue;}
+            }while(confirm != 1 && confirm != 2);
+            if(confirm == 1)    {reiniciarPrograma(sm); registarAcao(sm, "REINICIAR PROGRAMA", "Confirmado"); reiniciarPrograma(sm);}
+            else {registarAcao(sm, "REINICIAR PROGRAMA", "Cancelado pelo utilizador");}
+            pausar();
+            limpar_ecra();
+            break;
+
         case 0:
             // guardar dados em ficheiro FALTA
+            registarAcao(sm, "MENU INICIAL", "Saiu"); registarAcao(sm, "TERMINAR PROGRAMA", "Terminado pelo utilizador");
             libertarMemoria(sm);
             limpar_ecra();
             printf("\n  A terminar programa!");

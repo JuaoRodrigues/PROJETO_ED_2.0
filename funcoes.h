@@ -31,6 +31,7 @@ int clienteBanido(Supermercado *sm, int id);                    //funciona
 void listarBanidos(Supermercado *sm);                           //funciona
 
 void libertarMemoria(Supermercado *sm);                         //funciona
+void reiniciarPrograma(Supermercado *sm);                       //funciona
 
 
 void abrirCaixaDefinitiva(Supermercado *sm, int id_caixa);      // funciona

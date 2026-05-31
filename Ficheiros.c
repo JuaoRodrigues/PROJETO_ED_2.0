@@ -476,3 +476,24 @@ void carregarBanidos(Supermercado *sm)
     }
     fclose(f);
 }
+
+
+void registarAcao(Supermercado *sm, const char *acao, const char *detalhes)
+{
+    FILE *f = fopen("utilizador.csv", "a");
+    if (!f) return;
+
+    // obter data e hora real
+    time_t t = time(NULL);
+    struct tm *tm_info = localtime(&t);
+    char data_hora[32];
+    strftime(data_hora, sizeof(data_hora), "%Y-%m-%d %H:%M:%S", tm_info);
+
+    fprintf(f, "%s ; Dia %d ; %-20s ; %s\n",
+            data_hora,
+            sm->dia,
+            acao,
+            detalhes);
+
+    fclose(f);
+}

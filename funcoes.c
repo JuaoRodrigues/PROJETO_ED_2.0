@@ -672,6 +672,7 @@ void abrirCaixaDefinitiva(Supermercado *sm, int id_caixa)
 
     cai->ativa = 5;
     cai->seg_fim_atendimento = -1;
+    char det[64]; sprintf(det, "Caixa %d", id_caixa); registarAcao(sm, "ABRIR CAIXA DEF", det);
     printf("\n  Caixa %d aberta definitivamente!", id_caixa);
     printf("\n  Caso futuramente pretenda fechar esta caixa tem que o fazer manualmente");
 }
@@ -689,6 +690,7 @@ void fecharCaixaDefinitiva(Supermercado *sm, int id_caixa)
 
     cai->ativa = 4;
     cai->seg_fim_atendimento = -1;
+    char det[64]; sprintf(det, "Caixa %d", id_caixa); registarAcao(sm, "FECHAR CAIXA DEF", det);
 
     // move os clientes um a um, cada um escolhe a melhor caixa disponivel
     if(cai->fila.tamanho > 0)
@@ -724,11 +726,15 @@ void caixasAutomaticas (Supermercado *sm, int op)
             if (sm->caixas[i].ativa == 5) sm->caixas[i].ativa = 1;
             if (sm->caixas[i].ativa == 4) sm->caixas[i].ativa = 0;
         }
+        registarAcao(sm, "GESTAO AUTOMATICA", "Todas as caixas em automatico");
         printf("\n  Gestao automatica reativada para todas as caixas.\n");
     }else{
         if (sm->caixas[op - 1].ativa == 5) sm->caixas[op - 1].ativa = 1;
         if (sm->caixas[op - 1].ativa == 4) sm->caixas[op - 1].ativa = 0;
         printf("\n  Gestao automatica reativada para a caixa %d.\n", op);
+        char det[64];
+        sprintf(det, "Caixa %d em automatico", op);
+        registarAcao(sm, "GESTAO AUTOMATICA", det);
     }
 }
 
@@ -821,6 +827,9 @@ void moverClientePorId(Supermercado *sm, int origem)
     if (movido != NULL)
     {
         entrarFila(&sm->caixas[destino - 1], movido);
+        char det[128];
+        sprintf(det, "Cliente %06d (%s) da caixa %d para caixa %d", movido->id, movido->nome, origem, destino);
+        registarAcao(sm, "MOVER CLIENTE", det);
         printf("\n  Cliente %06d (%s) movido da caixa %d para a caixa %d.\n", movido->id, movido->nome, origem, destino);
     }
 }
@@ -849,6 +858,8 @@ void pesquisarCliente(Supermercado *sm, int id)
     NodoHash *nodo = procurarCliente(&sm->clientes, id);
     if(!nodo)   {printf("\n  Cliente %06d não existe no ficheiro 'clientes.txt'.\n", id); return;}
 
+    char det[128];
+    sprintf(det, "Cliente %06d - %s", id, nodo->cliente->nome);
     int tick = nodo->cliente->tick_entrada;
     int hora = tick / 60;
     int min = tick % 60;
@@ -869,6 +880,7 @@ void pesquisarCliente(Supermercado *sm, int id)
         nodoL = nodoL->proximo;
     }
 
+    registarAcao(sm, "PESQUISAR CLIENTE", det);
     // verifica se está numa fila
     for(int i = 0; i < sm->config.n_caixas; i++)
     {
@@ -942,6 +954,9 @@ void banirCliente(Supermercado *sm, int id)
         fclose(f);
     }
     printf("\n  O cliente %06d - %s foi banido com sucesso.\n", id, nodo->cliente->nome);
+    char det[128];
+    sprintf(det, "Cliente %06d - %s", id, nodo->cliente->nome);
+    registarAcao(sm, "BANIR CLIENTE", det);
 }
 
 
@@ -957,8 +972,16 @@ void desbanirCliente(Supermercado *sm, int id)
             if (anterior)   anterior->proximo  = atual->proximo;
             else            sm->banidos.inicio = atual->proximo;
             sm->banidos.total--;
+
+            // guarda o nome antes de libertar o nodo
+            char nome_temp[MAX_NOME];
+            strncpy(nome_temp, atual->nome, MAX_NOME - 1);
+            nome_temp[MAX_NOME - 1] = '\0';
+
             printf("\n  Cliente %06d - %s desbanido com sucesso.\n", id, atual->nome);
             free(atual);
+            char det[128];
+            sprintf(det, "Cliente %06d - %s", id, atual->nome);
 
             // reescreve o ficheiro sem este cliente
             FILE *f = fopen("banidos.txt", "w");
@@ -971,6 +994,9 @@ void desbanirCliente(Supermercado *sm, int id)
                     b = b->proximo;
                 }
                 fclose(f);
+                char det[128];
+                sprintf(det, "Cliente %06d - %s", id, nome_temp);
+                registarAcao(sm, "DESBANIR CLIENTE", det);
             }
             return;
         }
@@ -1112,4 +1138,22 @@ void libertarMemoria(Supermercado *sm)
     }
     sm->banidos.inicio = NULL;
     sm->banidos.total  = 0;
+}
+
+
+void reiniciarPrograma(Supermercado *sm)
+{
+    // limpa a memória
+    libertarMemoria(sm);
+
+    // apaga os ficheiros
+    remove("historico.txt");
+    remove("banidos.txt");
+
+    // reinicializa tudo do zero
+    memset(sm, 0, sizeof(Supermercado));
+    inicializarLoja(sm);
+
+    printf("\n  Programa reiniciado com sucesso.\n");
+    printf("\n  Historico e lista de banidos apagados.\n");
 }

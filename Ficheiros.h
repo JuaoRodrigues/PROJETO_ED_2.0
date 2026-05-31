@@ -14,6 +14,7 @@ void atribuirFuncionarios(const char *ficheiro, Supermercado *sm);
 void guardarDia(Supermercado *sm);
 int carregarDia(int dia_pretendido, Supermercado *sm_temp);
 void carregarBanidos(Supermercado *sm);                             //funciona
+void registarAcao(Supermercado *sm, const char *acao, const char *detalhes);        //funciona
 float atof_virgula(const char *str);
 int obterProximoDia();
 
