@@ -220,3 +220,112 @@
 2026-06-03 00:07:26 ; Dia 3 ; MENU PAUSA           ; Entrou
 2026-06-03 00:07:32 ; Dia 3 ; MENU ESTATISTICAS    ; Entrou
 2026-06-03 00:07:35 ; Dia 3 ; ESTATISTICAS CLIENTES ; Visualizado
+2026-06-03 00:16:06 ; Dia 3 ; MENU INICIAL         ; Entrou
+2026-06-03 00:16:08 ; Dia 3 ; MENU INICIAL         ; Saiu - Iniciar simulacao
+2026-06-03 00:16:08 ; Dia 3 ; MENU CONFIGURAR TEMPO ; Entrou
+2026-06-03 00:16:10 ; Dia 3 ; CONFIGURAR TEMPO     ; 1 minuto real
+2026-06-03 00:16:10 ; Dia 3 ; MENU CONFIGURAR TEMPO ; Saiu
+2026-06-03 00:16:10 ; Dia 3 ; INICIAR SIMULACAO    ; Simulacao iniciada
+2026-06-03 00:16:21 ; Dia 3 ; MENU PAUSA           ; Entrou
+2026-06-03 00:16:26 ; Dia 3 ; MENU ESTATISTICAS    ; Entrou
+2026-06-03 00:16:28 ; Dia 3 ; ESTATISTICAS CLIENTES ; Visualizado
+2026-06-03 00:17:18 ; Dia 3 ; MENU INICIAL         ; Entrou
+2026-06-03 00:17:20 ; Dia 3 ; VER ESTAT. DIA ANTERIOR ; Dia 2
+2026-06-03 00:17:20 ; Dia 2 ; MENU ESTAT. ANTERIORES ; Entrou
+2026-06-03 00:17:23 ; Dia 2 ; ESTATISTICAS CLIENTES ; Visualizado
+2026-06-03 00:19:17 ; Dia 3 ; MENU INICIAL         ; Entrou
+2026-06-03 00:19:20 ; Dia 3 ; VER ESTAT. DIA ANTERIOR ; Dia 2
+2026-06-03 00:19:20 ; Dia 2 ; MENU ESTAT. ANTERIORES ; Entrou
+2026-06-03 00:19:22 ; Dia 2 ; ESTATISTICAS CLIENTES ; Visualizado
+2026-06-03 00:20:08 ; Dia 2 ; TAXA OFERTA          ; Visualizado
+2026-06-03 00:20:16 ; Dia 2 ; ESTATISTICAS CLIENTES ; Visualizado
+2026-06-03 00:21:43 ; Dia 3 ; MENU INICIAL         ; Entrou
+2026-06-03 00:23:33 ; Dia 3 ; MENU INICIAL         ; Saiu - Iniciar simulacao
+2026-06-03 00:23:33 ; Dia 3 ; MENU CONFIGURAR TEMPO ; Entrou
+2026-06-03 00:23:41 ; Dia 3 ; CONFIGURAR TEMPO     ; 1 minuto real
+2026-06-03 00:23:41 ; Dia 3 ; MENU CONFIGURAR TEMPO ; Saiu
+2026-06-03 00:23:41 ; Dia 3 ; INICIAR SIMULACAO    ; Simulacao iniciada
+2026-06-03 00:23:54 ; Dia 3 ; MENU PAUSA           ; Entrou
+2026-06-03 00:24:41 ; Dia 3 ; MENU ESTATISTICAS    ; Entrou
+2026-06-03 00:25:06 ; Dia 3 ; TAXA OFERTA          ; Visualizado
+2026-06-03 00:25:31 ; Dia 3 ; ESTATISTICAS GERAIS  ; Visualizado
+2026-06-03 00:26:26 ; Dia 3 ; HISTORICO CAIXA      ; Caixa 6
+2026-06-03 00:26:35 ; Dia 3 ; LISTAR FILA          ; Caixa 2
+2026-06-03 00:26:46 ; Dia 3 ; LISTAR FUNCIONARIOS  ; Visualizado
+2026-06-03 00:27:10 ; Dia 3 ; ESTATISTICAS CLIENTES ; Visualizado
+2026-06-03 00:27:45 ; Dia 3 ; MENU ESTATISTICAS    ; Saiu
+2026-06-03 00:27:49 ; Dia 3 ; MENU CAIXAS          ; Entrou
+2026-06-03 00:28:03 ; Dia 3 ; LISTAR FILA          ; Caixa 2
+2026-06-03 00:28:11 ; Dia 3 ; MENU CAIXAS          ; Saiu
+2026-06-03 00:28:22 ; Dia 3 ; MENU CLIENTES        ; Entrou
+2026-06-03 00:28:29 ; Dia 3 ; MENU CLIENTES        ; Saiu
+2026-06-03 00:28:33 ; Dia 3 ; MENU CAIXAS          ; Entrou
+2026-06-03 00:28:49 ; Dia 3 ; ABRIR CAIXA DEF      ; Caixa 5
+2026-06-03 00:28:57 ; Dia 3 ; FECHAR CAIXA DEF     ; Caixa 2
+2026-06-03 00:29:21 ; Dia 3 ; MENU CAIXAS          ; Saiu
+2026-06-03 00:29:23 ; Dia 3 ; MENU PAUSA           ; Saiu - Retomou simulacao
+2026-06-03 00:29:27 ; Dia 3 ; MENU PAUSA           ; Entrou
+2026-06-03 00:29:31 ; Dia 3 ; MENU CLIENTES        ; Entrou
+2026-06-03 00:29:37 ; Dia 3 ; MENU CLIENTES        ; Saiu
+2026-06-03 00:29:38 ; Dia 3 ; MENU CAIXAS          ; Entrou
+2026-06-03 00:29:45 ; Dia 3 ; GESTAO AUTOMATICA    ; Todas as caixas em automatico
+2026-06-03 00:29:53 ; Dia 3 ; MENU CAIXAS          ; Saiu
+2026-06-03 00:29:55 ; Dia 3 ; MENU CLIENTES        ; Entrou
+2026-06-03 00:30:25 ; Dia 3 ; PESQUISAR CLIENTE    ; Cliente 399001 - Paula Mourao Pires
+2026-06-03 00:31:30 ; Dia 3 ; MOVER CLIENTE        ; Cliente 032896 (Camilo Rego Carvalheira) da caixa 4 para caixa 1
+2026-06-03 00:31:40 ; Dia 3 ; MENU CLIENTES        ; Saiu
+2026-06-03 00:31:42 ; Dia 3 ; MENU CAIXAS          ; Entrou
+2026-06-03 00:31:46 ; Dia 3 ; LISTAR FILA          ; Caixa 1
+2026-06-03 00:31:55 ; Dia 3 ; MENU CAIXAS          ; Saiu
+2026-06-03 00:32:01 ; Dia 3 ; MENU CLIENTES        ; Entrou
+2026-06-03 00:32:21 ; Dia 3 ; BANIR CLIENTE        ; Cliente 032896 - Camilo Rego Carvalheira
+2026-06-03 00:32:28 ; Dia 3 ; LISTAR BANIDOS       ; Visualizado
+2026-06-03 00:32:36 ; Dia 3 ; DESBANIR CLIENTE     ; Cliente 032896 - Camilo Rego Carvalheira
+2026-06-03 00:33:52 ; Dia 3 ; ADICIONAR CLIENTE    ; Cliente 246932 - Irene Marques Correia
+2026-06-03 00:34:24 ; Dia 3 ; REMOVER CLIENTE      ; Cliente 002006 - ines melo
+2026-06-03 00:34:33 ; Dia 3 ; REMOVER CLIENTE      ; Cliente 000002 - ines
+2026-06-03 00:35:20 ; Dia 3 ; REMOVER CLIENTE      ; Cliente 246932 - Irene Marques Correia
+2026-06-03 00:35:40 ; Dia 3 ; MENU CLIENTES        ; Saiu
+2026-06-03 00:35:47 ; Dia 3 ; MENU MEMÓRIA         ; Entrou
+2026-06-03 00:38:17 ; Dia 3 ; MENU MEMÓRIA         ; Saiu
+2026-06-03 00:38:21 ; Dia 3 ; MENU PAUSA           ; Saiu - Retomou simulacao
+2026-06-03 00:40:03 ; Dia 3 ; FIM SIMULACAO        ; Simulacao terminada e dia guardado
+2026-06-03 00:40:03 ; Dia 3 ; MENU FIM SIMULACAO   ; Entrou
+2026-06-03 00:40:16 ; Dia 3 ; MENU FIM SIMULACAO   ; Saiu
+2026-06-03 00:40:16 ; Dia 4 ; MENU INICIAL         ; Entrou
+2026-06-03 00:40:23 ; Dia 4 ; VER ESTAT. DIA ESPECIFICO ; Dia 0
+2026-06-03 00:40:24 ; Dia 4 ; VER ESTAT. DIA ESPECIFICO ; Dia 1
+2026-06-03 00:40:24 ; Dia 1 ; MENU ESTAT. ANTERIORES ; Entrou
+2026-06-03 00:40:26 ; Dia 1 ; ESTATISTICAS GERAIS  ; Visualizado
+2026-06-03 00:40:27 ; Dia 1 ; TAXA OFERTA          ; Visualizado
+2026-06-03 00:40:30 ; Dia 1 ; LISTAR FUNCIONARIOS  ; Visualizado
+2026-06-03 00:40:37 ; Dia 1 ; ESTATISTICAS CLIENTES ; Visualizado
+2026-06-03 00:40:44 ; Dia 1 ; MENU ESTAT. ANTERIORES ; Saiu
+2026-06-03 00:40:48 ; Dia 4 ; MENU MEMÓRIA         ; Entrou
+2026-06-03 00:41:04 ; Dia 4 ; MENU MEMÓRIA         ; Saiu
+2026-06-03 00:42:13 ; Dia 4 ; MENU INICIAL         ; Saiu
+2026-06-03 00:42:13 ; Dia 4 ; TERMINAR PROGRAMA    ; Terminado pelo utilizador
+2026-06-03 00:43:40 ; Dia 4 ; MENU INICIAL         ; Entrou
+2026-06-03 00:43:45 ; Dia 4 ; VER ESTAT. DIA ANTERIOR ; Dia 3
+2026-06-03 00:43:45 ; Dia 3 ; MENU ESTAT. ANTERIORES ; Entrou
+2026-06-03 00:43:47 ; Dia 3 ; ESTATISTICAS CLIENTES ; Visualizado
+2026-06-03 00:43:55 ; Dia 3 ; MENU ESTAT. ANTERIORES ; Saiu
+2026-06-03 00:45:06 ; Dia 4 ; MENU INICIAL         ; Entrou
+2026-06-03 00:45:09 ; Dia 4 ; VER ESTAT. DIA ANTERIOR ; Dia 3
+2026-06-03 00:45:09 ; Dia 3 ; MENU ESTAT. ANTERIORES ; Entrou
+2026-06-03 00:45:11 ; Dia 3 ; MENU ESTAT. ANTERIORES ; Saiu
+2026-06-03 00:45:16 ; Dia 4 ; MENU INICIAL         ; Saiu - Iniciar simulacao
+2026-06-03 00:45:16 ; Dia 4 ; MENU CONFIGURAR TEMPO ; Entrou
+2026-06-03 00:45:17 ; Dia 4 ; CONFIGURAR TEMPO     ; 1 minuto real
+2026-06-03 00:45:17 ; Dia 4 ; MENU CONFIGURAR TEMPO ; Saiu
+2026-06-03 00:45:17 ; Dia 4 ; INICIAR SIMULACAO    ; Simulacao iniciada
+2026-06-03 00:45:19 ; Dia 4 ; MENU PAUSA           ; Entrou
+2026-06-03 00:45:22 ; Dia 4 ; MENU ESTATISTICAS    ; Entrou
+2026-06-03 00:45:22 ; Dia 4 ; ESTATISTICAS GERAIS  ; Visualizado
+2026-06-03 00:45:24 ; Dia 4 ; TAXA OFERTA          ; Visualizado
+2026-06-03 00:45:27 ; Dia 4 ; HISTORICO CAIXA      ; Caixa 1
+2026-06-03 00:45:30 ; Dia 4 ; LISTAR FUNCIONARIOS  ; Visualizado
+2026-06-03 00:45:32 ; Dia 4 ; ESTATISTICAS CLIENTES ; Visualizado
+2026-06-03 00:53:31 ; Dia 4 ; MENU INICIAL         ; Entrou
+2026-06-03 00:53:34 ; Dia 4 ; MENU INICIAL         ; Saiu
+2026-06-03 00:53:34 ; Dia 4 ; TERMINAR PROGRAMA    ; Terminado pelo utilizador

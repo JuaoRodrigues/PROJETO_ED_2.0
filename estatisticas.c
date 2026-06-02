@@ -225,10 +225,11 @@ void estatisticas_clientes(Supermercado *sm)
 
     printf("  | Clientes sem produtos          : %d [%.1f%%]\n",
         e->total_sem_produtos,
-        total_entraram > 0 ? (float)e->total_sem_produtos / total_entraram * 100.0f : 0.0f);
+        total_entraram > 0 ? (float)e->total_sem_produtos / total_entraram * 100.0 : 0.0);
 
     printf("  | Clientes com oferta            : %d [%.1f%%]\n",
         e->total_com_oferta,
-        e->total_atendidos > 0 ? (float)e->total_com_oferta / e->total_atendidos * 100.0f : 0.0f);
-    printf("  |\n  | Total clientes                 : %d\n", sm->est_clientes.total_atendidos);
+        e->total_atendidos > 0 ? (float)e->total_com_oferta / e->total_atendidos * 100.0 : 0.0);
+    printf("  |\n  | Total clientes atendidos       : %d", sm->est_clientes.total_atendidos);
+    printf("\n  | Total clientes do dia          : %d\n", sm->clientesDia);
 }
