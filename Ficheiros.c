@@ -127,7 +127,7 @@ Produto *lerProdutos(const char *ficheiro, int *total, int tempo_max) {
 
 
 
-
+/*
 void lerDados(const char *ficheiro, Supermercado *sm) {
     FILE *f = fopen(ficheiro, "r");
     if (!f) {
@@ -137,7 +137,7 @@ void lerDados(const char *ficheiro, Supermercado *sm) {
 
     char linha[512];
 
-    /* Ignorar linhas de comentário e ler número de caixas */
+    // Ignorar linhas de comentário e ler número de caixas
     int n_caixas = 0;
     while (fgets(linha, sizeof(linha), f)) {
         if (linha[0] == '/' || strlen(linha) <= 1) continue;
@@ -146,7 +146,7 @@ void lerDados(const char *ficheiro, Supermercado *sm) {
     }
 
     for (int i = 0; i < n_caixas; i++) {
-        /* Ler linha da caixa: "CaixaN : ESTADO" */
+        // Ler linha da caixa: "CaixaN : ESTADO"
         while (fgets(linha, sizeof(linha), f)) {
             if (linha[0] != '/' && strlen(linha) > 1) break;
         }
@@ -167,7 +167,7 @@ void lerDados(const char *ficheiro, Supermercado *sm) {
         sm->caixas[i].valor_oferecido          = 0.0f;
         sm->caixas[i].tick_fim_atendimento = sm->config.hora_abertura * 3600;
 
-        /* Ler operador: "OPERADOR : NomeOperador" */
+        // Ler operador: "OPERADOR : NomeOperador"
         while (fgets(linha, sizeof(linha), f)) {
             if (linha[0] != '/' && strlen(linha) > 1) break;
         }
@@ -175,14 +175,14 @@ void lerDados(const char *ficheiro, Supermercado *sm) {
         sscanf(linha, "OPERADOR : %s", operador_nome);
         strncpy(sm->caixas[i].operador_nome, operador_nome, MAX_NOME - 1);
 
-        /* Ler número de clientes */
+        // Ler número de clientes
         while (fgets(linha, sizeof(linha), f)) {
             if (linha[0] != '/' && strlen(linha) > 1) break;
         }
         int n_clientes;
         sscanf(linha, "%d", &n_clientes);
 
-        /* Ler cada cliente */
+        // Ler cada cliente
         for (int j = 0; j < n_clientes; j++) {
             while (fgets(linha, sizeof(linha), f)) {
                 if (linha[0] != '/' && strlen(linha) > 1) break;
@@ -198,17 +198,17 @@ void lerDados(const char *ficheiro, Supermercado *sm) {
             c->proximo           = NULL;
             c->id                = 0;
 
-            /* Ler "NomeCliente : N_PRODUTOS  PROD1 PROD2 ..." */
+            // Ler "NomeCliente : N_PRODUTOS  PROD1 PROD2 ..."
             char *token = strtok(linha, " ");
             strncpy(c->nome, token, MAX_NOME - 1);
 
-            strtok(NULL, " ");  /* salta o ":" */
+            strtok(NULL, " ");  /* salta o ":"
 
             token = strtok(NULL, " ");
             int n_prod = atoi(token);
             c->n_produtos = n_prod;
 
-            /* Ler produtos do carrinho */
+            // Ler produtos do carrinho
             Produto *ultimo = NULL;
             for (int k = 0; k < n_prod; k++) {
                 token = strtok(NULL, " ");
@@ -219,7 +219,7 @@ void lerDados(const char *ficheiro, Supermercado *sm) {
                 strncpy(p->nome, token, MAX_NOME - 1);
                 p->nome[MAX_NOME - 1] = '\0';
                 p->id             = 0;
-                p->preco          = 0.0f;  /* desconhecido nos dados iniciais */
+                p->preco          = 0.0f;  // desconhecido nos dados iniciais
                 p->tempo_passagem = (rand() % (sm->config.tempo_atendimento_produto - 2 + 1)) + 2;
                 p->proximo        = NULL;
 
@@ -231,7 +231,7 @@ void lerDados(const char *ficheiro, Supermercado *sm) {
                 ultimo = p;
             }
 
-            /* Enqueue na caixa */
+            // Enqueue na caixa
             if (sm->caixas[i].fila.fim == NULL) {
                 sm->caixas[i].fila.frente = c;
                 sm->caixas[i].fila.fim    = c;
@@ -245,7 +245,7 @@ void lerDados(const char *ficheiro, Supermercado *sm) {
 
     fclose(f);
 }
-
+*/
 
 void atribuirFuncionarios(const char *ficheiro, Supermercado *sm)
 {

@@ -143,6 +143,7 @@ void correrSimulacao(Supermercado *sm) {
                 entradas[i].cliente->tick_entrada = entradas[i].tick_entrada;
                 preencherCarrinho(entradas[i].cliente, sm);
                 inserirLoja(&sm->clientes_na_loja, entradas[i]);
+                sm->clientesEntrados++;
                 /*
                 printf("[%02d:%02d] Cliente %06d (%s) entrou na loja com %d produtos.\n",
                    hora, minuto,
@@ -160,6 +161,98 @@ void correrSimulacao(Supermercado *sm) {
                 }
                 printf("\n");
                 */
+            }
+            // saida da loja acontece sempre, independentemente da hora  // <-- sem restricao de hora
+            if (entradas[i].tick_saida == sm->st.tick_atual && entradas[i].cliente != NULL) {
+                entradas[i].cliente->tick_saida = entradas[i].tick_saida;
+                removerLoja(&sm->clientes_na_loja, sm->st.tick_atual);
+                clienteEntrarCaixa(sm, entradas[i].cliente);
+                entradas[i].cliente = NULL;  // <-- marca como processado
+            }
+        }
+
+        processarAtendimento(sm);
+        oferecerProduto(sm);
+        gerirCaixas(sm, sm->st.tick_atual >= sm->st.ticks_totais && sm->clientes_na_loja.total_na_loja == 0);
+
+        // calcula o tempo de cada caixa aberta
+        for (int i = 0; i < sm->config.n_caixas; i++)
+        {
+            if (sm->caixas[i].ativa != 0)
+                sm->caixas[i].ticks_aberta ++;
+        }
+
+        // verifica se o utilizador pretende pausar a simulacao
+        if (KBHIT()) {   // <--
+            int tecla = GETCH();   // <--
+            if (tecla == 'p' || tecla == 'P') {
+                printf("\033[?25h");        //mostra o cursor
+                printf("\n");
+                pausarSimulacao(sm);
+                while (KBHIT()) GETCH();   // <--
+                printf("\033[?25l");        //esconde o cursor
+                limpar_ecra();
+            }
+        }
+        simular(sm, hora, minuto, total_entradas);
+        sm->st.tick_atual++;
+        SLEEP_MS((int)(sm->st.segundos_por_tick * 1000));   // <--
+    }
+    printf("\033[?25h");                // mostra o cursor novamente
+    guardarDia(sm);
+    registarAcao(sm, "FIM SIMULACAO", "Simulacao terminada e dia guardado");
+    printf("\n  Loja fechada. Simulacao terminada.");
+    printf("\n  Dia %d guardado em 'historico.txt'.\n\n", sm->dia);
+    //pausar();
+
+    menu_fim_simulacao(sm);
+    free(entradas);
+}
+
+
+/*
+void correrSimulacao(Supermercado *sm) {
+    int total_entradas = 0;
+    EntradaCliente *entradas = prepararEntradas(sm, &sm->clientes, &sm->st, &total_entradas);
+    sm->clientesDia = total_entradas;
+    //printf("Clientes previstos para hoje: %d\n\n", total_entradas);
+    limpar_ecra();
+    printf("\033[?25l");
+    // so para quando:
+    // 1) passar da hora de fecho
+    // 2) não haver clientes na loja
+    // 3) não haver clientes na fila
+
+    registarAcao(sm, "INICIAR SIMULACAO", "Simulacao iniciada");
+
+    while (sm->st.tick_atual <= sm->st.ticks_totais || sm->clientes_na_loja.total_na_loja > 0 || filasTotais(sm) > 0)
+    {
+        int hora, minuto;
+        tickParaHora(&sm->st, &hora, &minuto);
+
+        for (int i = 0; i < total_entradas; i++) {
+            // so entra na loja se ainda nao passou a hora de fecho  // <-- controlo de entradas
+            if (entradas[i].tick_entrada == sm->st.tick_atual && entradas[i].cliente != NULL && sm->st.tick_atual <= sm->st.ticks_totais) {
+                entradas[i].cliente->tick_entrada = entradas[i].tick_entrada;
+                preencherCarrinho(entradas[i].cliente, sm);
+                inserirLoja(&sm->clientes_na_loja, entradas[i]);
+                /*
+                printf("[%02d:%02d] Cliente %06d (%s) entrou na loja com %d produtos.\n",
+                   hora, minuto,
+                   entradas[i].cliente->id,
+                   entradas[i].cliente->nome,
+                   entradas[i].cliente->n_produtos);
+                */
+                // ESCREVER OS PRODUTOS DE CADA PESSOA
+                /*
+                Produto *prod = entradas[i].cliente->carrinho;
+                while(prod)
+                {
+                    printf("%s\n", prod->nome);
+                    prod = prod->proximo;
+                }
+                printf("\n");
+                */  /*
             }
             // saida da loja acontece sempre, independentemente da hora  // <-- sem restricao de hora
             if (entradas[i].tick_saida == sm->st.tick_atual && entradas[i].cliente != NULL) {
@@ -209,6 +302,6 @@ void correrSimulacao(Supermercado *sm) {
     menu_fim_simulacao(sm);
     free(entradas);
 }
-
+*/
 
 

@@ -138,7 +138,6 @@ void menu_caixas(Supermercado *sm)
     printf("  | 3. Fechar caixa definitivamente          |\n");
     printf("  | 4. Voltar a gestão automárica            |\n");
     printf("  | 5. Gestão automática de caixa específica |\n");
-    //printf("  | 6. Mover cliente de caixa                |\n");
     printf("  | 0. Voltar                                |\n");
     printf("  |------------------------------------------|\n");
     printf("  | Opção: ");
@@ -239,11 +238,13 @@ void menu_clientes(Supermercado *sm)
     printf("  |------------------------------------------|\n");
     printf("  |             GESTÃO DE CLIENTES           |\n");
     printf("  |------------------------------------------|\n");
-    printf("  | 1. Pesquisar cliente                     |\n");
-    printf("  | 2. Mover cliente para outra caixa        |\n");
+    printf("  | 1. Pesquisar Cliente                     |\n");
+    printf("  | 2. Mover Cliente para outra Caixa        |\n");
     printf("  | 3. Banir Cliente                         |\n");
-    printf("  | 4. Desbanir Cliente                      |\n");
+    printf("  | 4. Readmitir Cliente                     |\n");
     printf("  | 5. Listar Cliente Banidos                |\n");
+    printf("  | 6. Adicionar novo Cliente (ficheiro)     |\n");
+    printf("  | 7. Remover Cliente (ficheiro)            |\n");
     printf("  | 0. Voltar                                |\n");
     printf("  |------------------------------------------|\n");
     printf("  | Opção: ");
@@ -329,6 +330,18 @@ void menu_clientes(Supermercado *sm)
                }while (id<=0 || id > 999999);       // todos os IDS tem um maximo de 6 algarismos
             }
         }
+        pausar();
+        limpar_ecra();
+        break;
+    case 6:
+        limpar_ecra();
+        adicionarCliente(sm);
+        pausar();
+        limpar_ecra();
+        break;
+    case 7:
+        limpar_ecra();
+        removerCliente(sm);
         pausar();
         limpar_ecra();
         break;
@@ -472,6 +485,49 @@ void menu_estatisticas(Supermercado *sm)
     limpar_ecra();
 }
 
+
+void menu_memoria (Supermercado *sm)
+{
+    registarAcao(sm, "MENU MEMÓRIA", "Entrou");
+    int op;
+    do
+    {
+        printf("  |------------------------------------------|\n");
+        printf("  |                   MEMÓRIA                |\n");
+        printf("  |------------------------------------------|\n");
+        printf("  | 1. Ver memória utilizada                 |\n");
+        printf("  | 2. Ver memória desperdiçada              |\n");
+        printf("  | 0. Voltar                                |\n");
+        printf("  |------------------------------------------|\n");
+        printf("  | Opcao: ");
+        scanf("%d", &op);
+        LIMPAR_BUFFER();
+
+        switch(op)
+        {
+        case 1:
+            limpar_ecra();
+            memoriaUtilizada(sm);
+            pausar();
+            limpar_ecra();
+            break;
+        case 2:
+            limpar_ecra();
+            memoriaDesperdicada(sm);
+            pausar();
+            limpar_ecra();
+            break;
+        case 0:
+            limpar_ecra();
+            registarAcao(sm, "MENU MEMÓRIA", "Saiu");
+            break;
+        default: printf("Opção inválida.\n"); pausar();
+
+        }
+    }while(op != 0);
+}
+
+
 void pausarSimulacao(Supermercado *sm) {
     int op;
     registarAcao(sm, "MENU PAUSA", "Entrou");
@@ -482,7 +538,8 @@ void pausarSimulacao(Supermercado *sm) {
         printf("  | 1. Gerir Caixas                          |\n");
         printf("  | 2. Gerir Clientes                        |\n");
         printf("  | 3. Ver estatisticas do momento           |\n");
-        printf("  | 4. Retomar simulacao                     |\n");
+        printf("  | 4. Consultar memória                     |\n");
+        printf("  | 5. Retomar simulacao                     |\n");
         printf("  | 0. Cancelar simulacao                    |\n");
         printf("  |------------------------------------------|\n");
         printf("  | Opcao: ");
@@ -507,8 +564,14 @@ void pausarSimulacao(Supermercado *sm) {
                 break;
 
             case 4:
+                limpar_ecra();
+                menu_memoria(sm);
+                break;
+
+            case 5:
                 registarAcao(sm, "MENU PAUSA", "Saiu - Retomou simulacao");
                 return;
+
             case 0:
                 registarAcao(sm, "MENU PAUSA", "Saiu - Cancelou simulacao");
                 limpar_ecra();
@@ -603,8 +666,8 @@ void menu_configurar_tempo(Supermercado *sm)
         }
 
     }while(op != 0);
-
 }
+
 
 
 
@@ -623,8 +686,7 @@ void menu_inicial (Supermercado *sm)
         printf("  | 2. Ver estatísticas do dia anterior      |\n");
         printf("  | 3. Ver estatísticas dum dia especifico   |\n");
         printf("  | 4. Reiniciar programa                    |\n");
-        //printf("  | 4. Gerir caixas antes da simulação       |\n");
-        //printf("  | 5. Gerir clientes antes da simulação     |\n");
+        printf("  | 5. Consultar memória                     |\n");
         printf("  | 0. Terminar programa                     |\n");     // USAR exit(0)
         printf("  |------------------------------------------|\n");
         printf("  | Opcao: ");
@@ -685,6 +747,11 @@ void menu_inicial (Supermercado *sm)
             else {registarAcao(sm, "REINICIAR PROGRAMA", "Cancelado pelo utilizador");}
             pausar();
             limpar_ecra();
+            break;
+
+        case 5:
+            limpar_ecra();
+            menu_memoria(sm);
             break;
 
         case 0:

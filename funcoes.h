@@ -19,24 +19,29 @@ void gerirCaixas(Supermercado *sm, int loja_fechada);
 void entrarFila(Caixa *cai, Cliente *cli);
 Cliente *sairFila(Caixa *cai);
 void clienteEntrarCaixa(Supermercado *sm, Cliente *cliente);
-void processarAtendimento (Supermercado *sm);                   //funciona
-void oferecerProduto(Supermercado *sm);                         //funciona
-Cliente *sairFilaPonteiro(Caixa *cai, Cliente *alvo);           //funciona
-void moverClientePorId(Supermercado *sm, int origem);           //funciona
-NodoHash *procurarCliente(HashTable *ht, int id);               //funciona
-void pesquisarCliente(Supermercado *sm, int id);                //funciona
-void banirCliente(Supermercado *sm, int id);                    //funciona
-void desbanirCliente(Supermercado *sm, int id);                 //funciona
-int clienteBanido(Supermercado *sm, int id);                    //funciona
-void listarBanidos(Supermercado *sm);                           //funciona
+void processarAtendimento (Supermercado *sm);
+void oferecerProduto(Supermercado *sm);
+Cliente *sairFilaPonteiro(Caixa *cai, Cliente *alvo);
+void moverClientePorId(Supermercado *sm, int origem);
+NodoHash *procurarCliente(HashTable *ht, int id);
+void pesquisarCliente(Supermercado *sm, int id);
+void banirCliente(Supermercado *sm, int id);
+void desbanirCliente(Supermercado *sm, int id);
+int clienteBanido(Supermercado *sm, int id);
+void listarBanidos(Supermercado *sm);
+void adicionarCliente(Supermercado *sm);                        // TESTAR
+void removerCliente(Supermercado *sm);                          // TESTAR
 
-void libertarMemoria(Supermercado *sm);                         //funciona
-void reiniciarPrograma(Supermercado *sm);                       //funciona
+
+void memoriaUtilizada(Supermercado *sm);                        // TESTAR
+void memoriaDesperdicada(Supermercado *sm);                     // TESTAR
+void libertarMemoria(Supermercado *sm);
+void reiniciarPrograma(Supermercado *sm);
 
 
-void abrirCaixaDefinitiva(Supermercado *sm, int id_caixa);      // funciona
-void fecharCaixaDefinitiva(Supermercado *sm, int id_caixa);     // funciona
-void caixasAutomaticas (Supermercado *sm, int op);              // funciona
+void abrirCaixaDefinitiva(Supermercado *sm, int id_caixa);
+void fecharCaixaDefinitiva(Supermercado *sm, int id_caixa);
+void caixasAutomaticas (Supermercado *sm, int op);
 
 int filasTotais(Supermercado *sm);
 

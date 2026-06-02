@@ -62,7 +62,6 @@ void imprimirFila (Supermercado *sm, int id_caixa)
 
 
 
-
 void taxa_oferta (Supermercado *sm)
 {
     printf("===| Taxa de produtos oferecidos\n");
@@ -205,7 +204,14 @@ void estatisticas_gerais (Supermercado *sm)
 void estatisticas_clientes(Supermercado *sm)
 {
     EstatisticasClientes *e = &sm->est_clientes;
-    int total_entraram = sm->clientes.total_clientes;
+    // para funcionar nos 2 casos
+    // estatisticas do momento
+    // estatisticas de dias anteriores
+    int total_entraram;
+    if (sm->clientesEntrados > 0)
+        total_entraram = sm->clientesEntrados;
+    else
+        total_entraram = sm->clientesDia;
 
     printf("\n=== Estatísticas de Clientes\n\n");
 

@@ -19,6 +19,7 @@
  void menu_estatisticas(Supermercado *sm);
  void menu_estatisticas_anteriores(Supermercado *sm);
  void menu_configurar_tempo(Supermercado *sm);
+ void menu_memoria(Supermercado *sm);
 
  void menu_inicial (Supermercado *sm);
  void menu_fim_simulacao (Supermercado *sm);

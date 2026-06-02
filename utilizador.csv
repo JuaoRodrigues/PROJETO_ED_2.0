@@ -9,3 +9,214 @@
 2026-06-01 00:36:46 ; Dia 1 ; MENU INICIAL         ; Entrou
 2026-06-01 00:36:48 ; Dia 1 ; MENU INICIAL         ; Saiu
 2026-06-01 00:36:48 ; Dia 1 ; TERMINAR PROGRAMA    ; Terminado pelo utilizador
+2026-06-02 16:02:42 ; Dia 1 ; MENU INICIAL         ; Entrou
+2026-06-02 16:02:46 ; Dia 1 ; MENU INICIAL         ; Saiu
+2026-06-02 16:02:46 ; Dia 1 ; TERMINAR PROGRAMA    ; Terminado pelo utilizador
+2026-06-02 16:09:37 ; Dia 1 ; MENU INICIAL         ; Entrou
+2026-06-02 16:11:22 ; Dia 1 ; MENU INICIAL         ; Saiu - Iniciar simulacao
+2026-06-02 16:11:22 ; Dia 1 ; MENU CONFIGURAR TEMPO ; Entrou
+2026-06-02 16:11:43 ; Dia 1 ; CONFIGURAR TEMPO     ; 1 minuto real
+2026-06-02 16:11:43 ; Dia 1 ; MENU CONFIGURAR TEMPO ; Saiu
+2026-06-02 16:11:43 ; Dia 1 ; INICIAR SIMULACAO    ; Simulacao iniciada
+2026-06-02 16:11:54 ; Dia 1 ; MENU PAUSA           ; Entrou
+2026-06-02 16:11:58 ; Dia 1 ; MENU CAIXAS          ; Entrou
+2026-06-02 16:12:24 ; Dia 1 ; ABRIR CAIXA DEF      ; Caixa 4
+2026-06-02 16:12:35 ; Dia 1 ; FECHAR CAIXA DEF     ; Caixa 6
+2026-06-02 16:12:55 ; Dia 1 ; MENU CAIXAS          ; Saiu
+2026-06-02 16:13:00 ; Dia 1 ; MENU PAUSA           ; Saiu - Retomou simulacao
+2026-06-02 16:13:10 ; Dia 1 ; MENU PAUSA           ; Entrou
+2026-06-02 16:13:12 ; Dia 1 ; MENU CLIENTES        ; Entrou
+2026-06-02 16:13:30 ; Dia 1 ; MENU CLIENTES        ; Saiu
+2026-06-02 16:13:34 ; Dia 1 ; MENU ESTATISTICAS    ; Entrou
+2026-06-02 16:13:40 ; Dia 1 ; ESTATISTICAS GERAIS  ; Visualizado
+2026-06-02 16:14:00 ; Dia 1 ; TAXA OFERTA          ; Visualizado
+2026-06-02 16:14:15 ; Dia 1 ; LISTAR FUNCIONARIOS  ; Visualizado
+2026-06-02 16:14:33 ; Dia 1 ; ESTATISTICAS CLIENTES ; Visualizado
+2026-06-02 16:16:01 ; Dia 1 ; ESTATISTICAS CLIENTES ; Visualizado
+2026-06-02 16:16:35 ; Dia 1 ; MENU ESTATISTICAS    ; Saiu
+2026-06-02 16:16:41 ; Dia 1 ; MENU PAUSA           ; Saiu - Retomou simulacao
+2026-06-02 16:17:56 ; Dia 1 ; FIM SIMULACAO        ; Simulacao terminada e dia guardado
+2026-06-02 16:17:56 ; Dia 1 ; MENU FIM SIMULACAO   ; Entrou
+2026-06-02 16:18:20 ; Dia 1 ; MENU FIM SIMULACAO   ; Saiu
+2026-06-02 16:18:20 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 16:21:06 ; Dia 2 ; VER ESTAT. DIA ANTERIOR ; Dia 1
+2026-06-02 16:21:06 ; Dia 1 ; MENU ESTAT. ANTERIORES ; Entrou
+2026-06-02 16:21:09 ; Dia 1 ; ESTATISTICAS GERAIS  ; Visualizado
+2026-06-02 16:21:17 ; Dia 1 ; ESTATISTICAS CLIENTES ; Visualizado
+2026-06-02 16:22:08 ; Dia 1 ; ESTATISTICAS CLIENTES ; Visualizado
+2026-06-02 22:29:39 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 22:42:46 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 22:43:03 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 22:43:05 ; Dia 2 ; VER ESTAT. DIA ANTERIOR ; Dia 1
+2026-06-02 22:43:05 ; Dia 1 ; MENU ESTAT. ANTERIORES ; Entrou
+2026-06-02 22:43:06 ; Dia 1 ; ESTATISTICAS GERAIS  ; Visualizado
+2026-06-02 22:43:08 ; Dia 1 ; MENU ESTAT. ANTERIORES ; Saiu
+2026-06-02 22:45:27 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 22:46:45 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 22:49:31 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 22:51:37 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 23:03:53 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 23:03:57 ; Dia 2 ; MENU MEMÓRIA         ; Entrou
+2026-06-02 23:03:58 ; Dia 2 ; MENU MEMÓRIA         ; Saiu
+2026-06-02 23:03:58 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 23:04:00 ; Dia 2 ; MENU MEMÓRIA         ; Entrou
+2026-06-02 23:04:15 ; Dia 2 ; MENU MEMÓRIA         ; Saiu
+2026-06-02 23:04:15 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 23:05:08 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 23:09:26 ; Dia 2 ; MENU INICIAL         ; Saiu - Iniciar simulacao
+2026-06-02 23:09:26 ; Dia 2 ; MENU CONFIGURAR TEMPO ; Entrou
+2026-06-02 23:09:28 ; Dia 2 ; CONFIGURAR TEMPO     ; 1 minuto real
+2026-06-02 23:09:28 ; Dia 2 ; MENU CONFIGURAR TEMPO ; Saiu
+2026-06-02 23:09:28 ; Dia 2 ; INICIAR SIMULACAO    ; Simulacao iniciada
+2026-06-02 23:09:35 ; Dia 2 ; MENU PAUSA           ; Entrou
+2026-06-02 23:09:37 ; Dia 2 ; MENU MEMÓRIA         ; Entrou
+2026-06-02 23:09:48 ; Dia 2 ; MENU MEMÓRIA         ; Saiu
+2026-06-02 23:09:48 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 23:10:21 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 23:10:25 ; Dia 2 ; MENU INICIAL         ; Saiu - Iniciar simulacao
+2026-06-02 23:10:25 ; Dia 2 ; MENU CONFIGURAR TEMPO ; Entrou
+2026-06-02 23:10:26 ; Dia 2 ; CONFIGURAR TEMPO     ; 1 minuto real
+2026-06-02 23:10:26 ; Dia 2 ; MENU CONFIGURAR TEMPO ; Saiu
+2026-06-02 23:10:26 ; Dia 2 ; INICIAR SIMULACAO    ; Simulacao iniciada
+2026-06-02 23:10:43 ; Dia 2 ; MENU PAUSA           ; Entrou
+2026-06-02 23:10:50 ; Dia 2 ; MENU MEMÓRIA         ; Entrou
+2026-06-02 23:10:57 ; Dia 2 ; MENU MEMÓRIA         ; Saiu
+2026-06-02 23:11:05 ; Dia 2 ; MENU PAUSA           ; Saiu - Retomou simulacao
+2026-06-02 23:12:13 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 23:12:17 ; Dia 2 ; MENU INICIAL         ; Saiu - Iniciar simulacao
+2026-06-02 23:12:17 ; Dia 2 ; MENU CONFIGURAR TEMPO ; Entrou
+2026-06-02 23:12:22 ; Dia 2 ; CONFIGURAR TEMPO     ; 1 minuto real
+2026-06-02 23:12:22 ; Dia 2 ; MENU CONFIGURAR TEMPO ; Saiu
+2026-06-02 23:12:22 ; Dia 2 ; INICIAR SIMULACAO    ; Simulacao iniciada
+2026-06-02 23:12:23 ; Dia 2 ; MENU PAUSA           ; Entrou
+2026-06-02 23:12:25 ; Dia 2 ; MENU CAIXAS          ; Entrou
+2026-06-02 23:14:07 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 23:15:13 ; Dia 2 ; MENU INICIAL         ; Saiu - Iniciar simulacao
+2026-06-02 23:15:13 ; Dia 2 ; MENU CONFIGURAR TEMPO ; Entrou
+2026-06-02 23:15:14 ; Dia 2 ; CONFIGURAR TEMPO     ; 1 minuto real
+2026-06-02 23:15:14 ; Dia 2 ; MENU CONFIGURAR TEMPO ; Saiu
+2026-06-02 23:15:14 ; Dia 2 ; INICIAR SIMULACAO    ; Simulacao iniciada
+2026-06-02 23:15:19 ; Dia 2 ; MENU PAUSA           ; Entrou
+2026-06-02 23:15:21 ; Dia 2 ; MENU CLIENTES        ; Entrou
+2026-06-02 23:15:56 ; Dia 2 ; ADICIONAR CLIENTE    ; Cliente 000003 - Ines Melo de Almeida
+2026-06-02 23:16:09 ; Dia 2 ; PESQUISAR CLIENTE    ; Cliente 000003 - Ines Melo de Almeida
+2026-06-02 23:23:29 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 23:23:30 ; Dia 2 ; MENU INICIAL         ; Saiu - Iniciar simulacao
+2026-06-02 23:23:30 ; Dia 2 ; MENU CONFIGURAR TEMPO ; Entrou
+2026-06-02 23:23:34 ; Dia 2 ; CONFIGURAR TEMPO     ; 1 minuto real
+2026-06-02 23:23:34 ; Dia 2 ; MENU CONFIGURAR TEMPO ; Saiu
+2026-06-02 23:23:34 ; Dia 2 ; INICIAR SIMULACAO    ; Simulacao iniciada
+2026-06-02 23:23:36 ; Dia 2 ; MENU PAUSA           ; Entrou
+2026-06-02 23:23:38 ; Dia 2 ; MENU CLIENTES        ; Entrou
+2026-06-02 23:24:20 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 23:24:22 ; Dia 2 ; MENU INICIAL         ; Saiu - Iniciar simulacao
+2026-06-02 23:24:22 ; Dia 2 ; MENU CONFIGURAR TEMPO ; Entrou
+2026-06-02 23:24:23 ; Dia 2 ; CONFIGURAR TEMPO     ; 1 minuto real
+2026-06-02 23:24:23 ; Dia 2 ; MENU CONFIGURAR TEMPO ; Saiu
+2026-06-02 23:24:23 ; Dia 2 ; INICIAR SIMULACAO    ; Simulacao iniciada
+2026-06-02 23:24:24 ; Dia 2 ; MENU PAUSA           ; Entrou
+2026-06-02 23:24:26 ; Dia 2 ; MENU CLIENTES        ; Entrou
+2026-06-02 23:24:46 ; Dia 2 ; ADICIONAR CLIENTE    ; Cliente 002007 - Ines Melo de Almeida
+2026-06-02 23:25:51 ; Dia 2 ; REMOVER CLIENTE      ; Cliente 002007 - Ines Melo de Almeida
+2026-06-02 23:26:47 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 23:26:48 ; Dia 2 ; MENU INICIAL         ; Saiu - Iniciar simulacao
+2026-06-02 23:26:48 ; Dia 2 ; MENU CONFIGURAR TEMPO ; Entrou
+2026-06-02 23:26:49 ; Dia 2 ; CONFIGURAR TEMPO     ; 1 minuto real
+2026-06-02 23:26:49 ; Dia 2 ; MENU CONFIGURAR TEMPO ; Saiu
+2026-06-02 23:26:49 ; Dia 2 ; INICIAR SIMULACAO    ; Simulacao iniciada
+2026-06-02 23:26:51 ; Dia 2 ; MENU PAUSA           ; Entrou
+2026-06-02 23:26:52 ; Dia 2 ; MENU CLIENTES        ; Entrou
+2026-06-02 23:27:03 ; Dia 2 ; ADICIONAR CLIENTE    ; Cliente 002007 - Ines Melo de Almeida
+2026-06-02 23:27:09 ; Dia 2 ; REMOVER CLIENTE      ; Cliente 002007 - Ines Melo de Almeida
+2026-06-02 23:27:19 ; Dia 2 ; ADICIONAR CLIENTE    ; Cliente 002007 - ines
+2026-06-02 23:27:54 ; Dia 2 ; ADICIONAR CLIENTE    ; Cliente 000003 - jorge
+2026-06-02 23:29:34 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 23:29:36 ; Dia 2 ; MENU INICIAL         ; Saiu - Iniciar simulacao
+2026-06-02 23:29:36 ; Dia 2 ; MENU CONFIGURAR TEMPO ; Entrou
+2026-06-02 23:29:37 ; Dia 2 ; CONFIGURAR TEMPO     ; 1 minuto real
+2026-06-02 23:29:37 ; Dia 2 ; MENU CONFIGURAR TEMPO ; Saiu
+2026-06-02 23:29:37 ; Dia 2 ; INICIAR SIMULACAO    ; Simulacao iniciada
+2026-06-02 23:29:38 ; Dia 2 ; MENU PAUSA           ; Entrou
+2026-06-02 23:29:40 ; Dia 2 ; MENU CLIENTES        ; Entrou
+2026-06-02 23:30:03 ; Dia 2 ; REMOVER CLIENTE      ; Cliente 002007 - ines
+2026-06-02 23:30:42 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 23:30:43 ; Dia 2 ; MENU INICIAL         ; Saiu - Iniciar simulacao
+2026-06-02 23:30:43 ; Dia 2 ; MENU CONFIGURAR TEMPO ; Entrou
+2026-06-02 23:30:44 ; Dia 2 ; CONFIGURAR TEMPO     ; 1 minuto real
+2026-06-02 23:30:44 ; Dia 2 ; MENU CONFIGURAR TEMPO ; Saiu
+2026-06-02 23:30:44 ; Dia 2 ; INICIAR SIMULACAO    ; Simulacao iniciada
+2026-06-02 23:30:45 ; Dia 2 ; MENU PAUSA           ; Entrou
+2026-06-02 23:30:50 ; Dia 2 ; MENU CLIENTES        ; Entrou
+2026-06-02 23:30:54 ; Dia 2 ; REMOVER CLIENTE      ; Cliente 002007 - ines
+2026-06-02 23:30:58 ; Dia 2 ; REMOVER CLIENTE      ; Cliente 000003 - carlos
+2026-06-02 23:31:29 ; Dia 2 ; REMOVER CLIENTE      ; Cliente 002006 - ines melo
+2026-06-02 23:31:34 ; Dia 2 ; MENU CLIENTES        ; Saiu
+2026-06-02 23:31:36 ; Dia 2 ; MENU PAUSA           ; Saiu - Cancelou simulacao
+2026-06-02 23:31:36 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 23:31:38 ; Dia 2 ; MENU INICIAL         ; Saiu
+2026-06-02 23:31:38 ; Dia 2 ; TERMINAR PROGRAMA    ; Terminado pelo utilizador
+2026-06-02 23:34:28 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 23:34:30 ; Dia 2 ; MENU INICIAL         ; Saiu - Iniciar simulacao
+2026-06-02 23:34:30 ; Dia 2 ; MENU CONFIGURAR TEMPO ; Entrou
+2026-06-02 23:34:30 ; Dia 2 ; CONFIGURAR TEMPO     ; 1 minuto real
+2026-06-02 23:34:30 ; Dia 2 ; MENU CONFIGURAR TEMPO ; Saiu
+2026-06-02 23:34:31 ; Dia 2 ; INICIAR SIMULACAO    ; Simulacao iniciada
+2026-06-02 23:34:32 ; Dia 2 ; MENU PAUSA           ; Entrou
+2026-06-02 23:34:34 ; Dia 2 ; MENU CLIENTES        ; Entrou
+2026-06-02 23:34:42 ; Dia 2 ; ADICIONAR CLIENTE    ; Cliente 000002 - ines
+2026-06-02 23:34:57 ; Dia 2 ; REMOVER CLIENTE      ; Cliente 000002 - ines
+2026-06-02 23:35:01 ; Dia 2 ; MENU CLIENTES        ; Saiu
+2026-06-02 23:35:03 ; Dia 2 ; MENU PAUSA           ; Saiu - Cancelou simulacao
+2026-06-02 23:35:03 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 23:35:05 ; Dia 2 ; MENU INICIAL         ; Saiu
+2026-06-02 23:35:05 ; Dia 2 ; TERMINAR PROGRAMA    ; Terminado pelo utilizador
+2026-06-02 23:38:16 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 23:38:20 ; Dia 2 ; VER ESTAT. DIA ANTERIOR ; Dia 1
+2026-06-02 23:38:20 ; Dia 1 ; MENU ESTAT. ANTERIORES ; Entrou
+2026-06-02 23:38:22 ; Dia 1 ; ESTATISTICAS GERAIS  ; Visualizado
+2026-06-02 23:38:28 ; Dia 1 ; ESTATISTICAS CLIENTES ; Visualizado
+2026-06-02 23:39:29 ; Dia 1 ; MENU ESTAT. ANTERIORES ; Saiu
+2026-06-02 23:39:31 ; Dia 2 ; MENU INICIAL         ; Saiu - Iniciar simulacao
+2026-06-02 23:39:31 ; Dia 2 ; MENU CONFIGURAR TEMPO ; Entrou
+2026-06-02 23:39:31 ; Dia 2 ; CONFIGURAR TEMPO     ; 1 minuto real
+2026-06-02 23:39:31 ; Dia 2 ; MENU CONFIGURAR TEMPO ; Saiu
+2026-06-02 23:39:32 ; Dia 2 ; INICIAR SIMULACAO    ; Simulacao iniciada
+2026-06-02 23:39:38 ; Dia 2 ; MENU PAUSA           ; Entrou
+2026-06-02 23:39:43 ; Dia 2 ; MENU PAUSA           ; Saiu - Retomou simulacao
+2026-06-02 23:39:46 ; Dia 2 ; MENU PAUSA           ; Entrou
+2026-06-02 23:39:49 ; Dia 2 ; MENU ESTATISTICAS    ; Entrou
+2026-06-02 23:39:54 ; Dia 2 ; ESTATISTICAS CLIENTES ; Visualizado
+2026-06-02 23:46:48 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 23:46:53 ; Dia 2 ; MENU INICIAL         ; Saiu - Iniciar simulacao
+2026-06-02 23:46:53 ; Dia 2 ; MENU CONFIGURAR TEMPO ; Entrou
+2026-06-02 23:46:55 ; Dia 2 ; MENU CONFIGURAR TEMPO ; Saiu - Cancelou
+2026-06-02 23:46:55 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 23:56:11 ; Dia 2 ; MENU INICIAL         ; Entrou
+2026-06-02 23:56:12 ; Dia 2 ; MENU INICIAL         ; Saiu - Iniciar simulacao
+2026-06-02 23:56:12 ; Dia 2 ; MENU CONFIGURAR TEMPO ; Entrou
+2026-06-02 23:56:13 ; Dia 2 ; CONFIGURAR TEMPO     ; 1 minuto real
+2026-06-02 23:56:13 ; Dia 2 ; MENU CONFIGURAR TEMPO ; Saiu
+2026-06-02 23:56:13 ; Dia 2 ; INICIAR SIMULACAO    ; Simulacao iniciada
+2026-06-02 23:58:16 ; Dia 2 ; FIM SIMULACAO        ; Simulacao terminada e dia guardado
+2026-06-02 23:58:16 ; Dia 2 ; MENU FIM SIMULACAO   ; Entrou
+2026-06-03 00:04:16 ; Dia 3 ; MENU INICIAL         ; Entrou
+2026-06-03 00:04:23 ; Dia 3 ; MENU INICIAL         ; Saiu - Iniciar simulacao
+2026-06-03 00:04:23 ; Dia 3 ; MENU CONFIGURAR TEMPO ; Entrou
+2026-06-03 00:04:24 ; Dia 3 ; CONFIGURAR TEMPO     ; 1 minuto real
+2026-06-03 00:04:24 ; Dia 3 ; MENU CONFIGURAR TEMPO ; Saiu
+2026-06-03 00:04:24 ; Dia 3 ; INICIAR SIMULACAO    ; Simulacao iniciada
+2026-06-03 00:04:31 ; Dia 3 ; MENU PAUSA           ; Entrou
+2026-06-03 00:04:32 ; Dia 3 ; MENU ESTATISTICAS    ; Entrou
+2026-06-03 00:04:35 ; Dia 3 ; ESTATISTICAS CLIENTES ; Visualizado
+2026-06-03 00:06:24 ; Dia 3 ; TAXA OFERTA          ; Visualizado
+2026-06-03 00:06:28 ; Dia 3 ; ESTATISTICAS GERAIS  ; Visualizado
+2026-06-03 00:06:32 ; Dia 3 ; MENU ESTATISTICAS    ; Saiu
+2026-06-03 00:06:35 ; Dia 3 ; MENU PAUSA           ; Saiu - Retomou simulacao
+2026-06-03 00:06:49 ; Dia 3 ; MENU PAUSA           ; Entrou
+2026-06-03 00:06:53 ; Dia 3 ; MENU ESTATISTICAS    ; Entrou
+2026-06-03 00:06:55 ; Dia 3 ; ESTATISTICAS CLIENTES ; Visualizado
+2026-06-03 00:07:05 ; Dia 3 ; MENU ESTATISTICAS    ; Saiu
+2026-06-03 00:07:06 ; Dia 3 ; MENU PAUSA           ; Saiu - Retomou simulacao
+2026-06-03 00:07:26 ; Dia 3 ; MENU PAUSA           ; Entrou
+2026-06-03 00:07:32 ; Dia 3 ; MENU ESTATISTICAS    ; Entrou
+2026-06-03 00:07:35 ; Dia 3 ; ESTATISTICAS CLIENTES ; Visualizado

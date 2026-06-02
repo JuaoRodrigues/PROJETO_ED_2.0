@@ -78,6 +78,7 @@ void iniciarDia (Supermercado *sm)
         cai->tick_fim_atendimento     = 0;
         cai->ticks_aberta             = 0;
         cai->tick_abertura            = 0;
+        sm->clientesEntrados = 0;
 
         // fecha todas as caixas
         if (cai->ativa != 0) cai->ativa = 0;
@@ -1156,4 +1157,274 @@ void reiniciarPrograma(Supermercado *sm)
 
     printf("\n  Programa reiniciado com sucesso.\n");
     printf("\n  Historico e lista de banidos apagados.\n");
+}
+
+
+void adicionarCliente(Supermercado *sm)
+{
+    // 1 - pedir o ID ao utilizador e verificar se ja existe
+    int novo_id;
+    do
+    {
+        printf("\n  ID do novo cliente (1 a 999999): ");
+        scanf("%d", &novo_id);
+        LIMPAR_BUFFER();
+
+        if (novo_id <= 0 || novo_id > 999999)
+        {
+            printf("\n  ID inválido! Deve ser um valor entre 1 e 999999.\n");
+            continue;
+        }
+
+        // verificar se já existe na hashtable
+        if (procurarCliente(&sm->clientes, novo_id) != NULL)
+        {
+            printf("\n  Já existe um cliente com o ID %06d! Tente outro.\n", novo_id);
+            novo_id = -1;   // força repetição
+        }
+
+    } while (novo_id <= 0 || novo_id > 999999);
+
+    // 2 - pedir o nome e validar
+    char nome[MAX_NOME];
+    do
+    {
+        printf("\n  Nome do novo cliente: ");
+        fgets(nome, MAX_NOME, stdin);
+        nome[strcspn(nome, "\n")] = '\0';
+
+        if (strlen(nome) == 0 || strspn(nome, " ") == strlen(nome))
+            printf("\n  Nome inválido! Tente novamente.\n");
+
+    } while (strlen(nome) == 0 || strspn(nome, " ") == strlen(nome));
+
+    char det[128]; sprintf(det, "Cliente %06d - %s", novo_id, nome); registarAcao(sm, "ADICIONAR CLIENTE", det);
+    // 3 - adicionar à hashtable
+    Cliente *c = malloc(sizeof(Cliente));
+    if (!c) return;
+    c->id                = novo_id;
+    strncpy(c->nome, nome, MAX_NOME - 1);
+    c->nome[MAX_NOME - 1] = '\0';
+    c->n_produtos         = 0;
+    c->carrinho           = NULL;
+    c->tick_entrada_fila  = -1;
+    c->produto_oferecido  = 0;
+    c->proximo            = NULL;
+
+    int bucket = novo_id % HASH_SIZE;
+    NodoHash *nodo = malloc(sizeof(NodoHash));
+    if (!nodo) { free(c); return; }
+    nodo->id_cliente   = novo_id;
+    nodo->cliente      = c;
+    nodo->indice_caixa = -1;
+    nodo->proximo      = sm->clientes.buckets[bucket];
+    sm->clientes.buckets[bucket] = nodo;
+    sm->clientes.total_clientes++;
+
+    // 4 - guardar no ficheiro garantindo que começa numa linha nova
+    FILE *f = fopen("clientes.txt", "a");
+    if (!f) { printf("\n  Erro ao abrir clientes.txt.\n"); return; }
+
+    // verifica se o ficheiro termina com '\n'
+    FILE *f_check = fopen("clientes.txt", "r");
+    if (f_check)
+    {
+        fseek(f_check, -1, SEEK_END);
+        char ultimo;
+        fread(&ultimo, 1, 1, f_check);
+        fclose(f_check);
+
+        FILE *f = fopen("clientes.txt", "a");
+        if (!f) { printf("\n  Erro ao abrir clientes.txt.\n"); return; }
+        if (ultimo != '\n')
+            fprintf(f, "\n");
+        fprintf(f, "%06d\t%s\n", novo_id, nome);
+        fclose(f);
+    }
+}
+
+
+
+void removerCliente(Supermercado *sm)
+{
+    // 1 - pedir o ID
+    int id;
+    do
+    {
+        printf("\n  ID do cliente a remover (1 a 999999): ");
+        scanf("%d", &id);
+        LIMPAR_BUFFER();
+
+        if (id <= 0 || id > 999999)
+        {
+            printf("\n  ID inválido! Deve ser um valor entre 1 e 999999.\n");
+            continue;
+        }
+
+        if (procurarCliente(&sm->clientes, id) == NULL)
+        {
+            printf("\n  Cliente %06d não existe!\n", id);
+            id = -1;
+        }
+    } while (id <= 0 || id > 999999);
+
+    // 2 - remover da hashtable
+    int bucket = id % HASH_SIZE;
+    NodoHash *nodo    = sm->clientes.buckets[bucket];
+    NodoHash *anterior = NULL;
+
+    while (nodo)
+    {
+        if (nodo->id_cliente == id)
+        {
+            if (anterior)   anterior->proximo            = nodo->proximo;
+            else            sm->clientes.buckets[bucket] = nodo->proximo;
+
+            // liberta o carrinho
+            Produto *p = nodo->cliente->carrinho;
+            while (p)
+            {
+                Produto *tmp = p->proximo;
+                free(p);
+                p = tmp;
+            }
+
+            char nome_temp[MAX_NOME];
+            strncpy(nome_temp, nodo->cliente->nome, MAX_NOME - 1);
+
+            free(nodo->cliente);
+            free(nodo);
+            sm->clientes.total_clientes--;
+
+            printf("\n  Cliente %06d - %s removido com sucesso.\n", id, nome_temp);
+
+            // 3 - reescrever o ficheiro sem este cliente
+            FILE *f_leitura = fopen("clientes.txt", "r");
+            FILE *f_escrita = fopen("clientes_temp.txt", "w");
+            if (f_leitura && f_escrita)
+            {
+                char linha[256];
+                while (fgets(linha, sizeof(linha), f_leitura))
+                {
+                    int id_linha = atoi(linha);
+                    if (id_linha != id)
+                        fprintf(f_escrita, "%s", linha);
+                }
+                fclose(f_leitura);
+                fclose(f_escrita);
+                remove("clientes.txt");
+                rename("clientes_temp.txt", "clientes.txt");
+            }
+
+            char det[128];
+            sprintf(det, "Cliente %06d - %s", id, nome_temp);
+            registarAcao(sm, "REMOVER CLIENTE", det);
+            return;
+        }
+        anterior = nodo;
+        nodo     = nodo->proximo;
+    }
+}
+
+
+void memoriaUtilizada(Supermercado *sm)
+{
+    size_t total = 0;
+    size_t total_carrinhos = 0;
+
+    // hashtable - clientes
+    for (int i = 0; i < HASH_SIZE; i++)
+    {
+        NodoHash *nodo = sm->clientes.buckets[i];
+        while (nodo)
+        {
+            total += sizeof(NodoHash);
+            total += sizeof(Cliente);
+
+            // carrinho do cliente
+            Produto *p = nodo->cliente->carrinho;
+            while (p)
+            {
+                total += sizeof(Produto);
+                total_carrinhos += sizeof(Produto);
+                p = p->proximo;
+            }
+
+            nodo = nodo->proximo;
+        }
+    }
+
+    // array de produtos
+    total += sm->total_produtos * sizeof(Produto);
+
+    // caixas
+    for (int i = 0; i < sm->config.n_caixas; i++)
+    {
+        Caixa *cai = &sm->caixas[i];
+
+        NODO_prod_oferecido *o = cai->oferta.inicio;
+        while (o) { total += sizeof(NODO_prod_oferecido); o = o->proximo; }
+
+        NodoClienteAtendido *h = cai->historico.inicio;
+        while (h) { total += sizeof(NodoClienteAtendido); h = h->proximo; }
+    }
+
+    // clientes na loja
+    NodoLoja *nl = sm->clientes_na_loja.inicio;
+    while (nl) { total += sizeof(NodoLoja); nl = nl->proximo; }
+
+    // banidos
+    NodoBanido *nb = sm->banidos.inicio;
+    while (nb) { total += sizeof(NodoBanido); nb = nb->proximo; }
+
+    // estrutura principal
+    total += sizeof(Supermercado);
+
+    printf("\n=== Memória Utilizada\n");
+    printf("  | Clientes (HashTable)   : %6zu bytes\n", (size_t)(sm->clientes.total_clientes * (sizeof(NodoHash) + sizeof(Cliente))));
+    printf("  | Carrinhos (clientes)   : %6zu bytes\n", total_carrinhos);
+    printf("  | Produtos (array)       : %6zu bytes\n", (size_t)(sm->total_produtos * sizeof(Produto)));
+    printf("  | Estrutura Supermercado : %6zu bytes\n", sizeof(Supermercado));
+    printf("  |-------------------------------\n");
+    printf("  | TOTAL                  : %6zu bytes (%.2f KB)\n", total, total / 1024.0);
+}
+
+
+void memoriaDesperdicada(Supermercado *sm)
+{
+    size_t desperdicada = 0;
+
+    // hashtable: buckets vazios
+    int buckets_vazios = 0;
+    for (int i = 0; i < HASH_SIZE; i++)
+        if (sm->clientes.buckets[i] == NULL)
+            buckets_vazios++;
+    desperdicada += buckets_vazios * sizeof(NodoHash *);
+
+    // array de produtos: capacidade alocada vs usada
+    // lerProdutos aloca exatamente 'count' entradas, por isso nao ha desperdicio
+    // mas se houver linhas vazias no ficheiro pode haver
+    // aqui mostramos o padding por struct (alinhamento de memória)
+    size_t padding_produto   = sizeof(Produto)   - (sizeof(int) + MAX_NOME + sizeof(float) + sizeof(int));
+    size_t padding_cliente   = sizeof(Cliente)   - (sizeof(int) + MAX_NOME + sizeof(int) + sizeof(long) + sizeof(int));
+    size_t padding_caixa     = sizeof(Caixa)     - (sizeof(int) + MAX_NOME * 2 + sizeof(int) * 6 + sizeof(float) * 3 + sizeof(long));
+
+    desperdicada += sm->total_produtos          * padding_produto;
+    desperdicada += sm->clientes.total_clientes * padding_cliente;
+    desperdicada += sm->config.n_caixas         * padding_caixa;
+
+    // caixas fechadas com fila vazia mas estrutura alocada
+    int caixas_inativas = 0;
+    for (int i = 0; i < sm->config.n_caixas; i++)
+        if (sm->caixas[i].ativa == 0)
+            caixas_inativas++;
+    desperdicada += caixas_inativas * sizeof(Caixa);
+
+    printf("\n=== Memória Desperdiçada\n");
+    printf("  | Buckets vazios (HashTable) : %4d  -> %6zu bytes\n", buckets_vazios, (size_t)(buckets_vazios * sizeof(NodoHash *)));
+    printf("  | Padding structs (Produto)  : %4zu bytes/struct x %d = %zu bytes\n", padding_produto, sm->total_produtos, sm->total_produtos * padding_produto);
+    printf("  | Padding structs (Cliente)  : %4zu bytes/struct x %d = %zu bytes\n", padding_cliente, sm->clientes.total_clientes, sm->clientes.total_clientes * padding_cliente);
+    printf("  | Caixas inativas alocadas   : %4d  -> %6zu bytes\n", caixas_inativas, (size_t)(caixas_inativas * sizeof(Caixa)));
+    printf("  |-------------------------------\n");
+    printf("  | TOTAL                      : %6zu bytes (%.2f KB)\n", desperdicada, desperdicada / 1024.0);
 }
