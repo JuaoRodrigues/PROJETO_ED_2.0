@@ -137,6 +137,13 @@ void correrSimulacao(Supermercado *sm) {
 
     registarAcao(sm, "INICIAR SIMULACAO", "Simulacao iniciada");
 
+
+    #ifndef _WIN32
+    set_terminal_raw(1);   // <-- ativa antes do loop
+    #endif
+
+
+
     while (sm->st.tick_atual <= sm->st.ticks_totais || sm->clientes_na_loja.total_na_loja > 0 || filasTotais(sm) > 0)
     {
         clock_t inicio = clock();  // mede o inicio do tick
@@ -214,6 +221,13 @@ void correrSimulacao(Supermercado *sm) {
         SLEEP_MS(sleep_ajustado);
 
     }
+
+
+    #ifndef _WIN32
+    set_terminal_raw(0);   // <-- restaura depois do loop
+    #endif
+
+
     printf("\033[?25h");                // mostra o cursor novamente
     guardarDia(sm);
     registarAcao(sm, "FIM SIMULACAO", "Simulacao terminada e dia guardado");
