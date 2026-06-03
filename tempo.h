@@ -4,7 +4,7 @@
 #include "supermercado.h"
 #include "funcoes.h"
 
-#include <conio.h>      // serve para pausar a simulacao
+
 
 SimulacaoTempo configurarTempo(Configuracao *config, int temp);
 void tickParaHora(SimulacaoTempo *st, int *hora, int *minuto);

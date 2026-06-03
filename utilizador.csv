@@ -329,3 +329,31 @@
 2026-06-03 00:53:31 ; Dia 4 ; MENU INICIAL         ; Entrou
 2026-06-03 00:53:34 ; Dia 4 ; MENU INICIAL         ; Saiu
 2026-06-03 00:53:34 ; Dia 4 ; TERMINAR PROGRAMA    ; Terminado pelo utilizador
+2026-06-03 01:00:11 ; Dia 4 ; MENU INICIAL         ; Entrou
+2026-06-03 01:00:19 ; Dia 4 ; MENU INICIAL         ; Saiu - Iniciar simulacao
+2026-06-03 01:00:19 ; Dia 4 ; MENU CONFIGURAR TEMPO ; Entrou
+2026-06-03 01:00:20 ; Dia 4 ; CONFIGURAR TEMPO     ; 1 minuto real
+2026-06-03 01:00:20 ; Dia 4 ; MENU CONFIGURAR TEMPO ; Saiu
+2026-06-03 01:00:20 ; Dia 4 ; INICIAR SIMULACAO    ; Simulacao iniciada
+2026-06-03 01:02:25 ; Dia 4 ; FIM SIMULACAO        ; Simulacao terminada e dia guardado
+2026-06-03 01:02:25 ; Dia 4 ; MENU FIM SIMULACAO   ; Entrou
+2026-06-03 01:04:12 ; Dia 4 ; MENU FIM SIMULACAO   ; Saiu
+2026-06-03 01:04:12 ; Dia 5 ; MENU INICIAL         ; Entrou
+2026-06-03 01:04:14 ; Dia 5 ; MENU INICIAL         ; Saiu - Iniciar simulacao
+2026-06-03 01:04:14 ; Dia 5 ; MENU CONFIGURAR TEMPO ; Entrou
+2026-06-03 01:04:28 ; Dia 5 ; CONFIGURAR TEMPO     ; 1 minuto real
+2026-06-03 01:04:28 ; Dia 5 ; MENU CONFIGURAR TEMPO ; Saiu
+2026-06-03 01:04:28 ; Dia 5 ; INICIAR SIMULACAO    ; Simulacao iniciada
+2026-06-03 01:05:29 ; Dia 5 ; MENU PAUSA           ; Entrou
+2026-06-03 01:13:57 ; Dia 5 ; MENU INICIAL         ; Entrou
+2026-06-03 01:13:59 ; Dia 5 ; MENU INICIAL         ; Saiu - Iniciar simulacao
+2026-06-03 01:13:59 ; Dia 5 ; MENU CONFIGURAR TEMPO ; Entrou
+2026-06-03 01:14:04 ; Dia 5 ; CONFIGURAR TEMPO     ; 1 minuto real
+2026-06-03 01:14:04 ; Dia 5 ; MENU CONFIGURAR TEMPO ; Saiu
+2026-06-03 01:14:04 ; Dia 5 ; INICIAR SIMULACAO    ; Simulacao iniciada
+2026-06-03 01:15:10 ; Dia 5 ; FIM SIMULACAO        ; Simulacao terminada e dia guardado
+2026-06-03 01:15:10 ; Dia 5 ; MENU FIM SIMULACAO   ; Entrou
+2026-06-03 01:15:19 ; Dia 5 ; MENU FIM SIMULACAO   ; Saiu
+2026-06-03 01:15:19 ; Dia 6 ; MENU INICIAL         ; Entrou
+2026-06-03 01:15:21 ; Dia 6 ; MENU INICIAL         ; Saiu
+2026-06-03 01:15:21 ; Dia 6 ; TERMINAR PROGRAMA    ; Terminado pelo utilizador

@@ -134,6 +134,8 @@ void correrSimulacao(Supermercado *sm) {
 
     while (sm->st.tick_atual <= sm->st.ticks_totais || sm->clientes_na_loja.total_na_loja > 0 || filasTotais(sm) > 0)
     {
+        clock_t inicio = clock();  // mede o inicio do tick
+
         int hora, minuto;
         tickParaHora(&sm->st, &hora, &minuto);
 
@@ -162,12 +164,12 @@ void correrSimulacao(Supermercado *sm) {
                 printf("\n");
                 */
             }
-            // saida da loja acontece sempre, independentemente da hora  // <-- sem restricao de hora
+            // saida da loja acontece sempre, independentemente da hora
             if (entradas[i].tick_saida == sm->st.tick_atual && entradas[i].cliente != NULL) {
                 entradas[i].cliente->tick_saida = entradas[i].tick_saida;
                 removerLoja(&sm->clientes_na_loja, sm->st.tick_atual);
                 clienteEntrarCaixa(sm, entradas[i].cliente);
-                entradas[i].cliente = NULL;  // <-- marca como processado
+                entradas[i].cliente = NULL;  // marca como processado
             }
         }
 
@@ -183,20 +185,29 @@ void correrSimulacao(Supermercado *sm) {
         }
 
         // verifica se o utilizador pretende pausar a simulacao
-        if (KBHIT()) {   // <--
-            int tecla = GETCH();   // <--
+        if (KBHIT()) {
+            int tecla = GETCH();
             if (tecla == 'p' || tecla == 'P') {
                 printf("\033[?25h");        //mostra o cursor
                 printf("\n");
                 pausarSimulacao(sm);
-                while (KBHIT()) GETCH();   // <--
+                while (KBHIT()) GETCH();
                 printf("\033[?25l");        //esconde o cursor
                 limpar_ecra();
             }
         }
         simular(sm, hora, minuto, total_entradas);
         sm->st.tick_atual++;
-        SLEEP_MS((int)(sm->st.segundos_por_tick * 1000));   // <--
+
+        //calcula o tempo gasto no processamento
+        clock_t fim = clock();
+        double tempo_processamento = (double)(fim - inicio) / CLOCKS_PER_SEC * 1000;
+
+        // desconta o tempo de processamento do sleep
+        int sleep_ajustado = (int)(sm->st.segundos_por_tick * 1000 - tempo_processamento);
+        if (sleep_ajustado > 0)
+        SLEEP_MS(sleep_ajustado);
+
     }
     printf("\033[?25h");                // mostra o cursor novamente
     guardarDia(sm);
