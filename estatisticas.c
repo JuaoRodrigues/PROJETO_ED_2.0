@@ -2,9 +2,9 @@
 
 
 
-
-
-void registar_cliente_atendido (Caixa *cai, Cliente *cli)
+// função que verifica os clientes que ja foram atendidos
+// se ja foram atendidos copia os para uma lista para depois listar o histórico de respetiva caixa
+void registar_cliente_atendido (Supermercado *sm, Caixa *cai, Cliente *cli)
 {
     NodoClienteAtendido *novo = malloc(sizeof(NodoClienteAtendido));
     if(!novo)   return;
@@ -22,8 +22,11 @@ void registar_cliente_atendido (Caixa *cai, Cliente *cli)
         cai->historico.inicio = novo;
     }
     cai->historico.total ++;
+    sm->atendidos++;
 }
 
+
+// imprime o historico de uma caixa (todas as pessoas já atendidas != pessoas atendidas + pessoas na fila)
 void imprimir_historico (Caixa *cai)
 {
     printf("\n=== Caixa %d | Total atendidos: %d\n", cai->id, cai->historico.total);
@@ -40,6 +43,7 @@ void imprimir_historico (Caixa *cai)
 }
 
 
+// imprime as pessoas na fila (listar) de uma caixa especifica
 void imprimirFila (Supermercado *sm, int id_caixa)
 {
     Caixa *cai = &sm->caixas[id_caixa - 1];
@@ -61,7 +65,9 @@ void imprimirFila (Supermercado *sm, int id_caixa)
 
 
 
-
+// Faz a taxa de produtos oferecidos em cada caixa e no supermercado
+// apresenta uma frase do tipo:
+// caixa 1 : 3 em cada 10 pessoas ... [percentagem]
 void taxa_oferta (Supermercado *sm)
 {
     printf("===| Taxa de produtos oferecidos\n");
@@ -71,7 +77,7 @@ void taxa_oferta (Supermercado *sm)
         if(cai->total_clientes_atendidos == 0)  continue;
 
         // simplifica a fracao
-        // exemplo: 2/6 = 1/6
+        // exemplo: 2/6 = 1/3
         int oferecidos = cai->produtos_oferecidos;
         int total =      cai->total_clientes_atendidos;
 
@@ -119,7 +125,7 @@ void taxa_oferta (Supermercado *sm)
 
 
 
-
+// verifica as caixas com melhores / piores resultados em cada um dos 5 pamametros listados a seguir
 void estatisticas_gerais (Supermercado *sm)
 {
     // A -> atendidos
@@ -187,20 +193,10 @@ void estatisticas_gerais (Supermercado *sm)
     }
 }
 
-/*              ESTATISTICAS QUE SO FAZEM SENTIDO NO FIM DA SIMULACAO
-    // A -> abertura
-    // F -> fecho
-    // E -> esperado
-    int horaA = sm->config.hora_abertura,  minA = 0;
-    int horaE = sm->config.hora_fecho,     minE = 0;
-    int horaF = sm->st.tick_atual / 60 + sm->config.hora_abertura, minF = sm->st.tick_atual % 60 + sm->config.hora_abertura;
 
-    printf("===| Horas\n");
-    printf("   | Hora abertura : %02dh%02d\n", horaA, minA);
-    printf("   | Hora fecho : %02dh%02d\n", horaF, minF);
-    printf("   | Hora fecho (esperado): %02dh%02d\n\n", horaE, minE);
-*/
-
+// faz as estatísticas de clientes em que calcula diversas médias e algumas percentagens
+// % de clientes sem produtos -> % em relação a: total_entraram (aos que entraram na loja [mesmo que saiam sem nada])
+// % de clientes com ofertas  -> % em relação a: sm->est_clientes.total_atendidos (aos que passam numa caixa [levam algo])
 void estatisticas_clientes(Supermercado *sm)
 {
     EstatisticasClientes *e = &sm->est_clientes;

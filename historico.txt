@@ -182,3 +182,49 @@ CAIXA|7|Beatriz Manuel dos Antos|0|0|0,00|0|0,00|0
 CAIXA|8|Maria Joao Correia Reis|0|0|0,00|0|0,00|0
 FIM_DIA
 
+DIA 9
+n_caixas|8
+produtos_oferecidos_total|7
+valor_total_ganho|39831,83
+valor_oferecido_total|21,38
+clientes_dia|1001
+est_total_atendidos|920
+est_total_sem_produtos|45
+est_total_com_oferta|6
+est_total_produtos|9546
+est_total_espera|10100
+est_total_tempo_loja|42512
+est_total_gasto|39831,83
+CAIXA|1|Eva Mangas Rocha |262|2664|10974,87|1|4,69|974
+CAIXA|2|Mariana Martinho Miranda Ribeiro|216|2254|9488,80|1|2,89|1130
+CAIXA|3|Madalena Gouveia Simões Ribeiro|176|1816|7733,39|3|8,57|882
+CAIXA|4|Maria da Silva Tavares|179|1923|7940,16|2|5,23|905
+CAIXA|5|Beatriz Prata Magalhaes |68|703|2893,08|0|0,00|374
+CAIXA|6|Ana Claro Belo Soeiro|19|186|802,98|0|0,00|104
+CAIXA|7|Alexandre Rodrigues|0|0|0,00|0|0,00|0
+CAIXA|8|Teodora Margarida Barros Mestre|0|0|0,00|0|0,00|0
+FIM_DIA
+
+DIA 10
+n_caixas|8
+produtos_oferecidos_total|4
+valor_total_ganho|39533,68
+valor_oferecido_total|15,50
+clientes_dia|1001
+est_total_atendidos|914
+est_total_sem_produtos|58
+est_total_com_oferta|5
+est_total_produtos|9467
+est_total_espera|10256
+est_total_tempo_loja|42501
+est_total_gasto|39533,68
+CAIXA|1|Catarina Sofia Figueiredo Reis|250|2640|11150,71|1|2,99|1098
+CAIXA|2|Mariana Ghilas Pereira Almeida|246|2607|10680,04|0|0,00|1160
+CAIXA|3|Fabio Nabais Ferreira |182|1810|7669,69|0|0,00|924
+CAIXA|4|Sandra Maria Pereira |146|1546|6292,91|2|9,01|878
+CAIXA|5|Helena Tomas dos Santos|90|864|3741,49|1|3,50|362
+CAIXA|6|Joana Gomes Borges |0|0|0,00|0|0,00|0
+CAIXA|7|Marcia Artur Pandeirada Vaz|0|0|0,00|0|0,00|0
+CAIXA|8|Catarina Miguel Lema Pinheiro|0|0|0,00|0|0,00|0
+FIM_DIA
+

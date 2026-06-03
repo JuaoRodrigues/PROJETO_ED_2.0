@@ -69,15 +69,14 @@ void simular (Supermercado *sm, int hora, int minuto, int previstos)
             if(cai->ativa == 4)     printf("  | Caixa " VERMELHO "%d" RESET " : "VERMELHO"Fora de Serviço!"RESET"                        0\n", cai->id);
             else printf("  | Caixa " VERMELHO "%d" RESET " : Fechada!                                0\n", cai->id);
         }
-
-
-
     }
+
+
     printf("  |------------------------------------------------------\n");
     printf("  | DETALHES\n");
     printf("  | Clientes na Loja    : %02d\n", sm->clientes_na_loja.total_na_loja);
     printf("  | Clientes na Fila    : %02d\n", total_filas);
-    printf("  | Clientes Atendidos  : %02d\n", sm->clientesEntrados);
+    printf("  | Clientes Atendidos  : %02d\n", sm->atendidos);
     printf("  | Produtos Oferecidos : %02d\n", sm->produtos_oferecidos_total);
     printf("  | Clientes Previstos  : %02d\n", previstos);
     printf("  |\n");
@@ -86,45 +85,6 @@ void simular (Supermercado *sm, int hora, int minuto, int previstos)
 }
 
 
-// MENUS
-/*
-void menu_principal(Supermercado *sm)
-{
-    int op;
-
-do{
-    printf("  |------------------------------------------|\n");
-    printf("  |               SUPERMERCADO               |\n");
-    printf("  |------------------------------------------|\n");
-    printf("  | 1. Gerir Caixas                          |\n");
-    printf("  | 2. Gerir Clientes                        |\n");
-    printf("  | 3. Simular Tick de Tempo                 |\n");
-    printf("  | 4. Estatísticas                          |\n");
-    printf("  | 5. Sistema / Memória                     |\n");
-    printf("  | 6. Gravar Relatório                      |\n");
-    printf("  | 0. Sair                                  |\n");
-    printf("  |------------------------------------------|\n");
-    printf("  | Opção: ");
-    scanf("%d", &op);
-    LIMPAR_BUFFER();
-
-    switch (op)
-    {
-    case 1: menu_caixas(sm);            break;
-    case 2: menu_clientes(sm);          break;
-    case 3: printf("DESENVOLVER\n");    break;
-    case 4: menu_estatisticas(sm);      break;
-    case 5: printf("DESENVOLVER\n");    break;
-    case 6: printf("DESENVOLVER\n");    break;
-    case 0: break;
-
-    default: printf("  Opcao inválida.\n"); pausar();
-    }
-    limpar_ecra();
-}while(op != 0);
-
-}
-*/
 
 void menu_caixas(Supermercado *sm)
 {

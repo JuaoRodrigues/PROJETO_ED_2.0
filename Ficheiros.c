@@ -1,7 +1,5 @@
 #include "Ficheiros.h"
 
-/* ------------------------------ LEITURA DE FICHEIROS ------------------------------*/
-
 
 int lerConfiguracao(const char *ficheiro, Configuracao *config)
 {
@@ -25,6 +23,7 @@ int lerConfiguracao(const char *ficheiro, Configuracao *config)
     fclose(f);
     return 1;
 }
+
 
 
 void lerClientes(const char *ficheiro, HashTable *ht) {
@@ -70,7 +69,6 @@ void lerClientes(const char *ficheiro, HashTable *ht) {
 
     fclose(f);
 }
-
 
 
 
@@ -126,126 +124,6 @@ Produto *lerProdutos(const char *ficheiro, int *total, int tempo_max) {
 }
 
 
-
-/*
-void lerDados(const char *ficheiro, Supermercado *sm) {
-    FILE *f = fopen(ficheiro, "r");
-    if (!f) {
-        printf("Erro: nao foi possivel abrir %s\n", ficheiro);
-        return;
-    }
-
-    char linha[512];
-
-    // Ignorar linhas de comentário e ler número de caixas
-    int n_caixas = 0;
-    while (fgets(linha, sizeof(linha), f)) {
-        if (linha[0] == '/' || strlen(linha) <= 1) continue;
-        sscanf(linha, "%d", &n_caixas);
-        break;
-    }
-
-    for (int i = 0; i < n_caixas; i++) {
-        // Ler linha da caixa: "CaixaN : ESTADO"
-        while (fgets(linha, sizeof(linha), f)) {
-            if (linha[0] != '/' && strlen(linha) > 1) break;
-        }
-        char nome_caixa[MAX_NOME];
-        int ativa;
-        sscanf(linha, "%s : %d", nome_caixa, &ativa);
-
-        sm->caixas[i].id    = i + 1;
-        strncpy(sm->caixas[i].nome, nome_caixa, MAX_NOME - 1);
-        sm->caixas[i].ativa = ativa;
-        sm->caixas[i].fila.frente  = NULL;
-        sm->caixas[i].fila.fim     = NULL;
-        sm->caixas[i].fila.tamanho = 0;
-        sm->caixas[i].total_clientes_atendidos = 0;
-        sm->caixas[i].total_produtos_vendidos  = 0;
-        sm->caixas[i].total_valor_vendido      = 0.0f;
-        sm->caixas[i].produtos_oferecidos      = 0;
-        sm->caixas[i].valor_oferecido          = 0.0f;
-        sm->caixas[i].tick_fim_atendimento = sm->config.hora_abertura * 3600;
-
-        // Ler operador: "OPERADOR : NomeOperador"
-        while (fgets(linha, sizeof(linha), f)) {
-            if (linha[0] != '/' && strlen(linha) > 1) break;
-        }
-        char operador_nome[MAX_NOME];
-        sscanf(linha, "OPERADOR : %s", operador_nome);
-        strncpy(sm->caixas[i].operador_nome, operador_nome, MAX_NOME - 1);
-
-        // Ler número de clientes
-        while (fgets(linha, sizeof(linha), f)) {
-            if (linha[0] != '/' && strlen(linha) > 1) break;
-        }
-        int n_clientes;
-        sscanf(linha, "%d", &n_clientes);
-
-        // Ler cada cliente
-        for (int j = 0; j < n_clientes; j++) {
-            while (fgets(linha, sizeof(linha), f)) {
-                if (linha[0] != '/' && strlen(linha) > 1) break;
-            }
-            linha[strcspn(linha, "\n")] = '\0';
-
-            Cliente *c = malloc(sizeof(Cliente));
-            if (!c) continue;
-            c->n_produtos        = 0;
-            c->carrinho          = NULL;
-            c->tick_entrada_fila = sm->config.hora_abertura * 3600;
-            c->produto_oferecido = 0;
-            c->proximo           = NULL;
-            c->id                = 0;
-
-            // Ler "NomeCliente : N_PRODUTOS  PROD1 PROD2 ..."
-            char *token = strtok(linha, " ");
-            strncpy(c->nome, token, MAX_NOME - 1);
-
-            strtok(NULL, " ");  /* salta o ":"
-
-            token = strtok(NULL, " ");
-            int n_prod = atoi(token);
-            c->n_produtos = n_prod;
-
-            // Ler produtos do carrinho
-            Produto *ultimo = NULL;
-            for (int k = 0; k < n_prod; k++) {
-                token = strtok(NULL, " ");
-                if (!token) break;
-
-                Produto *p = malloc(sizeof(Produto));
-                if (!p) continue;
-                strncpy(p->nome, token, MAX_NOME - 1);
-                p->nome[MAX_NOME - 1] = '\0';
-                p->id             = 0;
-                p->preco          = 0.0f;  // desconhecido nos dados iniciais
-                p->tempo_passagem = (rand() % (sm->config.tempo_atendimento_produto - 2 + 1)) + 2;
-                p->proximo        = NULL;
-
-                if (c->carrinho == NULL) {
-                    c->carrinho = p;
-                } else {
-                    ultimo->proximo = p;
-                }
-                ultimo = p;
-            }
-
-            // Enqueue na caixa
-            if (sm->caixas[i].fila.fim == NULL) {
-                sm->caixas[i].fila.frente = c;
-                sm->caixas[i].fila.fim    = c;
-            } else {
-                sm->caixas[i].fila.fim->proximo = c;
-                sm->caixas[i].fila.fim          = c;
-            }
-            sm->caixas[i].fila.tamanho++;
-        }
-    }
-
-    fclose(f);
-}
-*/
 
 void atribuirFuncionarios(const char *ficheiro, Supermercado *sm)
 {
@@ -331,8 +209,6 @@ int obterProximoDia()
 }
 
 
-// --------------------------------------------------------------------
-
 
 void guardarDia(Supermercado *sm)
 {
@@ -348,13 +224,13 @@ void guardarDia(Supermercado *sm)
     fprintf(f, "valor_total_ganho|%.2f\n", sm->valor_total_ganho);
     fprintf(f, "valor_oferecido_total|%.2f\n", sm->valor_oferecido_total);
     fprintf(f, "clientes_dia|%d\n", sm->clientesDia);
-    fprintf(f, "est_total_atendidos|%d\n", sm->est_clientes.total_atendidos);       // <-
-    fprintf(f, "est_total_sem_produtos|%d\n", sm->est_clientes.total_sem_produtos); // <-
-    fprintf(f, "est_total_com_oferta|%d\n", sm->est_clientes.total_com_oferta);     // <-
-    fprintf(f, "est_total_produtos|%d\n", sm->est_clientes.total_produtos);         // <-
-    fprintf(f, "est_total_espera|%ld\n", sm->est_clientes.total_espera);            // <-
-    fprintf(f, "est_total_tempo_loja|%ld\n", sm->est_clientes.total_tempo_loja);    // <-
-    fprintf(f, "est_total_gasto|%.2f\n", sm->est_clientes.total_gasto);             // <-
+    fprintf(f, "est_total_atendidos|%d\n", sm->est_clientes.total_atendidos);
+    fprintf(f, "est_total_sem_produtos|%d\n", sm->est_clientes.total_sem_produtos);
+    fprintf(f, "est_total_com_oferta|%d\n", sm->est_clientes.total_com_oferta);
+    fprintf(f, "est_total_produtos|%d\n", sm->est_clientes.total_produtos);
+    fprintf(f, "est_total_espera|%ld\n", sm->est_clientes.total_espera);
+    fprintf(f, "est_total_tempo_loja|%ld\n", sm->est_clientes.total_tempo_loja);
+    fprintf(f, "est_total_gasto|%.2f\n", sm->est_clientes.total_gasto);
     for (int i = 0; i < sm->config.n_caixas; i++)
     {
         Caixa *cai = &sm->caixas[i];
@@ -373,6 +249,8 @@ void guardarDia(Supermercado *sm)
 }
 
 
+
+// converte uma string para um valor float
 float atof_virgula(const char *str)
 {
     char copia[64];
@@ -382,6 +260,8 @@ float atof_virgula(const char *str)
         if (copia[i] == ',') copia[i] = '.';
     return (float)atof(copia);
 }
+
+
 
 int carregarDia(int dia_pretendido, Supermercado *sm_temp)
 {
@@ -417,20 +297,20 @@ int carregarDia(int dia_pretendido, Supermercado *sm_temp)
             sm_temp->valor_oferecido_total = atof_virgula(strtok(NULL, "|"));
         else if (strcmp(tok, "clientes_dia") == 0)
             sm_temp->clientesDia = atoi(strtok(NULL, "|"));
-        else if (strcmp(tok, "est_total_atendidos") == 0)                                           // <-
-            sm_temp->est_clientes.total_atendidos = atoi(strtok(NULL, "|"));                        // <-
-        else if (strcmp(tok, "est_total_sem_produtos") == 0)                                        // <-
-            sm_temp->est_clientes.total_sem_produtos = atoi(strtok(NULL, "|"));                     // <-
-        else if (strcmp(tok, "est_total_com_oferta") == 0)                                          // <-
-            sm_temp->est_clientes.total_com_oferta = atoi(strtok(NULL, "|"));                       // <-
-        else if (strcmp(tok, "est_total_produtos") == 0)                                            // <-
-            sm_temp->est_clientes.total_produtos = atoi(strtok(NULL, "|"));                         // <-
-        else if (strcmp(tok, "est_total_espera") == 0)                                              // <-
-            sm_temp->est_clientes.total_espera = atol(strtok(NULL, "|"));                           // <-
-        else if (strcmp(tok, "est_total_tempo_loja") == 0)                                          // <-
-            sm_temp->est_clientes.total_tempo_loja = atol(strtok(NULL, "|"));                       // <-
-        else if (strcmp(tok, "est_total_gasto") == 0)                                               // <-
-            sm_temp->est_clientes.total_gasto = atof_virgula(strtok(NULL, "|"));                    // <-
+        else if (strcmp(tok, "est_total_atendidos") == 0)
+            sm_temp->est_clientes.total_atendidos = atoi(strtok(NULL, "|"));
+        else if (strcmp(tok, "est_total_sem_produtos") == 0)
+            sm_temp->est_clientes.total_sem_produtos = atoi(strtok(NULL, "|"));
+        else if (strcmp(tok, "est_total_com_oferta") == 0)
+            sm_temp->est_clientes.total_com_oferta = atoi(strtok(NULL, "|"));
+        else if (strcmp(tok, "est_total_produtos") == 0)
+            sm_temp->est_clientes.total_produtos = atoi(strtok(NULL, "|"));
+        else if (strcmp(tok, "est_total_espera") == 0)
+            sm_temp->est_clientes.total_espera = atol(strtok(NULL, "|"));
+        else if (strcmp(tok, "est_total_tempo_loja") == 0)
+            sm_temp->est_clientes.total_tempo_loja = atol(strtok(NULL, "|"));
+        else if (strcmp(tok, "est_total_gasto") == 0)
+            sm_temp->est_clientes.total_gasto = atof_virgula(strtok(NULL, "|"));
         else if (strcmp(tok, "CAIXA") == 0 && idx < MAX_CAIXAS)
         {
             Caixa *cai = &sm_temp->caixas[idx];

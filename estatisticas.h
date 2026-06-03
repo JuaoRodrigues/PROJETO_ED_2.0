@@ -3,10 +3,14 @@
 
 #include "supermercado.h"
 
-void registar_cliente_atendido (Caixa *cai, Cliente *cli);
-void imprimir_historico (Caixa *cai);
-void imprimirFila (Supermercado *sm, int id_caixa);         // FUNCIONA
 
+// LISTAGENS
+void registar_cliente_atendido (Supermercado *sm, Caixa *cai, Cliente *cli);
+void imprimir_historico (Caixa *cai);
+void imprimirFila (Supermercado *sm, int id_caixa);
+
+
+// ESTATISTICAS
 void taxa_oferta (Supermercado *sm);
 void estatisticas_gerais (Supermercado *sm);
 void estatisticas_clientes(Supermercado *sm);

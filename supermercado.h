@@ -4,8 +4,8 @@
 
 /* ------------------------------ CONSTANTES ------------------------------*/
 #define MAX_NOME            100
-#define MAX_CAIXAS          20          // ACHO QUE NAO É USADO
 #define HASH_SIZE           100
+#define MAX_CAIXAS          20
 
 // PARA A SIMULACAO
 #define MIN_CLIENTES_DIA    1000
@@ -99,7 +99,7 @@ typedef struct {
     // 5 = aberta definitivamente (nunca fecha ate ordem contrária)
     int    ativa;
     Fila   fila;
-    long   seg_fim_atendimento;     // segundos simulados em que o cliente termina a compra
+    long   seg_fim_atendimento;         // segundos simulados em que o cliente termina a compra
     int    tick_fim_atendimento;
     int    total_clientes_atendidos;
     int    total_produtos_vendidos;
@@ -108,27 +108,27 @@ typedef struct {
     float  valor_oferecido;
     Lista_ofertas oferta;
     ListaClientesAtendidos historico;
-    int ticks_aberta;       // total de ticks aberta
-    int tick_abertura;      // ultimo tick em que abriu
+    int ticks_aberta;           // total de ticks aberta
+    int tick_abertura;          // ultimo tick em que abriu
 } Caixa;
 
 
 
-/* ------------------------------ HASTABLE ------------------------------*/
+// ------------------------------ HASTABLE ------------------------------
 typedef struct NodoHash {
     int             id_cliente;
-    Cliente         *cliente;       /* ponteiro para o cliente */
-    int             indice_caixa;   /* -1 se não está em nenhuma caixa */
-    struct NodoHash *proximo;       /* encadeamento para colisões */
+    Cliente         *cliente;       // ponteiro para o cliente
+    int             indice_caixa;   // -1 se não está em nenhuma caixa
+    struct NodoHash *proximo;       // encadeamento para colisões
 } NodoHash;
 
 typedef struct {
     NodoHash *buckets[HASH_SIZE];
-    int       total_clientes;      /* útil para estatísticas */
+    int       total_clientes;       // útil para estatísticas
 } HashTable;
 
 
-/* ------------------------------ usado em tempo.c ------------------------------*/
+// ------------------------------ usado em tempo.c ------------------------------
 // CLIENTES NA LOJA
 typedef struct {
     Cliente *cliente;
@@ -142,7 +142,7 @@ typedef struct {
     int     ticks_totais;         // total de ticks da simulação
     int     tick_atual;           // tick em que estamos agora
     double  segundos_por_tick;    // tempo real de cada tick
-    long    seg_simulados;         // tick atual * 60
+    long    seg_simulados;        // tick atual * 60
 } SimulacaoTempo;
 
 
@@ -197,6 +197,7 @@ typedef struct {
     int             clientesEntrados;
     int             dia;
     ListaBanidos    banidos;
+    int             atendidos;
     EstatisticasClientes est_clientes;
 } Supermercado;
 
