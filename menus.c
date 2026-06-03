@@ -77,6 +77,8 @@ void simular (Supermercado *sm, int hora, int minuto, int previstos)
     printf("  | DETALHES\n");
     printf("  | Clientes na Loja    : %02d\n", sm->clientes_na_loja.total_na_loja);
     printf("  | Clientes na Fila    : %02d\n", total_filas);
+    printf("  | Clientes Atendidos  : %02d\n", sm->clientesEntrados);
+    printf("  | Produtos Oferecidos : %02d\n", sm->produtos_oferecidos_total);
     printf("  | Clientes Previstos  : %02d\n", previstos);
     printf("  |\n");
     printf("  | 'P' para pausar simulação\n");
@@ -617,7 +619,7 @@ void menu_fim_simulacao (Supermercado *sm)
 
             default: printf("Opção inválida.\n"); pausar();
         }
-    }while (op != 1 && op!= 2);
+    }while (op!= 2);
 }
 
 

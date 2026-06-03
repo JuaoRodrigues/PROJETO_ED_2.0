@@ -23,10 +23,15 @@ SimulacaoTempo configurarTempo(Configuracao *config, int temp) {
     if(temp != 1 && temp != 2)
     {
         printf("  |\n");
-        printf("  |Quanto tempo (em minutos) deve demorar a simulacao de 1 dia?\n");
-        printf("  |Minutos: ");
-        scanf("%d", &duracao_minutos);
-        LIMPAR_BUFFER();
+        printf("  | Quanto tempo (em minutos) deve demorar a simulacao de 1 dia?\n");
+        do
+        {
+            printf("  | Minutos: ");
+            scanf("%d", &duracao_minutos);
+            LIMPAR_BUFFER();
+            if(duracao_minutos <= 0)   {printf("  | Valor de tempo inválido!\n  | Tente novamente com um valor positivo\n"); continue;}
+        }while(duracao_minutos <= 0);
+
     }
     if(temp == 1)   duracao_minutos = 1;
     if(temp == 2)   duracao_minutos = 2;

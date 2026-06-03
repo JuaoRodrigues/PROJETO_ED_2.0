@@ -113,3 +113,72 @@ CAIXA|7|Rodrigo Agnes Ferro Ferreira|0|0|0,00|0|0,00|0
 CAIXA|8|Mafalda Vanessa Silva Lucas|0|0|0,00|0|0,00|0
 FIM_DIA
 
+DIA 6
+n_caixas|8
+produtos_oferecidos_total|9
+valor_total_ganho|39441,62
+valor_oferecido_total|24,87
+clientes_dia|1001
+est_total_atendidos|920
+est_total_sem_produtos|44
+est_total_com_oferta|9
+est_total_produtos|9448
+est_total_espera|10336
+est_total_tempo_loja|42740
+est_total_gasto|39441,62
+CAIXA|1|Ana Carolina Patricio |256|2560|11053,02|2|2,68|1017
+CAIXA|2|Mariana Nogueira Silva Pinto|198|2102|8677,54|1|6,99|970
+CAIXA|3|Mariana Maria Pinharandas |194|2023|8259,24|4|12,27|826
+CAIXA|4|Ana Maria Marques Santos|126|1323|5202,62|1|1,44|701
+CAIXA|5|Maria da Silva Tavares|104|1035|4513,99|1|1,49|397
+CAIXA|6|Catarina Miguel Lema Pinheiro|42|405|1736,53|0|0,00|176
+CAIXA|7|Ivo Cruz Cunha Domingues|0|0|0,00|0|0,00|0
+CAIXA|8|Maria Marques Brito Silva|0|0|0,00|0|0,00|0
+FIM_DIA
+
+DIA 7
+n_caixas|8
+produtos_oferecidos_total|11
+valor_total_ganho|38473,84
+valor_oferecido_total|50,29
+clientes_dia|1001
+est_total_atendidos|916
+est_total_sem_produtos|48
+est_total_com_oferta|11
+est_total_produtos|9191
+est_total_espera|10085
+est_total_tempo_loja|41999
+est_total_gasto|38473,84
+CAIXA|1|Maria da Silva Tavares|250|2556|10810,91|2|3,38|1080
+CAIXA|2|Bruna Cristina Pedreiro Silva|244|2500|10162,30|4|33,32|1075
+CAIXA|3|Ana Claro Belo Soeiro|205|2080|8969,05|3|11,31|969
+CAIXA|4|Henrique Carreiras Moraes |185|1736|7168,36|2|2,28|793
+CAIXA|5|Diana Sofia Marques Oliveira|32|319|1364,25|0|0,00|192
+CAIXA|6|Eva Filipa Guia Afonso|0|0|0,00|0|0,00|0
+CAIXA|7|Ana Carolina Patricio |0|0|0,00|0|0,00|0
+CAIXA|8|Eva Mangas Rocha |0|0|0,00|0|0,00|0
+FIM_DIA
+
+DIA 8
+n_caixas|8
+produtos_oferecidos_total|11
+valor_total_ganho|38875,56
+valor_oferecido_total|36,44
+clientes_dia|1000
+est_total_atendidos|927
+est_total_sem_produtos|36
+est_total_com_oferta|10
+est_total_produtos|9398
+est_total_espera|10412
+est_total_tempo_loja|42530
+est_total_gasto|38875,56
+CAIXA|1|Simao Daniela Pereira Lima|260|2616|10634,32|4|13,36|1102
+CAIXA|2|Beatriz Prata Magalhaes |243|2467|10324,92|4|15,84|957
+CAIXA|3|Madalena Gouveia Simões Ribeiro|209|2000|8307,03|1|1,59|907
+CAIXA|4|Iria Lourenco Oliveira |139|1504|6404,38|1|4,50|749
+CAIXA|5|Mariana Rebelo Santos Conceicao|76|811|3206,07|1|1,15|433
+CAIXA|6|Fabio Nabais Ferreira |0|0|0,00|0|0,00|0
+CAIXA|7|Beatriz Manuel dos Antos|0|0|0,00|0|0,00|0
+CAIXA|8|Maria Joao Correia Reis|0|0|0,00|0|0,00|0
+FIM_DIA
+
